@@ -1,0 +1,35 @@
+"""
+PHANTOM DFIR — Configuration
+Tool paths, Ollama endpoint, plugin timeouts.
+"""
+import shutil, os
+
+# ── LLM ──────────────────────────────────────────────────────────────────────
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_MODEL    = os.environ.get("PHANTOM_MODEL",   "qwen2.5:14b")
+
+# ── Tool aliases (SIFT Workstation) ──────────────────────────────────────────
+VOL3_CMD  = shutil.which("vol")  or "vol"
+VOL2_CMD  = shutil.which("vol2") or "vol2"
+LOG2TL    = shutil.which("log2timeline.py") or "log2timeline.py"
+MACTIME   = shutil.which("mactime") or "mactime"
+MMLS      = shutil.which("mmls")   or "mmls"
+FLS       = shutil.which("fls")    or "fls"
+ICAT      = shutil.which("icat")   or "icat"
+STRINGS   = shutil.which("strings") or "strings"
+
+# ── Timeouts (seconds) ───────────────────────────────────────────────────────
+TIMEOUT_OS_DETECT   = 120   # Per engine OS detection
+TIMEOUT_PLUGIN_FAST = 120   # pslist, netscan etc.
+TIMEOUT_PLUGIN_SLOW = 180   # malfind, psscan, shimcache (was 300)
+TIMEOUT_VOL2_HASH   = 180   # hashdump/lsadump
+TIMEOUT_LLM         = 120   # Per Ollama call
+MAX_PARALLEL_WORKERS = 16   # ThreadPoolExecutor workers (was 8)
+
+# ── Adversarial loop settings ─────────────────────────────────────────────────
+MAX_SKEPTIC_ROUNDS   = 3    # How many times Skeptic can challenge
+MIN_SOURCES_CRITICAL = 3    # IOC sources needed for CRITICAL confidence
+MIN_SOURCES_MEDIUM   = 2    # IOC sources needed for MEDIUM confidence
+
+# ── Output ───────────────────────────────────────────────────────────────────
+REPORT_DIR = os.path.expanduser("~")

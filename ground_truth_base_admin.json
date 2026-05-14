@@ -1,0 +1,52 @@
+{
+  "case_description": "Windows 10 x64 (base-admin) — compromised via Metasploit Meterpreter with lateral SSH movement via PuTTY. Puppet Labs Ruby is a legitimate management tool (NOT malware).",
+  "expected_malicious": [
+    {
+      "ioc": "subject_srv.exe",
+      "attack_phase": "Persistence",
+      "mitre": "T1543.003",
+      "description": "Malicious service binary running from C:\\windows\\ (NOT System32)"
+    },
+    {
+      "ioc": "putty.exe",
+      "attack_phase": "LateralMovement",
+      "mitre": "T1021.004",
+      "description": "PuTTY used for lateral SSH movement to multiple internal hosts"
+    },
+    {
+      "ioc": "172.16.4.10",
+      "attack_phase": "C2",
+      "mitre": "T1071.001",
+      "description": "C2 connection on port 8080 to attacker-controlled host"
+    },
+    {
+      "ioc": "onion-master",
+      "attack_phase": "LateralMovement",
+      "mitre": "T1021.004",
+      "description": "SSH lateral movement target identified in PuTTY cmdlines"
+    }
+  ],
+  "expected_benign": [
+    {
+      "ioc": "ruby.exe",
+      "reason": "Puppet Labs legitimate installation at C:\\Program Files\\Puppet Labs\\",
+      "path": "C:\\Program Files\\Puppet Labs\\Puppet\\sys\\ruby\\bin\\ruby.exe"
+    },
+    {
+      "ioc": "rubyw.exe",
+      "reason": "Puppet Labs legitimate installation",
+      "path": "C:\\Program Files\\Puppet Labs\\Puppet\\sys\\ruby\\bin\\rubyw.exe"
+    },
+    {
+      "ioc": "vmtoolsd.exe",
+      "reason": "VMware Tools — standard virtualization agent"
+    },
+    {
+      "ioc": "MSASCuiL.exe",
+      "reason": "Windows Defender UI — standard AV component"
+    }
+  ],
+  "expected_network": ["172.16.4.10"],
+  "expected_ssh_targets": ["onion-master", "base-elk", "proxy"],
+  "notes": "powershell.exe is intentionally excluded from IOC detection — it is a system process that appears in every Windows image. Flagging it would be a false positive in most cases."
+}
