@@ -92,35 +92,40 @@ After each run, PHANTOM generates:
 
 ## Architecture
 
+![PHANTOM DFIR Architecture](docs/architecture_diagram.png)
+
+```mermaid
+flowchart TB
+    subgraph INPUT["📥 Evidence Input"]
+        MEM["🧠 Memory Image (.img)"]
+        DISK["💾 Disk Image (.E01)"]
+    end
+
+    subgraph PIPELINE["⚡ LangGraph Multi-Agent Pipeline"]
+        direction TB
+        COL["🔍 COLLECTOR\n35+ plugins · 16 workers"]
+        INV["🧪 INVESTIGATOR\nStatic rules + LLM"]
+        EVD["📋 EVIDENCE\nPID-targeted re-queries"]
+        SKP["⚔️ SKEPTIC\nAdversarial debate"]
+        RPT["📊 REPORTER\nJSON + MD + Trace"]
+
+        COL --> INV --> EVD --> SKP
+        SKP -->|"🔄 self-correction (max 3)"| EVD
+        SKP -->|"✅ final"| RPT
+    end
+
+    subgraph MCP["🔌 MCP Server — 20 Read-Only Tools"]
+        TOOLS["SHA256 integrity · stdio + HTTP · ⛔ No destructive commands"]
+    end
+
+    MEM --> COL
+    DISK --> COL
+    MCP -.->|tool calls| COL
+    MCP -.->|tool calls| EVD
+    RPT --> O1["findings.json"] & O2["report.md"] & O3["execution_log.json"] & O4["progress.json"]
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    PHANTOM DFIR v2.1 (LangGraph)            │
-├─────────────────────────────────────────────────────────────┤
-│  1. COLLECTOR    — Race Vol3 vs Vol2 vs strings (parallel)  │
-│     → 35+ plugins run simultaneously (16 workers)           │
-│                                                             │
-│  2. INVESTIGATOR — LLM + dynamic rule-based analysis        │
-│     → Dynamic IOC extraction (no hardcoded IPs/ports)       │
-│     → Benign binary detection (Puppet/Chef Ruby → CLEARED)  │
-│     → Rich evidence quotes from raw plugin output            │
-│                                                             │
-│  3. EVIDENCE     — Targeted re-queries (PID/IP specific)    │
-│     → malfind PID, netscan filtered to C2 IP                │
-│     → Linux + Windows support                               │
-│                                                             │
-│  4. SKEPTIC      — Challenges every hypothesis              │
-│     → CONFIRMED / NEEDS_MORE / REFUTED / CLEARED            │
-│     → Benign findings get ✅ CLEARED (not false-positive)    │
-│     → Loops back to Evidence if unverified (max 3 rounds)   │
-│                                                             │
-│  5. REPORTER     — Final verified report                    │
-│     → CRITICAL / MEDIUM / LOW / CLEARED / REFUTED           │
-│     → Attack narrative (coherent breach story)               │
-│     → Attacker-focused timeline (system noise filtered)     │
-│     → False-positive-free MITRE ATT&CK kill chain           │
-│     → Dynamic remediation playbook                          │
-└─────────────────────────────────────────────────────────────┘
-```
+
+> **Security**: Architectural guardrails (no shell access, SHA256 verify, read-only subprocess, max iteration cap) vs prompt guardrails (IOC validation, JSON schema, static fallback). See [ARCHITECTURE.md](ARCHITECTURE.md) for full trust boundary documentation.
 
 ---
 
