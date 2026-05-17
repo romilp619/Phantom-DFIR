@@ -28,7 +28,7 @@ Result:       19/19 sources confirmed → 🔴 CRITICAL (verified, not hallucina
 
 ---
 
-## Try-It-Out Instructions (for Judges)
+## Try-It-Out Instructions
 
 ### Prerequisites
 - **SANS SIFT Workstation** (VM or bare metal)
@@ -215,21 +215,6 @@ phantom-dfir/
 
 ---
 
-## Why This Wins the Hackathon
 
-| Judging Criterion | PHANTOM's Answer |
-|---|---|
-| **Hallucination reduction** | Skeptic agent demands 3 raw evidence sources |
-| **False positive reduction** | Path-aware benign detection (Puppet Ruby → CLEARED) |
-| **Senior analyst reasoning** | Adversarial debate + attack narrative |
-| **Speed** | 35+ plugins in parallel (16 workers), < 5 min target |
-| **Autonomy** | LangGraph decides what to investigate next |
-| **SIFT integration** | Vol3 + Vol2 + all SIFT tools natively |
-| **Novel approach** | Never been built for DFIR before |
-| **Generalizability** | Dynamic IOC extraction — works on ANY case |
-| **MITRE accuracy** | Zero false positives from tool name matching |
-| **Report quality** | Coherent attack narrative, not just IOC list |
-
----
 
 *PHANTOM DFIR v2.1 — Find Evil! Hackathon 2026*
