@@ -92,8 +92,6 @@ After each run, PHANTOM generates:
 
 ## Architecture
 
-![PHANTOM DFIR Architecture](docs/architecture_diagram.png)
-
 ```mermaid
 flowchart TB
     subgraph INPUT["📥 Evidence Input"]
