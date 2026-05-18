@@ -1,5 +1,10 @@
 # PHANTOM DFIR
 ## Parallel Hypothesis Analysis with Multi-agent Threat Hunting Overlay Network
+<img width="1279" height="490" alt="image" src="https://github.com/user-attachments/assets/ce0212e3-541b-4bfa-96da-9a5b363c2d02" />
+
+<img width="1280" height="586" alt="image" src="https://github.com/user-attachments/assets/0650022e-9844-4c77-8b30-c756c4c3b404" />
+
+<img width="1279" height="477" alt="image" src="https://github.com/user-attachments/assets/392c4cd1-1861-4adc-8e91-0a366baf740d" />
 
 > **The world's first adversarial self-verifying DFIR agent**
 > Built on LangGraph + Ollama · Runs entirely on SANS SIFT Workstation · 100% Free
