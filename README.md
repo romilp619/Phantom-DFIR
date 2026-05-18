@@ -42,7 +42,38 @@ PHANTOM DFIR supports both:
 - SANS SIFT Workstation
 
 ---
+# Automatic Installation (Recommended)
 
+PHANTOM includes an automated installer that:
+
+- Creates a Python virtual environment
+- Installs required dependencies
+- Installs Volatility 3
+- Installs MCP/FastAPI packages
+- Prepares Volatility symbol cache
+- Creates a `~/phantom` launcher
+
+Run:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/Phantom-DFIR.git
+
+cd Phantom-DFIR
+
+bash install.sh
+```
+
+After installation:
+
+```bash
+source .venv/bin/activate
+```
+
+Run PHANTOM:
+
+```bash
+python3 main.py -f /path/to/memory.img
+```
 # Option 1 — Windows WSL / Kali / Ubuntu
 
 Recommended for:
