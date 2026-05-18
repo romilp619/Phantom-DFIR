@@ -36,57 +36,318 @@ Result:       19/19 sources confirmed → 🔴 CRITICAL (verified, not hallucina
 - **Volatility 3** (`pip install volatility3` — pre-installed on SIFT)
 - **Ollama** with `qwen2.5:14b` model (optional — works without LLM in `--no-llm` mode)
 
-### Step 1: Install (One Command)
+PHANTOM DFIR supports both:
+
+- Windows WSL2 / Kali / Ubuntu
+- SANS SIFT Workstation
+
+---
+
+# Option 1 — Windows WSL / Kali / Ubuntu
+
+Recommended for:
+- Faster setup
+- Local development
+- Easier Volatility configuration
+
+## Prerequisites
+
+- Windows WSL2, Kali Linux, or Ubuntu
+- Python 3.10+
+- Git
+- Internet connection (for initial Volatility symbol download)
+
+---
+
+## Step 1: Clone Repository
 
 ```bash
 cd ~
-git clone https://github.com/YOUR_USERNAME/phantom-dfir.git
-cd phantom-dfir
-bash install.sh
+
+git clone https://github.com/YOUR_USERNAME/Phantom-DFIR.git
+
+cd Phantom-DFIR
 ```
 
-### Step 2: Run Analysis
+---
+
+## Step 2: Create Virtual Environment
 
 ```bash
-# Full analysis (with LLM)
+python3 -m venv venv
+
+source venv/bin/activate
+```
+
+---
+
+## Step 3: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+
+pip install volatility3 fastapi uvicorn mcp pefile
+```
+
+---
+
+## Step 4: Install Ollama (Optional)
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+Start Ollama:
+
+```bash
+ollama serve
+```
+
+Pull model:
+
+```bash
+ollama pull qwen2.5:14b
+```
+
+---
+
+## Step 5: First Volatility Symbol Download
+
+Run once:
+
+```bash
+vol -f /path/to/memory.img windows.info
+```
+
+IMPORTANT:
+- First run may take 5–15 minutes
+- Do NOT interrupt symbol download
+
+---
+
+## Step 6: Run Analysis
+
+### Full analysis (with LLM)
+
+```bash
 python3 main.py -f /path/to/memory.img
+```
 
-# Rule-based only (no LLM required — faster, deterministic)
+### Rule-based only (deterministic)
+
+```bash
 python3 main.py -f /path/to/memory.img --no-llm
+```
 
-# With custom model
+### Custom model
+
+```bash
 python3 main.py -f /path/to/memory.img --model qwen2.5:14b
 ```
 
-### Step 3: Run Benchmark (accuracy scoring)
+---
+
+## Step 7: Benchmark Accuracy
 
 ```bash
-python3 benchmark.py -f /path/to/memory.img --ground-truth ground_truth_base_admin.json
+python3 benchmark.py \
+  -f /path/to/memory.img \
+  --ground-truth ground_truth_base_admin.json
 ```
 
-### Step 4: Test MCP Server
+---
+
+## Step 8: MCP Server
+
+### Terminal 1
 
 ```bash
-# Terminal 1: Start server
 python3 mcpserver/mcp_server.py --transport http --port 8765
+```
 
-# Terminal 2: Run smoke test
+### Terminal 2
+
+```bash
 python3 test_mcp.py --memory /path/to/memory.img
 ```
 
-### Step 5: Memory + Disk Correlation (optional)
+---
+
+## Step 9: Memory + Disk Correlation
 
 ```bash
-python3 disk_correlator.py -m /path/to/memory.img -d /path/to/disk.E01
+python3 disk_correlator.py \
+  -m /path/to/memory.img \
+  -d /path/to/disk.E01
 ```
 
-### Output Files
+---
+
+# Option 2 — SANS SIFT Workstation
+
+Recommended for:
+- Professional DFIR workflows
+- Forensic lab environments
+- Hackathon demo environments
+
+IMPORTANT:
+SIFT ships with a system-installed Volatility that may cause symbol permission issues.
+
+PHANTOM solves this by using a local Python virtual environment.
+
+---
+
+## Prerequisites
+
+- SANS SIFT Workstation
+- Python 3.10+
+- Internet connection (required for first Windows symbol download)
+
+---
+
+## Step 1: Clone Repository
+
+```bash
+cd ~
+
+git clone https://github.com/YOUR_USERNAME/Phantom-DFIR.git
+
+cd Phantom-DFIR
+```
+
+---
+
+## Step 2: Run Installer
+
+```bash
+bash install.sh
+```
+
+Installer automatically:
+- creates venv
+- installs Volatility 3
+- installs MCP/FastAPI dependencies
+- configures local environment
+- prepares symbol cache
+
+---
+
+## Step 3: Activate Environment
+
+```bash
+source .venv/bin/activate
+```
+
+---
+
+## Step 4: Install Ollama (Optional)
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+Start Ollama:
+
+```bash
+ollama serve
+```
+
+Pull model:
+
+```bash
+ollama pull qwen2.5:14b
+```
+
+---
+
+## Step 5: First Volatility Symbol Download
+
+Run once:
+
+```bash
+vol -f /path/to/memory.img windows.info
+```
+
+IMPORTANT:
+- First run may take 5–15 minutes
+- Do NOT interrupt symbol download
+- This caches Microsoft kernel symbols locally
+
+---
+
+## Step 6: Run Analysis
+
+### Full analysis (with LLM)
+
+```bash
+python3 main.py -f /path/to/memory.img
+```
+
+### Rule-based only
+
+```bash
+python3 main.py -f /path/to/memory.img --no-llm
+```
+
+### Custom model
+
+```bash
+python3 main.py -f /path/to/memory.img --model qwen2.5:14b
+```
+
+---
+
+## Step 7: Benchmark Accuracy
+
+```bash
+python3 benchmark.py \
+  -f /path/to/memory.img \
+  --ground-truth ground_truth_base_admin.json
+```
+
+---
+
+## Step 8: MCP Server
+
+### Terminal 1
+
+```bash
+python3 mcpserver/mcp_server.py --transport http --port 8765
+```
+
+### Terminal 2
+
+```bash
+python3 test_mcp.py --memory /path/to/memory.img
+```
+
+---
+
+## Step 9: Memory + Disk Correlation
+
+```bash
+python3 disk_correlator.py \
+  -m /path/to/memory.img \
+  -d /path/to/disk.E01
+```
+
+---
+
+# Output Files
 
 After each run, PHANTOM generates:
-- `phantom_<target>_<timestamp>.json` — Full findings report
-- `phantom_<target>_<timestamp>.md` — Human-readable markdown report
-- `phantom_<target>_<timestamp>_execution_log.json` — Agent execution trace
-- `phantom_<target>_progress.json` — Iteration improvement metrics
+
+- `phantom_<target>_<timestamp>.json`
+  → Full structured findings report
+
+- `phantom_<target>_<timestamp>.md`
+  → Human-readable forensic report
+
+- `phantom_<target>_<timestamp>_execution_log.json`
+  → Multi-agent reasoning trace
+
+- `phantom_<target>_progress.json`
+  → Iteration improvement metrics
 
 ---
 
