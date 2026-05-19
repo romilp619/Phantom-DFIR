@@ -230,7 +230,8 @@ python3 disk_correlator.py \
 
 ---
 
-# Option 1 — Windows WSL / Kali / Ubuntu
+
+# Option 2 — Windows WSL / Kali / Ubuntu
 
 Recommended for:
 - Faster setup
