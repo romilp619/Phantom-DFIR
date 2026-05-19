@@ -79,147 +79,8 @@ Run PHANTOM:
 ```bash
 python3 main.py -f /path/to/memory.img
 ```
-# Option 1 — Windows WSL / Kali / Ubuntu
 
-Recommended for:
-- Faster setup
-- Local development
-- Easier Volatility configuration
-
-## Prerequisites
-
-- Windows WSL2, Kali Linux, or Ubuntu
-- Python 3.10+
-- Git
-- Internet connection (for initial Volatility symbol download)
-
----
-
-## Step 1: Clone Repository
-
-```bash
-cd ~
-
-git clone https://github.com/YOUR_USERNAME/Phantom-DFIR.git
-
-cd Phantom-DFIR
-```
-
----
-
-## Step 2: Create Virtual Environment
-
-```bash
-python3 -m venv venv
-
-source venv/bin/activate
-```
-
----
-
-## Step 3: Install Dependencies
-
-```bash
-pip install -r requirements.txt
-
-pip install volatility3 fastapi uvicorn mcp pefile
-```
-
----
-
-## Step 4: Install Ollama (Optional)
-
-```bash
-curl -fsSL https://ollama.com/install.sh | sh
-```
-
-Start Ollama:
-
-```bash
-ollama serve
-```
-
-Pull model:
-
-```bash
-ollama pull qwen2.5:14b
-```
-
----
-
-## Step 5: First Volatility Symbol Download
-
-Run once:
-
-```bash
-vol -f /path/to/memory.img windows.info
-```
-
-IMPORTANT:
-- First run may take 5–15 minutes
-- Do NOT interrupt symbol download
-
----
-
-## Step 6: Run Analysis
-
-### Full analysis (with LLM)
-
-```bash
-python3 main.py -f /path/to/memory.img
-```
-
-### Rule-based only (deterministic)
-
-```bash
-python3 main.py -f /path/to/memory.img --no-llm
-```
-
-### Custom model
-
-```bash
-python3 main.py -f /path/to/memory.img --model qwen2.5:14b
-```
-
----
-
-## Step 7: Benchmark Accuracy
-
-```bash
-python3 benchmark.py \
-  -f /path/to/memory.img \
-  --ground-truth ground_truth_base_admin.json
-```
-
----
-
-## Step 8: MCP Server
-
-### Terminal 1
-
-```bash
-python3 mcpserver/mcp_server.py --transport http --port 8765
-```
-
-### Terminal 2
-
-```bash
-python3 test_mcp.py --memory /path/to/memory.img
-```
-
----
-
-## Step 9: Memory + Disk Correlation
-
-```bash
-python3 disk_correlator.py \
-  -m /path/to/memory.img \
-  -d /path/to/disk.E01
-```
-
----
-
-# Option 2 — SANS SIFT Workstation
+# Option 1 — SANS SIFT Workstation
 
 Recommended for:
 - Professional DFIR workflows
@@ -320,6 +181,146 @@ python3 main.py -f /path/to/memory.img
 ```
 
 ### Rule-based only
+
+```bash
+python3 main.py -f /path/to/memory.img --no-llm
+```
+
+### Custom model
+
+```bash
+python3 main.py -f /path/to/memory.img --model qwen2.5:14b
+```
+
+---
+
+## Step 7: Benchmark Accuracy
+
+```bash
+python3 benchmark.py \
+  -f /path/to/memory.img \
+  --ground-truth ground_truth_base_admin.json
+```
+
+---
+
+## Step 8: MCP Server
+
+### Terminal 1
+
+```bash
+python3 mcpserver/mcp_server.py --transport http --port 8765
+```
+
+### Terminal 2
+
+```bash
+python3 test_mcp.py --memory /path/to/memory.img
+```
+
+---
+
+## Step 9: Memory + Disk Correlation
+
+```bash
+python3 disk_correlator.py \
+  -m /path/to/memory.img \
+  -d /path/to/disk.E01
+```
+
+---
+
+# Option 1 — Windows WSL / Kali / Ubuntu
+
+Recommended for:
+- Faster setup
+- Local development
+- Easier Volatility configuration
+
+## Prerequisites
+
+- Windows WSL2, Kali Linux, or Ubuntu
+- Python 3.10+
+- Git
+- Internet connection (for initial Volatility symbol download)
+
+---
+
+## Step 1: Clone Repository
+
+```bash
+cd ~
+
+git clone https://github.com/YOUR_USERNAME/Phantom-DFIR.git
+
+cd Phantom-DFIR
+```
+
+---
+
+## Step 2: Create Virtual Environment
+
+```bash
+python3 -m venv venv
+
+source venv/bin/activate
+```
+
+---
+
+## Step 3: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+
+pip install volatility3 fastapi uvicorn mcp pefile
+```
+
+---
+
+## Step 4: Install Ollama (Optional)
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+Start Ollama:
+
+```bash
+ollama serve
+```
+
+Pull model:
+
+```bash
+ollama pull qwen2.5:14b
+```
+
+---
+
+## Step 5: First Volatility Symbol Download
+
+Run once:
+
+```bash
+vol -f /path/to/memory.img windows.info
+```
+
+IMPORTANT:
+- First run may take 5–15 minutes
+- Do NOT interrupt symbol download
+
+---
+
+## Step 6: Run Analysis
+
+### Full analysis (with LLM)
+
+```bash
+python3 main.py -f /path/to/memory.img
+```
+
+### Rule-based only (deterministic)
 
 ```bash
 python3 main.py -f /path/to/memory.img --no-llm
