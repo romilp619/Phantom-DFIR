@@ -1,0 +1,134 @@
+[
+  {
+    "process": "svchost.exe Pid: 1024 Address: 0xe60000",
+    "pid": "1024",
+    "memory_region": "0xe60000",
+    "entropy": "unknown",
+    "shellcode_type": "Generic injected shellcode / process injection",
+    "classification_reason": "executable private VAD",
+    "injection_indicators": [
+      "executable/private memory region"
+    ],
+    "shellcode_indicators": [
+      "executable private VAD"
+    ],
+    "api_indicators": [],
+    "shellcode_family_indicators": [
+      "generic_injected_memory"
+    ],
+    "confidence": 55,
+    "raw_excerpt": "Volatility Foundation Volatility Framework 2.6.1\nProcess: svchost.exe Pid: 1024 Address: 0xe60000\nVad Tag: VadS Protection: PAGE_EXECUTE_READWRITE\nFlags: CommitCharge: 2, MemCommit: 1, PrivateMemory: 1, Protection: 6",
+    "source": "malfind",
+    "parser_mode": "regex-malfind"
+  },
+  {
+    "process": "svchost.exe Pid: 1108 Address: 0x6c0000",
+    "pid": "1108",
+    "memory_region": "0x6c0000",
+    "entropy": "unknown",
+    "shellcode_type": "Generic injected shellcode / process injection",
+    "classification_reason": "executable private VAD",
+    "injection_indicators": [
+      "executable/private memory region"
+    ],
+    "shellcode_indicators": [
+      "executable private VAD"
+    ],
+    "api_indicators": [],
+    "shellcode_family_indicators": [
+      "generic_injected_memory"
+    ],
+    "confidence": 55,
+    "raw_excerpt": "Process: svchost.exe Pid: 1108 Address: 0x6c0000\nVad Tag: VadS Protection: PAGE_EXECUTE_READWRITE\nFlags: CommitCharge: 2, MemCommit: 1, PrivateMemory: 1, Protection: 6",
+    "source": "malfind",
+    "parser_mode": "regex-malfind"
+  },
+  {
+    "process": "explorer.exe Pid: 816 Address: 0x9d0000",
+    "pid": "816",
+    "memory_region": "0x9d0000",
+    "entropy": "unknown",
+    "shellcode_type": "Generic injected shellcode / process injection",
+    "classification_reason": "executable private VAD",
+    "injection_indicators": [
+      "executable/private memory region"
+    ],
+    "shellcode_indicators": [
+      "executable private VAD"
+    ],
+    "api_indicators": [],
+    "shellcode_family_indicators": [
+      "generic_injected_memory"
+    ],
+    "confidence": 55,
+    "raw_excerpt": "Process: explorer.exe Pid: 816 Address: 0x9d0000\nVad Tag: VadS Protection: PAGE_EXECUTE_READWRITE\nFlags: CommitCharge: 1, MemCommit: 1, PrivateMemory: 1, Protection: 6",
+    "source": "malfind",
+    "parser_mode": "regex-malfind"
+  },
+  {
+    "process": "explorer.exe Pid: 816 Address: 0x1f10000",
+    "pid": "816",
+    "memory_region": "0x1f10000",
+    "entropy": "unknown",
+    "shellcode_type": "Generic injected shellcode / process injection",
+    "classification_reason": "executable private VAD",
+    "injection_indicators": [
+      "executable/private memory region"
+    ],
+    "shellcode_indicators": [
+      "executable private VAD"
+    ],
+    "api_indicators": [],
+    "shellcode_family_indicators": [
+      "generic_injected_memory"
+    ],
+    "confidence": 55,
+    "raw_excerpt": "Process: explorer.exe Pid: 816 Address: 0x1f10000\nVad Tag: VadS Protection: PAGE_EXECUTE_READWRITE\nFlags: CommitCharge: 2, MemCommit: 1, PrivateMemory: 1, Protection: 6",
+    "source": "malfind",
+    "parser_mode": "regex-malfind"
+  },
+  {
+    "process": "xampp-control.e Pid: 2768 Address: 0x280000",
+    "pid": "2768",
+    "memory_region": "0x280000",
+    "entropy": "unknown",
+    "shellcode_type": "Generic injected shellcode / process injection",
+    "classification_reason": "executable private VAD",
+    "injection_indicators": [
+      "executable/private memory region"
+    ],
+    "shellcode_indicators": [
+      "executable private VAD"
+    ],
+    "api_indicators": [],
+    "shellcode_family_indicators": [
+      "generic_injected_memory"
+    ],
+    "confidence": 55,
+    "raw_excerpt": "Process: xampp-control.e Pid: 2768 Address: 0x280000\nVad Tag: VadS Protection: PAGE_EXECUTE_READWRITE\nFlags: CommitCharge: 1, MemCommit: 1, PrivateMemory: 1, Protection: 6",
+    "source": "malfind",
+    "parser_mode": "regex-malfind"
+  },
+  {
+    "process": "FTK Imager.exe Pid: 2120 Address: 0x4f40000",
+    "pid": "2120",
+    "memory_region": "0x4f40000",
+    "entropy": "unknown",
+    "shellcode_type": "Generic injected shellcode / process injection",
+    "classification_reason": "executable private VAD",
+    "injection_indicators": [
+      "executable/private memory region"
+    ],
+    "shellcode_indicators": [
+      "executable private VAD"
+    ],
+    "api_indicators": [],
+    "shellcode_family_indicators": [
+      "generic_injected_memory"
+    ],
+    "confidence": 55,
+    "raw_excerpt": "Process: FTK Imager.exe Pid: 2120 Address: 0x4f40000\nVad Tag: VadS Protection: PAGE_EXECUTE_READWRITE\nFlags: CommitCharge: 2, MemCommit: 1, PrivateMemory: 1, Protection: 6",
+    "source": "malfind",
+    "parser_mode": "regex-malfind"
+  }
+]

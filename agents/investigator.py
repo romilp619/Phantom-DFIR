@@ -1,8 +1,11 @@
 """
-PHANTOM DFIR — Investigator Agent v2.0
+PHANTOM DFIR — Investigator Agent v3.0
 Analyzes raw evidence and proposes forensic hypotheses.
 Each hypothesis has a specific, falsifiable claim + supporting raw evidence.
 
+v3.0 — Dynamic Legitimacy Engine integration
+     — Behavioral false positive filtering (path, parent, network, memory)
+     — No hardcoded process name allowlists
 v2.0 — Dynamic IOC extraction (no hardcoded IPs/ports)
      — SSH target extraction from PuTTY/ssh cmdlines
      — Better Linux static rules
@@ -11,23 +14,21 @@ v2.0 — Dynamic IOC extraction (no hardcoded IPs/ports)
 import json
 import re
 import uuid
-from langchain_ollama import OllamaLLM
 from langchain_core.prompts import PromptTemplate
 
 from state import InvestigationState
 from config import OLLAMA_BASE_URL, OLLAMA_MODEL, TIMEOUT_LLM
 from correlation.mitre import map_hypothesis_to_mitre
+from tools.legitimacy_engine import filter_legitimate_hypotheses
+from tools.llm_provider import create_llm
+from tools.skills_loader import load_skills_for_phase
 
-llm = OllamaLLM(
-    base_url=OLLAMA_BASE_URL,
-    model=OLLAMA_MODEL,
-    timeout=TIMEOUT_LLM,
-    temperature=0.1,
-)
+llm = create_llm(temperature=0.1)
 
 INVESTIGATOR_PROMPT = PromptTemplate.from_template("""
 You are a senior DFIR analyst analyzing a {os_type} memory dump.
 Identify SPECIFIC, FALSIFIABLE hypotheses backed by exact evidence.
+{skill_context}
 
 CRITICAL RULES FOR THE 'ioc' FIELD:
 - ioc MUST be a SHORT specific value: a filename, an IP address, or a PID number
@@ -364,13 +365,17 @@ def run_investigator(state: InvestigationState) -> InvestigationState:
 
     # ── Try LLM for additional hypotheses ─────────────────────────────────────
     llm_hyps = []
+    skill_context = load_skills_for_phase("investigator")
+    if skill_context:
+        print(f"  Skills loaded: {len(skill_context)} chars of expert context", flush=True)
     if llm is not None:
         print(f"  Sending {len(evidence_summary)} chars to {OLLAMA_MODEL}...", flush=True)
         try:
             chain  = INVESTIGATOR_PROMPT | llm
             output = chain.invoke({
                 "evidence_summary": evidence_summary,
-                "os_type": os_type.upper()
+                "os_type": os_type.upper(),
+                "skill_context": skill_context,
             })
             start  = output.find("[")
             end    = output.rfind("]") + 1
@@ -422,7 +427,18 @@ def run_investigator(state: InvestigationState) -> InvestigationState:
         hypotheses.append(h)
         print(f"  → {h['id']}: {h['claim'][:80]}", flush=True)
 
-    print(f"\n  {len(hypotheses)} total hypotheses.", flush=True)
+    print(f"\n  {len(hypotheses)} total hypotheses (before legitimacy filtering).", flush=True)
+
+    # ── Legitimacy Engine: filter out behaviorally-legitimate processes ────
+    threshold = state.get("legitimacy_threshold", 70)
+    print(f"\n  Running legitimacy engine (threshold={threshold})...", flush=True)
+    kept, filtered = filter_legitimate_hypotheses(
+        hypotheses, raw_evidence, os_type, threshold=threshold
+    )
+
+    if filtered:
+        print(f"  Legitimacy engine cleared {len(filtered)} legitimate process(es).", flush=True)
+    print(f"  {len(kept)} hypotheses remain for investigation.", flush=True)
 
     # ── Reasoning Trace ───────────────────────────────────────────────────
     import time as _time
@@ -444,11 +460,31 @@ def run_investigator(state: InvestigationState) -> InvestigationState:
                          f"{OLLAMA_MODEL} for adversarial hypothesis generation. LLM finds "
                          f"patterns humans encode as rules miss.",
             "result": f"{len(llm_hyps)} LLM hypotheses (after IOC validation), "
-                      f"merged to {len(hypotheses)} total",
+                      f"merged to {len(kept) + len(filtered)} total",
+            "timestamp": _time.time(),
+        })
+    if filtered:
+        reasoning.append({
+            "agent": "Investigator",
+            "action": "Legitimacy filtering",
+            "rationale": f"Behavioral legitimacy engine scored each hypothesis on path, "
+                         f"parent-child relationship, network behavior, and memory anomalies. "
+                         f"Threshold={threshold}/100.",
+            "result": f"{len(filtered)} cleared (legitimate), {len(kept)} kept for investigation",
             "timestamp": _time.time(),
         })
 
-    return {**state, "hypotheses": hypotheses, "reasoning_log": reasoning}
+    # Track cleared processes from legitimacy engine
+    existing_fp = state.get("false_positives_detected", [])
+    existing_fp.extend(filtered)
+
+    return {
+        **state,
+        "hypotheses": kept,
+        "false_positives_detected": existing_fp,
+        "cleared_findings": filtered,
+        "reasoning_log": reasoning,
+    }
 
 
 def _static_fallback(raw_evidence: dict, os_type: str) -> list:

@@ -1,0 +1,4277 @@
+[
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "System",
+    "pid": 4,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "System (4): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "System",
+    "pid": 4,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "System (4): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "System",
+    "pid": 4,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "System (4): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "System",
+    "pid": 4,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "System (4): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "System",
+    "pid": 4,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "System (4): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "smss.exe",
+    "pid": 420,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "smss.exe (420): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "smss.exe",
+    "pid": 420,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "smss.exe (420): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "smss.exe",
+    "pid": 420,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "smss.exe (420): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "smss.exe",
+    "pid": 420,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "smss.exe (420): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "smss.exe",
+    "pid": 420,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "smss.exe (420): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "csrss.exe",
+    "pid": 484,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "csrss.exe (484): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "csrss.exe",
+    "pid": 484,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "csrss.exe (484): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "csrss.exe",
+    "pid": 484,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "csrss.exe (484): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "csrss.exe",
+    "pid": 484,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "csrss.exe (484): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "csrss.exe",
+    "pid": 484,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "csrss.exe (484): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "csrss.exe",
+    "pid": 524,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "csrss.exe (524): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "csrss.exe",
+    "pid": 524,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "csrss.exe (524): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "csrss.exe",
+    "pid": 524,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "csrss.exe (524): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "csrss.exe",
+    "pid": 524,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "csrss.exe (524): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "csrss.exe",
+    "pid": 524,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "csrss.exe (524): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wininit.exe",
+    "pid": 532,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "wininit.exe (532): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wininit.exe",
+    "pid": 532,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "wininit.exe (532): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wininit.exe",
+    "pid": 532,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "wininit.exe (532): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wininit.exe",
+    "pid": 532,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "wininit.exe (532): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wininit.exe",
+    "pid": 532,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "wininit.exe (532): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "winlogon.exe",
+    "pid": 560,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "winlogon.exe (560): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "winlogon.exe",
+    "pid": 560,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "winlogon.exe (560): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "winlogon.exe",
+    "pid": 560,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "winlogon.exe (560): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "winlogon.exe",
+    "pid": 560,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "winlogon.exe (560): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "winlogon.exe",
+    "pid": 560,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "winlogon.exe (560): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "services.exe",
+    "pid": 608,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "services.exe (608): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "services.exe",
+    "pid": 608,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "services.exe (608): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "services.exe",
+    "pid": 608,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "services.exe (608): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "services.exe",
+    "pid": 608,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "services.exe (608): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "services.exe",
+    "pid": 608,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "services.exe (608): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "lsass.exe",
+    "pid": 620,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "lsass.exe (620): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "lsass.exe",
+    "pid": 620,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "lsass.exe (620): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "lsass.exe",
+    "pid": 620,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "lsass.exe (620): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "lsass.exe",
+    "pid": 620,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "lsass.exe (620): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "lsass.exe",
+    "pid": 620,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "lsass.exe (620): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "lsm.exe",
+    "pid": 628,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "lsm.exe (628): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "lsm.exe",
+    "pid": 628,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "lsm.exe (628): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "lsm.exe",
+    "pid": 628,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "lsm.exe (628): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "lsm.exe",
+    "pid": 628,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "lsm.exe (628): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "lsm.exe",
+    "pid": 628,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "lsm.exe (628): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "svchost.exe (792): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (792): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (792): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (792): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (792): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (792): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (792): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-5-80-1601830629-990752416-3372939810-977361409-3075122917",
+    "name": "DcomLaunch",
+    "line": "svchost.exe (792): S-1-5-80-1601830629-990752416-3372939810-977361409-3075122917 (DcomLaunch)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-5-80-1981970923-922788642-3535304421-2999920573-318732269",
+    "name": "PlugPlay",
+    "line": "svchost.exe (792): S-1-5-80-1981970923-922788642-3535304421-2999920573-318732269 (PlugPlay)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-5-5-0-39793",
+    "name": "Logon Session",
+    "line": "svchost.exe (792): S-1-5-5-0-39793 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (792): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 792,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "svchost.exe (792): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxService.exe",
+    "pid": 836,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "VBoxService.exe (836): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxService.exe",
+    "pid": 836,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "VBoxService.exe (836): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxService.exe",
+    "pid": 836,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "VBoxService.exe (836): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxService.exe",
+    "pid": 836,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "VBoxService.exe (836): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxService.exe",
+    "pid": 836,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "VBoxService.exe (836): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 892,
+    "sid": "S-1-5-20",
+    "name": "NT Authority",
+    "line": "svchost.exe (892): S-1-5-20 (NT Authority)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 892,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (892): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 892,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (892): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 892,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (892): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 892,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (892): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 892,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (892): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 892,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (892): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 892,
+    "sid": "S-1-5-80-979556362-403687129-3954533659-2335141334-1547273080",
+    "name": "RpcSs",
+    "line": "svchost.exe (892): S-1-5-80-979556362-403687129-3954533659-2335141334-1547273080 (RpcSs)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 892,
+    "sid": "S-1-5-5-0-56328",
+    "name": "Logon Session",
+    "line": "svchost.exe (892): S-1-5-5-0-56328 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 892,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (892): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-5-19",
+    "name": "NT Authority",
+    "line": "svchost.exe (984): S-1-5-19 (NT Authority)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (984): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (984): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (984): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (984): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (984): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (984): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-5-80-2676549577-1911656217-2625096541-4178041876-1366760775",
+    "name": "Audiosrv",
+    "line": "svchost.exe (984): S-1-5-80-2676549577-1911656217-2625096541-4178041876-1366760775 (Audiosrv)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-5-80-2940520708-3855866260-481812779-327648279-1710889582",
+    "name": "Dhcp",
+    "line": "svchost.exe (984): S-1-5-80-2940520708-3855866260-481812779-327648279-1710889582 (Dhcp)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-5-80-880578595-1860270145-482643319-2788375705-1540778122",
+    "name": "eventlog",
+    "line": "svchost.exe (984): S-1-5-80-880578595-1860270145-482643319-2788375705-1540778122 (eventlog)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-5-80-2600004209-3485701-3730724489-2512861693-659445543",
+    "name": "",
+    "line": "svchost.exe (984): S-1-5-80-2600004209-3485701-3730724489-2512861693-659445543"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-5-80-172094073-716411664-54255058-185476446-2329512179",
+    "name": "lmhosts",
+    "line": "svchost.exe (984): S-1-5-80-172094073-716411664-54255058-185476446-2329512179 (lmhosts)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-5-5-0-57311",
+    "name": "Logon Session",
+    "line": "svchost.exe (984): S-1-5-5-0-57311 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 984,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (984): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1012,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "svchost.exe (1012): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1012,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "svchost.exe (1012): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1012,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (1012): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1012,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (1012): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1012,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (1012): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "svchost.exe (1024): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (1024): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (1024): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (1024): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (1024): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (1024): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (1024): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-864916184-135290571-3087830041-1716922880-4237303741",
+    "name": "BITS",
+    "line": "svchost.exe (1024): S-1-5-80-864916184-135290571-3087830041-1716922880-4237303741 (BITS)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-3256172449-2363790065-3617575471-4144056108-756904704",
+    "name": "CertPropSvc",
+    "line": "svchost.exe (1024): S-1-5-80-3256172449-2363790065-3617575471-4144056108-756904704 (CertPropSvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-3578261754-285310837-913589462-2834155770-667502746",
+    "name": "EapHost",
+    "line": "svchost.exe (1024): S-1-5-80-3578261754-285310837-913589462-2834155770-667502746 (EapHost)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-1373701630-3910968185-3388013410-2492353-937432973",
+    "name": "hkmsvc",
+    "line": "svchost.exe (1024): S-1-5-80-1373701630-3910968185-3388013410-2492353-937432973 (hkmsvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-698886940-375981264-2691324669-2937073286-3841916615",
+    "name": "IKEEXT",
+    "line": "svchost.exe (1024): S-1-5-80-698886940-375981264-2691324669-2937073286-3841916615 (IKEEXT)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-62724632-2456781206-3863850748-1496050881-1042387526",
+    "name": "iphlpsvc",
+    "line": "svchost.exe (1024): S-1-5-80-62724632-2456781206-3863850748-1496050881-1042387526 (iphlpsvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-879696042-2351668846-370232824-2524288904-4023536711",
+    "name": "LanmanServer",
+    "line": "svchost.exe (1024): S-1-5-80-879696042-2351668846-370232824-2524288904-4023536711 (LanmanServer)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-917953661-2020045820-2727011118-2260243830-4032185929",
+    "name": "MSiSCSI",
+    "line": "svchost.exe (1024): S-1-5-80-917953661-2020045820-2727011118-2260243830-4032185929 (MSiSCSI)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-1802467488-1541022566-2033325545-854566965-652742428",
+    "name": "RasAuto",
+    "line": "svchost.exe (1024): S-1-5-80-1802467488-1541022566-2033325545-854566965-652742428 (RasAuto)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-4176366874-305252471-2256717057-2714189771-3552532790",
+    "name": "RasMan",
+    "line": "svchost.exe (1024): S-1-5-80-4176366874-305252471-2256717057-2714189771-3552532790 (RasMan)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-1954729425-4294152082-187165618-318331177-3831297489",
+    "name": "RemoteAccess",
+    "line": "svchost.exe (1024): S-1-5-80-1954729425-4294152082-187165618-318331177-3831297489 (RemoteAccess)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-4125092361-1567024937-842823819-2091237918-836075745",
+    "name": "Schedule",
+    "line": "svchost.exe (1024): S-1-5-80-4125092361-1567024937-842823819-2091237918-836075745 (Schedule)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-1691538513-4084330536-1620899472-1113280783-3554754292",
+    "name": "SCPolicySvc",
+    "line": "svchost.exe (1024): S-1-5-80-1691538513-4084330536-1620899472-1113280783-3554754292 (SCPolicySvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-4022436659-1090538466-1613889075-870485073-3428993833",
+    "name": "SessionEnv",
+    "line": "svchost.exe (1024): S-1-5-80-4022436659-1090538466-1613889075-870485073-3428993833 (SessionEnv)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-2009329905-444645132-2728249442-922493431-93864177",
+    "name": "SharedAccess",
+    "line": "svchost.exe (1024): S-1-5-80-2009329905-444645132-2728249442-922493431-93864177 (SharedAccess)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-3594706986-2537596223-181334840-1741483385-1351671666",
+    "name": "wercplsupport",
+    "line": "svchost.exe (1024): S-1-5-80-3594706986-2537596223-181334840-1741483385-1351671666 (wercplsupport)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-3750560858-172214265-3889451188-1914796615-4100997547",
+    "name": "Winmgmt",
+    "line": "svchost.exe (1024): S-1-5-80-3750560858-172214265-3889451188-1914796615-4100997547 (Winmgmt)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-80-1014140700-3308905587-3330345912-272242898-93311788",
+    "name": "wuauserv",
+    "line": "svchost.exe (1024): S-1-5-80-1014140700-3308905587-3330345912-272242898-93311788 (wuauserv)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-5-0-60564",
+    "name": "Logon Session",
+    "line": "svchost.exe (1024): S-1-5-5-0-60564 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (1024): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1024,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "svchost.exe (1024): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "SLsvc.exe",
+    "pid": 1040,
+    "sid": "S-1-5-20",
+    "name": "NT Authority",
+    "line": "SLsvc.exe (1040): S-1-5-20 (NT Authority)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "SLsvc.exe",
+    "pid": 1040,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "SLsvc.exe (1040): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "SLsvc.exe",
+    "pid": 1040,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "SLsvc.exe (1040): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "SLsvc.exe",
+    "pid": 1040,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "SLsvc.exe (1040): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "SLsvc.exe",
+    "pid": 1040,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "SLsvc.exe (1040): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "SLsvc.exe",
+    "pid": 1040,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "SLsvc.exe (1040): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "SLsvc.exe",
+    "pid": 1040,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "SLsvc.exe (1040): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "SLsvc.exe",
+    "pid": 1040,
+    "sid": "S-1-5-80-2119565420-4155874467-2934723793-509086461-374458824",
+    "name": "slsvc",
+    "line": "SLsvc.exe (1040): S-1-5-80-2119565420-4155874467-2934723793-509086461-374458824 (slsvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "SLsvc.exe",
+    "pid": 1040,
+    "sid": "S-1-5-5-0-60869",
+    "name": "Logon Session",
+    "line": "SLsvc.exe (1040): S-1-5-5-0-60869 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "SLsvc.exe",
+    "pid": 1040,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "SLsvc.exe (1040): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-19",
+    "name": "NT Authority",
+    "line": "svchost.exe (1108): S-1-5-19 (NT Authority)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (1108): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (1108): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (1108): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (1108): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (1108): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (1108): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-1772571935-1555666882-3369284645-1675012128-2386634627",
+    "name": "EventSystem",
+    "line": "svchost.exe (1108): S-1-5-80-1772571935-1555666882-3369284645-1675012128-2386634627 (EventSystem)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-364023826-931424190-487969545-1024119571-74567675",
+    "name": "fdPHost",
+    "line": "svchost.exe (1108): S-1-5-80-364023826-931424190-487969545-1024119571-74567675 (fdPHost)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-3215268152-2863950836-530904203-4246843131-2183915461",
+    "name": "FDResPub",
+    "line": "svchost.exe (1108): S-1-5-80-3215268152-2863950836-530904203-4246843131-2183915461 (FDResPub)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-719998295-2833700043-1566817583-4093942769-1414026312",
+    "name": "LanmanWorkstation",
+    "line": "svchost.exe (1108): S-1-5-80-719998295-2833700043-1566817583-4093942769-1414026312 (LanmanWorkstation)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-940647296-341435850-43817331-158078607-2483727905",
+    "name": "lltdsvc",
+    "line": "svchost.exe (1108): S-1-5-80-940647296-341435850-43817331-158078607-2483727905 (lltdsvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-3635958274-2059881490-2225992882-984577281-633327304",
+    "name": "netprofm",
+    "line": "svchost.exe (1108): S-1-5-80-3635958274-2059881490-2225992882-984577281-633327304 (netprofm)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-2310782386-4237065203-3688974353-390202159-3511571085",
+    "name": "nsi",
+    "line": "svchost.exe (1108): S-1-5-80-2310782386-4237065203-3688974353-390202159-3511571085 (nsi)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-1209419826-1829913269-3824447628-1153237837-3789837839",
+    "name": "SCardSvr",
+    "line": "svchost.exe (1108): S-1-5-80-1209419826-1829913269-3824447628-1153237837-3789837839 (SCardSvr)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-429025866-4105586292-427562881-1309981334-1060966148",
+    "name": "SLUINotify",
+    "line": "svchost.exe (1108): S-1-5-80-429025866-4105586292-427562881-1309981334-1060966148 (SLUINotify)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-486568272-975562994-1883531608-2732234258-332540751",
+    "name": "SSDPSRV",
+    "line": "svchost.exe (1108): S-1-5-80-486568272-975562994-1883531608-2732234258-332540751 (SSDPSRV)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-3435701886-799518250-3791383489-3228296122-2938884314",
+    "name": "SstpSvc",
+    "line": "svchost.exe (1108): S-1-5-80-3435701886-799518250-3791383489-3228296122-2938884314 (SstpSvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-4167276341-681140529-2035857140-584847688-708058301",
+    "name": "TBS",
+    "line": "svchost.exe (1108): S-1-5-80-4167276341-681140529-2035857140-584847688-708058301 (TBS)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-56840347-690487168-3179794702-1332568925-762031181",
+    "name": "THREADORDER",
+    "line": "svchost.exe (1108): S-1-5-80-56840347-690487168-3179794702-1332568925-762031181 (THREADORDER)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-448846144-1414373772-1578130625-718576682-2306699751",
+    "name": "upnphost",
+    "line": "svchost.exe (1108): S-1-5-80-448846144-1414373772-1578130625-718576682-2306699751 (upnphost)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-4267341169-2882910712-659946508-2704364837-2204554466",
+    "name": "W32Time",
+    "line": "svchost.exe (1108): S-1-5-80-4267341169-2882910712-659946508-2704364837-2204554466 (W32Time)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-80-2455429942-3131183193-3617688776-595395669-3772047725",
+    "name": "WinHttpAutoProxySvc",
+    "line": "svchost.exe (1108): S-1-5-80-2455429942-3131183193-3617688776-595395669-3772047725 (WinHttpAutoProxySvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-5-5-0-62561",
+    "name": "Logon Session",
+    "line": "svchost.exe (1108): S-1-5-5-0-62561 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1108,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (1108): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "svchost.exe (1176): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (1176): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (1176): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (1176): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (1176): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (1176): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (1176): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-1580948945-3239616721-2529237571-3761093093-1214243633",
+    "name": "AudioEndpointBuilder",
+    "line": "svchost.exe (1176): S-1-5-80-1580948945-3239616721-2529237571-3761093093-1214243633 (AudioEndpointBuilder)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-1987853863-1639573247-1110726908-1137832616-3599624523",
+    "name": "CscService",
+    "line": "svchost.exe (1176): S-1-5-80-1987853863-1639573247-1110726908-1137832616-3599624523 (CscService)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-3787436395-2174616005-3003730137-1094982900-1570567328",
+    "name": "dot3svc",
+    "line": "svchost.exe (1176): S-1-5-80-3787436395-2174616005-3003730137-1094982900-1570567328 (dot3svc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-89818136-74175777-88572358-3912780041-2421659406",
+    "name": "hidserv",
+    "line": "svchost.exe (1176): S-1-5-80-89818136-74175777-88572358-3912780041-2421659406 (hidserv)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-2506443892-94066030-1663014834-2885971264-4189966690",
+    "name": "IPBusEnum",
+    "line": "svchost.exe (1176): S-1-5-80-2506443892-94066030-1663014834-2885971264-4189966690 (IPBusEnum)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-2898649604-2335086160-1904548223-3761738420-3855444835",
+    "name": "Netman",
+    "line": "svchost.exe (1176): S-1-5-80-2898649604-2335086160-1904548223-3761738420-3855444835 (Netman)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-768763963-4214222998-2156221936-2953597973-713500239",
+    "name": "TrkWks",
+    "line": "svchost.exe (1176): S-1-5-80-768763963-4214222998-2156221936-2953597973-713500239 (TrkWks)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-2014626298-1656748749-3847481816-918933055-2469338456",
+    "name": "UmRdpService",
+    "line": "svchost.exe (1176): S-1-5-80-2014626298-1656748749-3847481816-918933055-2469338456 (UmRdpService)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-2815190569-4075358141-1041947382-2198045348-980246365",
+    "name": "UxSms",
+    "line": "svchost.exe (1176): S-1-5-80-2815190569-4075358141-1041947382-2198045348-980246365 (UxSms)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-3524758515-3090971750-345616940-2322499744-3530715838",
+    "name": "WdiSystemHost",
+    "line": "svchost.exe (1176): S-1-5-80-3524758515-3090971750-345616940-2322499744-3530715838 (WdiSystemHost)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-113310567-2163499630-2787090463-221477905-209227094",
+    "name": "WPDBusEnum",
+    "line": "svchost.exe (1176): S-1-5-80-113310567-2163499630-2787090463-221477905-209227094 (WPDBusEnum)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-80-2652678385-582572993-1835434367-1344795993-749280709",
+    "name": "wudfsvc",
+    "line": "svchost.exe (1176): S-1-5-80-2652678385-582572993-1835434367-1344795993-749280709 (wudfsvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-5-0-63900",
+    "name": "Logon Session",
+    "line": "svchost.exe (1176): S-1-5-5-0-63900 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (1176): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1176,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "svchost.exe (1176): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-20",
+    "name": "NT Authority",
+    "line": "svchost.exe (1204): S-1-5-20 (NT Authority)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (1204): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (1204): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (1204): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (1204): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (1204): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (1204): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-80-242729624-280608522-2219052887-3187409060-2225943459",
+    "name": "CryptSvc",
+    "line": "svchost.exe (1204): S-1-5-80-242729624-280608522-2219052887-3187409060-2225943459 (CryptSvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-80-859482183-879914841-863379149-1145462774-2388618682",
+    "name": "Dnscache",
+    "line": "svchost.exe (1204): S-1-5-80-859482183-879914841-863379149-1145462774-2388618682 (Dnscache)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-80-2818357584-3387065753-4000393942-342927828-138088443",
+    "name": "KtmRm",
+    "line": "svchost.exe (1204): S-1-5-80-2818357584-3387065753-4000393942-342927828-138088443 (KtmRm)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-80-2006800713-1441093265-249754844-3404434343-1444102779",
+    "name": "napagent",
+    "line": "svchost.exe (1204): S-1-5-80-2006800713-1441093265-249754844-3404434343-1444102779 (napagent)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-80-3141615172-2057878085-1754447212-2405740020-3916490453",
+    "name": "NlaSvc",
+    "line": "svchost.exe (1204): S-1-5-80-3141615172-2057878085-1754447212-2405740020-3916490453 (NlaSvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-80-446051430-1559341753-4161941529-1950928533-810483104",
+    "name": "TermService",
+    "line": "svchost.exe (1204): S-1-5-80-446051430-1559341753-4161941529-1950928533-810483104 (TermService)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-80-4059739203-877974739-1245631912-527174227-2996563517",
+    "name": "Wecsvc",
+    "line": "svchost.exe (1204): S-1-5-80-4059739203-877974739-1245631912-527174227-2996563517 (Wecsvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-80-569256582-2953403351-2909559716-1301513147-412116970",
+    "name": "WinRM",
+    "line": "svchost.exe (1204): S-1-5-80-569256582-2953403351-2909559716-1301513147-412116970 (WinRM)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-5-5-0-64755",
+    "name": "Logon Session",
+    "line": "svchost.exe (1204): S-1-5-5-0-64755 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1204,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (1204): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-5-19",
+    "name": "NT Authority",
+    "line": "svchost.exe (1352): S-1-5-19 (NT Authority)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (1352): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (1352): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (1352): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (1352): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (1352): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (1352): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-5-80-1383147646-27650227-2710666058-1662982300-1023958487",
+    "name": "BFE",
+    "line": "svchost.exe (1352): S-1-5-80-1383147646-27650227-2710666058-1662982300-1023958487 (BFE)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-5-80-2970612574-78537857-698502321-558674196-1451644582",
+    "name": "DPS",
+    "line": "svchost.exe (1352): S-1-5-80-2970612574-78537857-698502321-558674196-1451644582 (DPS)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-5-80-3088073201-1464728630-1879813800-1107566885-823218052",
+    "name": "MpsSvc",
+    "line": "svchost.exe (1352): S-1-5-80-3088073201-1464728630-1879813800-1107566885-823218052 (MpsSvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-5-80-2661322625-712705077-2999183737-3043590567-590698655",
+    "name": "pla",
+    "line": "svchost.exe (1352): S-1-5-80-2661322625-712705077-2999183737-3043590567-590698655 (pla)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-5-5-0-68690",
+    "name": "Logon Session",
+    "line": "svchost.exe (1352): S-1-5-5-0-68690 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (1352): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1352,
+    "sid": "S-1-5-33",
+    "name": "Write Restricted",
+    "line": "svchost.exe (1352): S-1-5-33 (Write Restricted)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "spoolsv.exe",
+    "pid": 1476,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "spoolsv.exe (1476): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "spoolsv.exe",
+    "pid": 1476,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "spoolsv.exe (1476): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "spoolsv.exe",
+    "pid": 1476,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "spoolsv.exe (1476): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "spoolsv.exe",
+    "pid": 1476,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "spoolsv.exe (1476): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "spoolsv.exe",
+    "pid": 1476,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "spoolsv.exe (1476): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "spoolsv.exe",
+    "pid": 1476,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "spoolsv.exe (1476): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "spoolsv.exe",
+    "pid": 1476,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "spoolsv.exe (1476): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "spoolsv.exe",
+    "pid": 1476,
+    "sid": "S-1-5-80-3951239711-1671533544-1416304335-3763227691-3930497994",
+    "name": "Spooler",
+    "line": "spoolsv.exe (1476): S-1-5-80-3951239711-1671533544-1416304335-3763227691-3930497994 (Spooler)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "spoolsv.exe",
+    "pid": 1476,
+    "sid": "S-1-5-5-0-74673",
+    "name": "Logon Session",
+    "line": "spoolsv.exe (1476): S-1-5-5-0-74673 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "spoolsv.exe",
+    "pid": 1476,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "spoolsv.exe (1476): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "spoolsv.exe",
+    "pid": 1476,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "spoolsv.exe (1476): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1512,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "svchost.exe (1512): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1512,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (1512): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1512,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (1512): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1512,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (1512): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1512,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (1512): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1512,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (1512): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1512,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (1512): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1512,
+    "sid": "S-1-5-80-567506535-1419326804-775859156-1080935409-722777684",
+    "name": "",
+    "line": "svchost.exe (1512): S-1-5-80-567506535-1419326804-775859156-1080935409-722777684"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1512,
+    "sid": "S-1-5-5-0-76331",
+    "name": "Logon Session",
+    "line": "svchost.exe (1512): S-1-5-5-0-76331 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1512,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (1512): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1512,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "svchost.exe (1512): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1556,
+    "sid": "S-1-5-20",
+    "name": "NT Authority",
+    "line": "svchost.exe (1556): S-1-5-20 (NT Authority)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1556,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (1556): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1556,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (1556): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1556,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (1556): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1556,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (1556): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1556,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (1556): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1556,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (1556): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1556,
+    "sid": "S-1-5-80-3044542841-3639452079-4096941652-1606687743-1256249853",
+    "name": "PolicyAgent",
+    "line": "svchost.exe (1556): S-1-5-80-3044542841-3639452079-4096941652-1606687743-1256249853 (PolicyAgent)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1556,
+    "sid": "S-1-5-5-0-76815",
+    "name": "Logon Session",
+    "line": "svchost.exe (1556): S-1-5-5-0-76815 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1556,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (1556): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1568,
+    "sid": "S-1-5-19",
+    "name": "NT Authority",
+    "line": "svchost.exe (1568): S-1-5-19 (NT Authority)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1568,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (1568): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1568,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (1568): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1568,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (1568): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1568,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (1568): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1568,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (1568): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1568,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (1568): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1568,
+    "sid": "S-1-5-80-2822507136-3601578665-1013168651-121944544-1825232178",
+    "name": "RemoteRegistry",
+    "line": "svchost.exe (1568): S-1-5-80-2822507136-3601578665-1013168651-121944544-1825232178 (RemoteRegistry)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1568,
+    "sid": "S-1-5-5-0-77011",
+    "name": "Logon Session",
+    "line": "svchost.exe (1568): S-1-5-5-0-77011 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1568,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (1568): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1680,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "svchost.exe (1680): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1680,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (1680): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1680,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (1680): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1680,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (1680): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1680,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (1680): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1680,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (1680): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1680,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (1680): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1680,
+    "sid": "S-1-5-80-3299868208-4286319593-1091140620-3583751967-1732444380",
+    "name": "WerSvc",
+    "line": "svchost.exe (1680): S-1-5-80-3299868208-4286319593-1091140620-3583751967-1732444380 (WerSvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1680,
+    "sid": "S-1-5-5-0-78324",
+    "name": "Logon Session",
+    "line": "svchost.exe (1680): S-1-5-5-0-78324 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1680,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (1680): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 1680,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "svchost.exe (1680): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "taskeng.exe (1984): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "taskeng.exe (1984): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "taskeng.exe (1984): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "taskeng.exe (1984): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "taskeng.exe (1984): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "taskeng.exe (1984): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "taskeng.exe (1984): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-864916184-135290571-3087830041-1716922880-4237303741",
+    "name": "BITS",
+    "line": "taskeng.exe (1984): S-1-5-80-864916184-135290571-3087830041-1716922880-4237303741 (BITS)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-3256172449-2363790065-3617575471-4144056108-756904704",
+    "name": "CertPropSvc",
+    "line": "taskeng.exe (1984): S-1-5-80-3256172449-2363790065-3617575471-4144056108-756904704 (CertPropSvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-3578261754-285310837-913589462-2834155770-667502746",
+    "name": "EapHost",
+    "line": "taskeng.exe (1984): S-1-5-80-3578261754-285310837-913589462-2834155770-667502746 (EapHost)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-1373701630-3910968185-3388013410-2492353-937432973",
+    "name": "hkmsvc",
+    "line": "taskeng.exe (1984): S-1-5-80-1373701630-3910968185-3388013410-2492353-937432973 (hkmsvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-698886940-375981264-2691324669-2937073286-3841916615",
+    "name": "IKEEXT",
+    "line": "taskeng.exe (1984): S-1-5-80-698886940-375981264-2691324669-2937073286-3841916615 (IKEEXT)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-62724632-2456781206-3863850748-1496050881-1042387526",
+    "name": "iphlpsvc",
+    "line": "taskeng.exe (1984): S-1-5-80-62724632-2456781206-3863850748-1496050881-1042387526 (iphlpsvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-879696042-2351668846-370232824-2524288904-4023536711",
+    "name": "LanmanServer",
+    "line": "taskeng.exe (1984): S-1-5-80-879696042-2351668846-370232824-2524288904-4023536711 (LanmanServer)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-917953661-2020045820-2727011118-2260243830-4032185929",
+    "name": "MSiSCSI",
+    "line": "taskeng.exe (1984): S-1-5-80-917953661-2020045820-2727011118-2260243830-4032185929 (MSiSCSI)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-1802467488-1541022566-2033325545-854566965-652742428",
+    "name": "RasAuto",
+    "line": "taskeng.exe (1984): S-1-5-80-1802467488-1541022566-2033325545-854566965-652742428 (RasAuto)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-4176366874-305252471-2256717057-2714189771-3552532790",
+    "name": "RasMan",
+    "line": "taskeng.exe (1984): S-1-5-80-4176366874-305252471-2256717057-2714189771-3552532790 (RasMan)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-1954729425-4294152082-187165618-318331177-3831297489",
+    "name": "RemoteAccess",
+    "line": "taskeng.exe (1984): S-1-5-80-1954729425-4294152082-187165618-318331177-3831297489 (RemoteAccess)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-4125092361-1567024937-842823819-2091237918-836075745",
+    "name": "Schedule",
+    "line": "taskeng.exe (1984): S-1-5-80-4125092361-1567024937-842823819-2091237918-836075745 (Schedule)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-1691538513-4084330536-1620899472-1113280783-3554754292",
+    "name": "SCPolicySvc",
+    "line": "taskeng.exe (1984): S-1-5-80-1691538513-4084330536-1620899472-1113280783-3554754292 (SCPolicySvc)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-4022436659-1090538466-1613889075-870485073-3428993833",
+    "name": "SessionEnv",
+    "line": "taskeng.exe (1984): S-1-5-80-4022436659-1090538466-1613889075-870485073-3428993833 (SessionEnv)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-2009329905-444645132-2728249442-922493431-93864177",
+    "name": "SharedAccess",
+    "line": "taskeng.exe (1984): S-1-5-80-2009329905-444645132-2728249442-922493431-93864177 (SharedAccess)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-3594706986-2537596223-181334840-1741483385-1351671666",
+    "name": "wercplsupport",
+    "line": "taskeng.exe (1984): S-1-5-80-3594706986-2537596223-181334840-1741483385-1351671666 (wercplsupport)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-3750560858-172214265-3889451188-1914796615-4100997547",
+    "name": "Winmgmt",
+    "line": "taskeng.exe (1984): S-1-5-80-3750560858-172214265-3889451188-1914796615-4100997547 (Winmgmt)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-80-1014140700-3308905587-3330345912-272242898-93311788",
+    "name": "wuauserv",
+    "line": "taskeng.exe (1984): S-1-5-80-1014140700-3308905587-3330345912-272242898-93311788 (wuauserv)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-5-0-60564",
+    "name": "Logon Session",
+    "line": "taskeng.exe (1984): S-1-5-5-0-60564 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "taskeng.exe (1984): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1984,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "taskeng.exe (1984): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "taskeng.exe (1444): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "taskeng.exe (1444): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "taskeng.exe (1444): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "taskeng.exe (1444): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "taskeng.exe (1444): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "taskeng.exe (1444): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "taskeng.exe (1444): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "taskeng.exe (1444): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "taskeng.exe (1444): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "taskeng.exe (1444): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "taskeng.exe (1444): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "taskeng.exe",
+    "pid": 1444,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "taskeng.exe (1444): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "dwm.exe (1688): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "dwm.exe (1688): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "dwm.exe (1688): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "dwm.exe (1688): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "dwm.exe (1688): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "dwm.exe (1688): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "dwm.exe (1688): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "dwm.exe (1688): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "dwm.exe (1688): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "dwm.exe (1688): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "dwm.exe (1688): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "dwm.exe",
+    "pid": 1688,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "dwm.exe (1688): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "explorer.exe (816): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "explorer.exe (816): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "explorer.exe (816): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "explorer.exe (816): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "explorer.exe (816): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "explorer.exe (816): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "explorer.exe (816): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "explorer.exe (816): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "explorer.exe (816): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "explorer.exe (816): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "explorer.exe (816): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "explorer.exe",
+    "pid": 816,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "explorer.exe (816): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "VBoxTray.exe (1816): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "VBoxTray.exe (1816): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "VBoxTray.exe (1816): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "VBoxTray.exe (1816): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "VBoxTray.exe (1816): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "VBoxTray.exe (1816): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "VBoxTray.exe (1816): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "VBoxTray.exe (1816): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "VBoxTray.exe (1816): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "VBoxTray.exe (1816): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "VBoxTray.exe (1816): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "VBoxTray.exe",
+    "pid": 1816,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "VBoxTray.exe (1816): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "cmd.exe (612): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "cmd.exe (612): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "cmd.exe (612): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "cmd.exe (612): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "cmd.exe (612): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "cmd.exe (612): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "cmd.exe (612): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "cmd.exe (612): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "cmd.exe (612): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "cmd.exe (612): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "cmd.exe (612): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 612,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "cmd.exe (612): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 2424,
+    "sid": "S-1-5-20",
+    "name": "NT Authority",
+    "line": "svchost.exe (2424): S-1-5-20 (NT Authority)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 2424,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "svchost.exe (2424): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 2424,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "svchost.exe (2424): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 2424,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "svchost.exe (2424): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 2424,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "svchost.exe (2424): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 2424,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "svchost.exe (2424): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 2424,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "svchost.exe (2424): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 2424,
+    "sid": "S-1-5-80-4230913304-2206818457-801678004-120036174-1892434133",
+    "name": "TapiSrv",
+    "line": "svchost.exe (2424): S-1-5-80-4230913304-2206818457-801678004-120036174-1892434133 (TapiSrv)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 2424,
+    "sid": "S-1-5-5-0-294143",
+    "name": "Logon Session",
+    "line": "svchost.exe (2424): S-1-5-5-0-294143 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "svchost.exe",
+    "pid": 2424,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "svchost.exe (2424): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "msdtc.exe",
+    "pid": 2620,
+    "sid": "S-1-5-20",
+    "name": "NT Authority",
+    "line": "msdtc.exe (2620): S-1-5-20 (NT Authority)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "msdtc.exe",
+    "pid": 2620,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "msdtc.exe (2620): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "msdtc.exe",
+    "pid": 2620,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "msdtc.exe (2620): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "msdtc.exe",
+    "pid": 2620,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "msdtc.exe (2620): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "msdtc.exe",
+    "pid": 2620,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "msdtc.exe (2620): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "msdtc.exe",
+    "pid": 2620,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "msdtc.exe (2620): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "msdtc.exe",
+    "pid": 2620,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "msdtc.exe (2620): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "msdtc.exe",
+    "pid": 2620,
+    "sid": "S-1-5-80-3960419045-2460139048-4046793004-1809597027-2250574426",
+    "name": "MSDTC",
+    "line": "msdtc.exe (2620): S-1-5-80-3960419045-2460139048-4046793004-1809597027-2250574426 (MSDTC)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "msdtc.exe",
+    "pid": 2620,
+    "sid": "S-1-5-5-0-306121",
+    "name": "Logon Session",
+    "line": "msdtc.exe (2620): S-1-5-5-0-306121 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "msdtc.exe",
+    "pid": 2620,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "msdtc.exe (2620): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "xampp-control.e (2768): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "xampp-control.e (2768): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "xampp-control.e (2768): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "xampp-control.e (2768): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "xampp-control.e (2768): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "xampp-control.e (2768): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "xampp-control.e (2768): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "xampp-control.e (2768): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "xampp-control.e (2768): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "xampp-control.e (2768): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "xampp-control.e (2768): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "xampp-control.e",
+    "pid": 2768,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "xampp-control.e (2768): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "httpd.exe (2796): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "httpd.exe (2796): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "httpd.exe (2796): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "httpd.exe (2796): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "httpd.exe (2796): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "httpd.exe (2796): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "httpd.exe (2796): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "httpd.exe (2796): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "httpd.exe (2796): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "httpd.exe (2796): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "httpd.exe (2796): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2796,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "httpd.exe (2796): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "mysqld.exe (2804): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "mysqld.exe (2804): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "mysqld.exe (2804): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "mysqld.exe (2804): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "mysqld.exe (2804): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "mysqld.exe (2804): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "mysqld.exe (2804): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "mysqld.exe (2804): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "mysqld.exe (2804): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "mysqld.exe (2804): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "mysqld.exe (2804): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "mysqld.exe",
+    "pid": 2804,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "mysqld.exe (2804): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "FileZillaServer (2856): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "FileZillaServer (2856): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "FileZillaServer (2856): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "FileZillaServer (2856): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "FileZillaServer (2856): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "FileZillaServer (2856): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "FileZillaServer (2856): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "FileZillaServer (2856): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "FileZillaServer (2856): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "FileZillaServer (2856): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "FileZillaServer (2856): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FileZillaServer",
+    "pid": 2856,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "FileZillaServer (2856): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "httpd.exe (2880): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "httpd.exe (2880): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "httpd.exe (2880): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "httpd.exe (2880): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "httpd.exe (2880): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "httpd.exe (2880): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "httpd.exe (2880): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "httpd.exe (2880): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "httpd.exe (2880): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "httpd.exe (2880): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "httpd.exe (2880): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "httpd.exe",
+    "pid": 2880,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "httpd.exe (2880): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "wuauclt.exe (2516): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "wuauclt.exe (2516): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "wuauclt.exe (2516): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "wuauclt.exe (2516): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "wuauclt.exe (2516): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "wuauclt.exe (2516): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "wuauclt.exe (2516): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "wuauclt.exe (2516): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "wuauclt.exe (2516): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "wuauclt.exe (2516): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "wuauclt.exe (2516): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "wuauclt.exe",
+    "pid": 2516,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "wuauclt.exe (2516): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "cmd.exe (1972): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "cmd.exe (1972): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "cmd.exe (1972): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "cmd.exe (1972): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "cmd.exe (1972): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "cmd.exe (1972): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "cmd.exe (1972): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "cmd.exe (1972): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "cmd.exe (1972): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "cmd.exe (1972): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "cmd.exe (1972): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "cmd.exe",
+    "pid": 1972,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "cmd.exe (1972): S-1-16-12288 (High Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "TrustedInstalle",
+    "pid": 3848,
+    "sid": "S-1-5-18",
+    "name": "Local System",
+    "line": "TrustedInstalle (3848): S-1-5-18 (Local System)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "TrustedInstalle",
+    "pid": 3848,
+    "sid": "S-1-16-16384",
+    "name": "System Mandatory Level",
+    "line": "TrustedInstalle (3848): S-1-16-16384 (System Mandatory Level)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "TrustedInstalle",
+    "pid": 3848,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "TrustedInstalle (3848): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "TrustedInstalle",
+    "pid": 3848,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "TrustedInstalle (3848): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "TrustedInstalle",
+    "pid": 3848,
+    "sid": "S-1-5-6",
+    "name": "Service",
+    "line": "TrustedInstalle (3848): S-1-5-6 (Service)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "TrustedInstalle",
+    "pid": 3848,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "TrustedInstalle (3848): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "TrustedInstalle",
+    "pid": 3848,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "TrustedInstalle (3848): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "TrustedInstalle",
+    "pid": 3848,
+    "sid": "S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464",
+    "name": "TrustedInstaller",
+    "line": "TrustedInstalle (3848): S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464 (TrustedInstaller)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "TrustedInstalle",
+    "pid": 3848,
+    "sid": "S-1-5-5-0-9076139",
+    "name": "Logon Session",
+    "line": "TrustedInstalle (3848): S-1-5-5-0-9076139 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "TrustedInstalle",
+    "pid": 3848,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "TrustedInstalle (3848): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "TrustedInstalle",
+    "pid": 3848,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "TrustedInstalle (3848): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-500",
+    "name": "Administrator",
+    "line": "FTK Imager.exe (2120): S-1-5-21-3848053756-3249532031-1848221756-500 (Administrator)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-5-21-3848053756-3249532031-1848221756-513",
+    "name": "Domain Users",
+    "line": "FTK Imager.exe (2120): S-1-5-21-3848053756-3249532031-1848221756-513 (Domain Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-1-0",
+    "name": "Everyone",
+    "line": "FTK Imager.exe (2120): S-1-1-0 (Everyone)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-5-32-544",
+    "name": "Administrators",
+    "line": "FTK Imager.exe (2120): S-1-5-32-544 (Administrators)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-5-32-545",
+    "name": "Users",
+    "line": "FTK Imager.exe (2120): S-1-5-32-545 (Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-5-4",
+    "name": "Interactive",
+    "line": "FTK Imager.exe (2120): S-1-5-4 (Interactive)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-5-11",
+    "name": "Authenticated Users",
+    "line": "FTK Imager.exe (2120): S-1-5-11 (Authenticated Users)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-5-15",
+    "name": "This Organization",
+    "line": "FTK Imager.exe (2120): S-1-5-15 (This Organization)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-5-5-0-128791",
+    "name": "Logon Session",
+    "line": "FTK Imager.exe (2120): S-1-5-5-0-128791 (Logon Session)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-2-0",
+    "name": "Local (Users with the ability to log in locally)",
+    "line": "FTK Imager.exe (2120): S-1-2-0 (Local (Users with the ability to log in locally))"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-5-64-10",
+    "name": "NTLM Authentication",
+    "line": "FTK Imager.exe (2120): S-1-5-64-10 (NTLM Authentication)"
+  },
+  {
+    "source": "getsids",
+    "parser_mode": "regex-vol2-getsids",
+    "process": "FTK Imager.exe",
+    "pid": 2120,
+    "sid": "S-1-16-12288",
+    "name": "High Mandatory Level",
+    "line": "FTK Imager.exe (2120): S-1-16-12288 (High Mandatory Level)"
+  }
+]

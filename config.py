@@ -1,12 +1,21 @@
 """
 PHANTOM DFIR — Configuration
-Tool paths, Ollama endpoint, plugin timeouts.
+Tool paths, LLM provider, plugin timeouts.
 """
 import shutil, os
 
-# ── LLM ──────────────────────────────────────────────────────────────────────
+# ── LLM Provider ─────────────────────────────────────────────────────────────
+# Supported: "ollama" (default, free, local), "claude", "openai", "groq"
+# Override via CLI: --provider claude --api-key sk-...
+LLM_PROVIDER    = os.environ.get("PHANTOM_PROVIDER", "ollama")
+LLM_API_KEY     = os.environ.get("PHANTOM_API_KEY",  None)
+
+# ── Ollama (default provider) ────────────────────────────────────────────────
 OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_MODEL    = os.environ.get("PHANTOM_MODEL",   "qwen2.5:14b")
+
+# ── Skills ───────────────────────────────────────────────────────────────────
+SKILLS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "skills")
 
 # ── Tool aliases (SIFT Workstation) ──────────────────────────────────────────
 VOL3_CMD  = shutil.which("vol")  or "vol"

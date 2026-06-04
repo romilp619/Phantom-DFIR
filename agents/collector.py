@@ -236,20 +236,32 @@ def _run_parallel(tasks: dict) -> tuple:
     """Run a dict of {name: callable} in parallel, return (results, errors)."""
     raw_evidence = {}
     errors       = []
+    total        = len(tasks)
+    completed    = 0
+    t_start      = time.time()
 
-    print(f"\n  Running {len(tasks)} plugins in parallel...", flush=True)
+    print(f"\n  Running {total} plugins in parallel ({MAX_PARALLEL_WORKERS} workers)...", flush=True)
     with ThreadPoolExecutor(max_workers=MAX_PARALLEL_WORKERS) as ex:
-        future_map = {ex.submit(fn): name for name, fn in tasks.items()}
+        future_map  = {ex.submit(fn): name for name, fn in tasks.items()}
+        future_start = {name: time.time() for name in tasks}
         for future in as_completed(future_map):
             name = future_map[future]
+            completed += 1
+            elapsed_plugin = time.time() - future_start.get(name, time.time())
             try:
                 result = future.result()
                 raw_evidence[name] = result or ""
                 status = "✓" if result and "[TIMEOUT]" not in result and "[ERROR]" not in result else "✗"
-                print(f"    {status} {name}", flush=True)
+                print(f"    [{completed:>2}/{total}] {status} {name:<30} ({elapsed_plugin:.1f}s)", flush=True)
             except Exception as e:
                 errors.append(f"{name}: {e}")
                 raw_evidence[name] = f"[ERROR] {e}"
+                print(f"    [{completed:>2}/{total}] ✗ {name:<30} (FAILED: {e})", flush=True)
+
+    wall_time = time.time() - t_start
+    succeeded = total - len(errors)
+    print(f"\n  ── {succeeded}/{total} plugins succeeded in {wall_time:.1f}s "
+          f"({len(errors)} failed) ──", flush=True)
 
     return raw_evidence, errors
 

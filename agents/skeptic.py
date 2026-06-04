@@ -12,23 +12,20 @@ v1.1 — Fixed NEEDS_MORE override bug: if 3+ sources confirm, always CRITICAL
 """
 import json
 import re
-from langchain_ollama import OllamaLLM
 from langchain_core.prompts import PromptTemplate
 
 from state import InvestigationState
 from config import OLLAMA_BASE_URL, OLLAMA_MODEL, TIMEOUT_LLM, MAX_SKEPTIC_ROUNDS
 from correlation.confidence import score, bucket_findings, is_benign_hypothesis
+from tools.llm_provider import create_llm
+from tools.skills_loader import load_skills_for_phase
 
-llm = OllamaLLM(
-    base_url=OLLAMA_BASE_URL,
-    model=OLLAMA_MODEL,
-    timeout=TIMEOUT_LLM,
-    temperature=0.0,   # Skeptic must be deterministic
-)
+llm = create_llm(temperature=0.0)  # Skeptic must be deterministic
 
 SKEPTIC_PROMPT = PromptTemplate.from_template("""
 You are an adversarial reviewer of a DFIR investigation.
 Your job: challenge each hypothesis ONLY if the evidence does NOT support it.
+{skill_context}
 
 === ABSOLUTE RULES (never break these) ===
 1. If verified_sources_count >= 3: verdict MUST be "CONFIRMED" — no exceptions
@@ -149,10 +146,14 @@ def run_skeptic(state: InvestigationState) -> InvestigationState:
     hyp_json = _format_hypotheses_for_skeptic(hypotheses)
 
     # Try LLM skeptic first
+    skill_context = load_skills_for_phase("skeptic")
     verdicts = None
     try:
         chain  = SKEPTIC_PROMPT | llm
-        output = chain.invoke({"hypotheses_json": hyp_json})
+        output = chain.invoke({
+            "hypotheses_json": hyp_json,
+            "skill_context": skill_context,
+        })
         start  = output.find("[")
         end    = output.rfind("]") + 1
         if start == -1:
@@ -216,6 +217,10 @@ def run_skeptic(state: InvestigationState) -> InvestigationState:
     # Bucket findings by confidence
     buckets = bucket_findings(updated)
 
+    # Merge any findings already cleared by the legitimacy engine
+    existing_cleared = state.get("cleared_findings", [])
+    all_cleared = existing_cleared + buckets["cleared"]
+
     return {
         **state,
         "hypotheses":        updated,
@@ -223,7 +228,7 @@ def run_skeptic(state: InvestigationState) -> InvestigationState:
         "critical_findings": buckets["critical"],
         "medium_findings":   buckets["medium"],
         "low_findings":      buckets["low"],
-        "cleared_findings":  buckets["cleared"],
+        "cleared_findings":  all_cleared,
         "refuted":           buckets["refuted"],
         "reasoning_log":     reasoning,
     }

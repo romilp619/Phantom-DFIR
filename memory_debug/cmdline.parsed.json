@@ -1,0 +1,260 @@
+[
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "\\SystemRoot\\System32\\smss.exe",
+    "line": "Command line : \\SystemRoot\\System32\\smss.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\csrss.exe ObjectDirectory=\\Windows SharedSection=1024,12288,512 Windows=On SubSystemType=Windows ServerDll=basesrv,1 ServerDll=winsrv:UserServerDllInitialization,3 ServerDll=winsrv:ConServerDllInitialization,2 ProfileControl=Off MaxRequestThreads=16",
+    "line": "Command line : C:\\Windows\\system32\\csrss.exe ObjectDirectory=\\Windows SharedSection=1024,12288,512 Windows=On SubSystemType=Windows ServerDll=basesrv,1 ServerDll=winsrv:UserServerDllInitialization,3 ServerDll=winsrv:ConServerDllInitialization,2 ProfileControl=Off MaxRequestThreads=16"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\csrss.exe ObjectDirectory=\\Windows SharedSection=1024,12288,512 Windows=On SubSystemType=Windows ServerDll=basesrv,1 ServerDll=winsrv:UserServerDllInitialization,3 ServerDll=winsrv:ConServerDllInitialization,2 ProfileControl=Off MaxRequestThreads=16",
+    "line": "Command line : C:\\Windows\\system32\\csrss.exe ObjectDirectory=\\Windows SharedSection=1024,12288,512 Windows=On SubSystemType=Windows ServerDll=basesrv,1 ServerDll=winsrv:UserServerDllInitialization,3 ServerDll=winsrv:ConServerDllInitialization,2 ProfileControl=Off MaxRequestThreads=16"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "wininit.exe",
+    "line": "Command line : wininit.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "winlogon.exe",
+    "line": "Command line : winlogon.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\services.exe",
+    "line": "Command line : C:\\Windows\\system32\\services.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\lsass.exe",
+    "line": "Command line : C:\\Windows\\system32\\lsass.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\lsm.exe",
+    "line": "Command line : C:\\Windows\\system32\\lsm.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\svchost.exe -k DcomLaunch",
+    "line": "Command line : C:\\Windows\\system32\\svchost.exe -k DcomLaunch"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "system32\\VBoxService.exe",
+    "line": "Command line : system32\\VBoxService.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\svchost.exe -k rpcss",
+    "line": "Command line : C:\\Windows\\system32\\svchost.exe -k rpcss"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\System32\\svchost.exe -k LocalServiceNetworkRestricted",
+    "line": "Command line : C:\\Windows\\System32\\svchost.exe -k LocalServiceNetworkRestricted"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\svchost.exe -k GPSvcGroup",
+    "line": "Command line : C:\\Windows\\system32\\svchost.exe -k GPSvcGroup"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\svchost.exe -k netsvcs",
+    "line": "Command line : C:\\Windows\\system32\\svchost.exe -k netsvcs"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\SLsvc.exe",
+    "line": "Command line : C:\\Windows\\system32\\SLsvc.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\svchost.exe -k LocalService",
+    "line": "Command line : C:\\Windows\\system32\\svchost.exe -k LocalService"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\System32\\svchost.exe -k LocalSystemNetworkRestricted",
+    "line": "Command line : C:\\Windows\\System32\\svchost.exe -k LocalSystemNetworkRestricted"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\svchost.exe -k NetworkService",
+    "line": "Command line : C:\\Windows\\system32\\svchost.exe -k NetworkService"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\svchost.exe -k LocalServiceNoNetwork",
+    "line": "Command line : C:\\Windows\\system32\\svchost.exe -k LocalServiceNoNetwork"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\System32\\spoolsv.exe",
+    "line": "Command line : C:\\Windows\\System32\\spoolsv.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\svchost.exe -k apphost",
+    "line": "Command line : C:\\Windows\\system32\\svchost.exe -k apphost"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\svchost.exe -k NetworkServiceNetworkRestricted",
+    "line": "Command line : C:\\Windows\\system32\\svchost.exe -k NetworkServiceNetworkRestricted"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\system32\\svchost.exe -k regsvc",
+    "line": "Command line : C:\\Windows\\system32\\svchost.exe -k regsvc"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\System32\\svchost.exe -k WerSvcGroup",
+    "line": "Command line : C:\\Windows\\System32\\svchost.exe -k WerSvcGroup"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "taskeng.exe {6CB08E8B-D510-4679-AE0A-1A733C326820}",
+    "line": "Command line : taskeng.exe {6CB08E8B-D510-4679-AE0A-1A733C326820}"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "taskeng.exe {D55A4A0C-25DD-4DA7-A8BE-1DCE417A0C4D}",
+    "line": "Command line : taskeng.exe {D55A4A0C-25DD-4DA7-A8BE-1DCE417A0C4D}"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "\"C:\\Windows\\system32\\Dwm.exe\"",
+    "line": "Command line : \"C:\\Windows\\system32\\Dwm.exe\""
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\Explorer.EXE",
+    "line": "Command line : C:\\Windows\\Explorer.EXE"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "\"C:\\Windows\\System32\\VBoxTray.exe\"",
+    "line": "Command line : \"C:\\Windows\\System32\\VBoxTray.exe\""
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-command-indicator",
+    "command": "cmd.exe pid:    612",
+    "line": "cmd.exe pid:    612"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "\"C:\\Windows\\System32\\cmd.exe\"",
+    "line": "Command line : \"C:\\Windows\\System32\\cmd.exe\""
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\System32\\svchost.exe -k tapisrv",
+    "line": "Command line : C:\\Windows\\System32\\svchost.exe -k tapisrv"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\System32\\msdtc.exe",
+    "line": "Command line : C:\\Windows\\System32\\msdtc.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "\"C:\\xampp\\xampp-control.exe\"",
+    "line": "Command line : \"C:\\xampp\\xampp-control.exe\""
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "c:\\xampp\\apache\\bin\\httpd.exe",
+    "line": "Command line : c:\\xampp\\apache\\bin\\httpd.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "\"c:\\xampp\\mysql\\bin\\mysqld.exe\" --defaults-file=\"c:\\xampp\\mysql\\bin\\my.ini\" --standalone",
+    "line": "Command line : \"c:\\xampp\\mysql\\bin\\mysqld.exe\" --defaults-file=\"c:\\xampp\\mysql\\bin\\my.ini\" --standalone"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "c:\\xampp\\filezillaftp\\filezillaserver.exe -compat -start",
+    "line": "Command line : c:\\xampp\\filezillaftp\\filezillaserver.exe -compat -start"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\xampp\\apache\\bin\\httpd.exe -d C:/xampp/apache",
+    "line": "Command line : C:\\xampp\\apache\\bin\\httpd.exe -d C:/xampp/apache"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "\"C:\\Windows\\system32\\wuauclt.exe\"",
+    "line": "Command line : \"C:\\Windows\\system32\\wuauclt.exe\""
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-command-indicator",
+    "command": "cmd.exe pid:   1972",
+    "line": "cmd.exe pid:   1972"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "\"C:\\Windows\\System32\\cmd.exe\"",
+    "line": "Command line : \"C:\\Windows\\System32\\cmd.exe\""
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "C:\\Windows\\servicing\\TrustedInstaller.exe",
+    "line": "Command line : C:\\Windows\\servicing\\TrustedInstaller.exe"
+  },
+  {
+    "source": "cmdline",
+    "parser_mode": "regex-vol2-cmdline",
+    "command": "\"\\\\Vboxsvr\\101\\FTK-Imager\\FTK Imager.exe\"",
+    "line": "Command line : \"\\\\Vboxsvr\\101\\FTK-Imager\\FTK Imager.exe\""
+  }
+]

@@ -1,1 +1,8 @@
 base-admin-memory.img
+__pycache__/
+*.pyc
+*.bak
+*.router_backup_
+*.E01
+*.img
+*.raw

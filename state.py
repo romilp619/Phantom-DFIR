@@ -63,5 +63,11 @@ class InvestigationState(TypedDict):
     duration_seconds: float
     start_time:       float          # unix timestamp at investigation start
 
+    # ── Self-Correction Loop ────────────────────────────────────────────────
+    iteration_number:        int            # current self-correction iteration (0-based)
+    legitimacy_threshold:    int            # current legitimacy score threshold (starts 50)
+    false_positives_detected: List[Dict]    # processes auto-cleared by legitimacy engine
+    self_correction_history: List[Dict]     # [{iteration, threshold, findings_before, findings_after}]
+
     # ── Analyst Reasoning Trace ──────────────────────────────────────────────
     reasoning_log:    List[Dict]    # [{agent, action, rationale, result, timestamp}]

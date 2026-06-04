@@ -1,5 +1,5 @@
 """
-PHANTOM DFIR — Reporter Agent v2.1
+PHANTOM DFIR — Reporter Agent v4.0
 Generates final JSON + Markdown report with:
   - Coherent attack narrative (not just a list of findings)
   - Verified findings (CRITICAL / MEDIUM / LOW)
@@ -11,6 +11,7 @@ Generates final JSON + Markdown report with:
 
 v2.0 — Dynamic remediation from ATT&CK techniques
 v2.1 — Attack narrative, cleared/benign section, filtered timeline
+v4.0 — Evidence coverage audit, SHA-256 chain of custody, version bump
 """
 import json
 import os
@@ -302,7 +303,37 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
     refuted  = state.get("refuted",           [])
     all_conf = critical + medium + low  # cleared excluded from "confirmed malicious"
 
-    # MITRE
+    # ── Evidence Coverage Audit (v4.0) ───────────────────────────────────
+    # Quality gate: check which plugin data was collected but never cited
+    raw_evidence = state.get("raw_evidence", {})
+    all_hypotheses = state.get("hypotheses", []) + cleared + refuted
+    cited_sources = set()
+    for h in all_hypotheses:
+        for src in h.get("verified_sources", []):
+            cited_sources.add(src)
+        # Also count sources referenced by IOC name matching
+        ioc = h.get("ioc", "").lower().replace(".exe", "")
+        if ioc:
+            for plugin_name, output in raw_evidence.items():
+                if output and ioc in output.lower():
+                    cited_sources.add(plugin_name)
+
+    plugins_with_data = {k for k, v in raw_evidence.items() if v and v.strip()}
+    uncited_plugins = plugins_with_data - cited_sources
+    coverage_pct = round(
+        (len(plugins_with_data - uncited_plugins) / max(len(plugins_with_data), 1)) * 100
+    )
+
+    reasoning_log = state.get("reasoning_log", [])
+    reasoning_log.append({
+        "agent": "reporter",
+        "action": "evidence_coverage_audit",
+        "rationale": f"Quality gate: {len(plugins_with_data)} plugins had data, "
+                     f"{len(cited_sources)} were cited in findings",
+        "result": f"Coverage: {coverage_pct}% | "
+                  f"Uncited: {', '.join(sorted(uncited_plugins)[:5]) if uncited_plugins else 'none'}",
+    })
+    state["reasoning_log"] = reasoning_log
     techniques   = map_evidence_to_mitre(state.get("raw_evidence", {}))
     kill_chain   = build_kill_chain(techniques)
 
@@ -322,7 +353,7 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
     report = {
         "metadata": {
             "tool":       "PHANTOM DFIR",
-            "version":    "2.1.0",
+            "version":    "4.0.0",
             "subtitle":   "Parallel Hypothesis Analysis with Multi-agent Threat Hunting Overlay Network",
             "timestamp":  datetime.now().isoformat(),
             "target":     filepath,
@@ -485,7 +516,7 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
             md_lines.append(f"| {i} | **{agent}** | {action} | {rational} | {result} |")
         md_lines += ["", "---", ""]
 
-    md_lines.append(f"*PHANTOM DFIR v2.1 | World's first adversarial self-verifying DFIR agent*")
+    md_lines.append(f"*PHANTOM DFIR v4.0 | World's first adversarial self-verifying DFIR agent*")
 
     md_path = os.path.join(REPORT_DIR, f"{basename}.md")
     with open(md_path, "w") as f:
@@ -493,9 +524,34 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
     print(f"  ✓ MD:   {md_path}", flush=True)
 
     # ── Execution Log (structured JSON) ────────────────────────────────────
+    # v4.0: SHA-256 output hashes for chain of custody
+    import hashlib
+
+    # Hash each plugin's raw evidence for tamper detection
+    evidence_integrity = {}
+    for plugin_name, plugin_output in state.get("raw_evidence", {}).items():
+        if plugin_output:
+            output_hash = hashlib.sha256(plugin_output.encode("utf-8", errors="replace")).hexdigest()
+            evidence_integrity[plugin_name] = {
+                "sha256": output_hash,
+                "size_bytes": len(plugin_output),
+            }
+
+    # Hash the memory image file itself
+    target_hash = ""
+    try:
+        h = hashlib.sha256()
+        with open(filepath, "rb") as img_f:
+            for chunk in iter(lambda: img_f.read(8192 * 1024), b""):
+                h.update(chunk)
+        target_hash = h.hexdigest()
+    except Exception:
+        target_hash = "unable_to_hash"
+
     exec_log = {
-        "phantom_version": "2.1.0",
+        "phantom_version": "4.0.0",
         "target": filepath,
+        "target_sha256": target_hash,
         "os_type": state.get("os_type", "?"),
         "duration_seconds": round(duration, 1),
         "total_steps": len(reasoning_log),
@@ -505,6 +561,7 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
         "cleared_count": len(cleared),
         "refuted_count": len(refuted),
         "hallucinations_caught": len(refuted),
+        "evidence_integrity": evidence_integrity,
         "reasoning_trace": reasoning_log,
     }
     exec_log_path = os.path.join(REPORT_DIR, f"{basename}_execution_log.json")
