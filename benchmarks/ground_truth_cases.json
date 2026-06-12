@@ -1,0 +1,521 @@
+{
+  "schema_version": "1.0",
+  "description": "PHANTOM DFIR multi-case ground truth and reproduction checklist built from the validated challenge runs.",
+  "scoring_notes": [
+    "Each finding is considered reproduced when any alias appears in the report text or structured JSON.",
+    "Required findings are weighted; optional findings document useful context but do not block a pass.",
+    "Forbidden phrases identify common false positives or stale routing bugs seen during validation.",
+    "This file is intentionally artifact-driven: it does not require hardcoded answers in PHANTOM itself."
+  ],
+  "cases": [
+    {
+      "id": "base_admin_memory",
+      "name": "SANS Find Evil base-admin memory",
+      "evidence_type": "memory",
+      "expected_verdict_any": [
+        "COMPROMISE",
+        "MALICIOUS",
+        "subject_srv.exe"
+      ],
+      "expected_findings": [
+        {
+          "id": "subject_srv_service",
+          "weight": 20,
+          "required": true,
+          "aliases": ["subject_srv.exe"],
+          "description": "Malicious service binary from C:\\windows\\ rather than System32."
+        },
+        {
+          "id": "c2_172_16_4_10",
+          "weight": 20,
+          "required": true,
+          "aliases": ["172.16.4.10", "172.16.4.10:8080"],
+          "description": "C2 connection to attacker host."
+        },
+        {
+          "id": "putty_lateral_movement",
+          "weight": 20,
+          "required": true,
+          "aliases": ["putty.exe", "PuTTY"],
+          "description": "PuTTY used for lateral SSH movement."
+        },
+        {
+          "id": "ssh_targets",
+          "weight": 15,
+          "required": true,
+          "aliases": ["onion-master", "base-elk", "proxy"],
+          "description": "Internal SSH targets recovered from command lines."
+        },
+        {
+          "id": "ruby_cleared",
+          "weight": 15,
+          "required": false,
+          "aliases": ["Puppet Labs", "ruby.exe", "rubyw.exe"],
+          "description": "Puppet Ruby correctly treated as benign context, not malware."
+        },
+        {
+          "id": "vmware_tools_cleared",
+          "weight": 10,
+          "required": false,
+          "aliases": ["vmtoolsd.exe", "VMware Tools"],
+          "description": "VMware tooling treated as benign context."
+        }
+      ],
+      "forbidden": [
+        "ruby.exe -- CRITICAL",
+        "ruby.exe - malicious"
+      ]
+    },
+    {
+      "id": "sysinternals_case",
+      "name": "SysInternals challenge",
+      "evidence_type": "disk",
+      "expected_verdict_any": [
+        "SUSPICIOUS",
+        "SysInternals attack chain",
+        "Multiple indicators"
+      ],
+      "expected_findings": [
+        {
+          "id": "fake_sysinternals_execution",
+          "weight": 15,
+          "required": true,
+          "aliases": ["C:\\Users\\Public\\Downloads\\SysInternals.exe", "SysInternals.exe via amcache, bam, userassist", "SysInternals.exe executed"],
+          "description": "Fake SysInternals executable execution corroborated by UserAssist, Amcache, and BAM."
+        },
+        {
+          "id": "download_time",
+          "weight": 10,
+          "required": true,
+          "aliases": ["21:18:51", "SysInternal.exe downloaded at 21:18:51", "downloaded at 2022-11-15 21:18:51"],
+          "description": "Published solution download timestamp recovered."
+        },
+        {
+          "id": "execution_time",
+          "weight": 10,
+          "required": true,
+          "aliases": ["21:19:00", "UserAssist execution", "SysInternal.exe executed at 21:19:00"],
+          "description": "UserAssist execution timestamp recovered."
+        },
+        {
+          "id": "hosts_tampering",
+          "weight": 10,
+          "required": true,
+          "aliases": ["192.168.15.10 www.sysinternals.com", "192.168.15.10 www.malware430.com", "HOSTS tampering"],
+          "description": "HOSTS file redirects recovered."
+        },
+        {
+          "id": "defender_before_execution",
+          "weight": 10,
+          "required": true,
+          "aliases": ["Defender exclusion existed before execution", "2022-11-15 21:17:00Z Exclusions\\Paths", "DisableAvCheck"],
+          "description": "Defender exclusion/configuration happened before execution."
+        },
+        {
+          "id": "srum_bytes",
+          "weight": 10,
+          "required": true,
+          "aliases": ["600880", "8347", "SRUM Bytes Received/Sent recovered"],
+          "description": "SRUM byte counts recovered."
+        },
+        {
+          "id": "bam_end_time",
+          "weight": 10,
+          "required": true,
+          "aliases": ["21:21:09", "BAM last execution"],
+          "description": "BAM last execution/end time recovered."
+        },
+        {
+          "id": "vmtoolsio_event7045",
+          "weight": 10,
+          "required": true,
+          "aliases": ["VMToolsIO", "Event ID 7045", "Service installed"],
+          "description": "VMToolsIO service installation attributed through Event 7045."
+        },
+        {
+          "id": "usn_prefetch_deletion",
+          "weight": 8,
+          "required": true,
+          "aliases": ["USN confirms Prefetch deletion", "Deleted Prefetch files", "Prefetch cleanup"],
+          "description": "USN and filesystem evidence show large-scale Prefetch deletion."
+        },
+        {
+          "id": "sysinternals_deletion",
+          "weight": 4,
+          "required": true,
+          "aliases": ["USN confirms SysInternal.exe deletion", "SysInternals.exe deletion"],
+          "description": "USN confirms SysInternals executable deletion."
+        },
+        {
+          "id": "shutdown",
+          "weight": 3,
+          "required": true,
+          "aliases": ["2022-11-15 21:21:12", "System shutdown at 21:21:12"],
+          "description": "Shutdown timestamp recovered."
+        }
+      ],
+      "forbidden": [
+        "binary EVTX chunk suppressed",
+        "Event7045 timestamps : 0",
+        "Likely clean"
+      ]
+    },
+    {
+      "id": "ali_hadi_web_server",
+      "name": "Ali Hadi Web Server compromise",
+      "evidence_type": "full",
+      "expected_verdict_any": [
+        "DEFINITIVE COMPROMISE",
+        "Webshell compromise",
+        "HIGH CONFIDENCE COMPROMISE"
+      ],
+      "expected_findings": [
+        {
+          "id": "webshell_findings",
+          "weight": 15,
+          "required": true,
+          "aliases": ["webshell", "c99.php", "tmpbrjvl.php", "tmpukudk.php", "tmpbiwuc.php"],
+          "description": "Webshell files or memory/webserver webshell artifacts recovered."
+        },
+        {
+          "id": "sqlmap",
+          "weight": 12,
+          "required": true,
+          "aliases": ["SQLMap", "sqlmap"],
+          "description": "SQLMap activity detected in web logs."
+        },
+        {
+          "id": "exec_abuse",
+          "weight": 12,
+          "required": true,
+          "aliases": ["/exec", "Command injection", "%26%26", "&&"],
+          "description": "Command injection and /exec abuse recovered."
+        },
+        {
+          "id": "attacker_ip",
+          "weight": 10,
+          "required": false,
+          "aliases": ["192.168.56.102"],
+          "description": "Known attacker IP from the public solution."
+        },
+        {
+          "id": "account_creation",
+          "weight": 15,
+          "required": true,
+          "aliases": ["net user user1 user1 /add", "net user user1 root@psut /add", "net user hacker"],
+          "description": "Account creation recovered from memory command history."
+        },
+        {
+          "id": "rdp_persistence",
+          "weight": 15,
+          "required": true,
+          "aliases": ["Remote Desktop Users", "net localgroup", "remotedesktop enable", "netsh firewall set service"],
+          "description": "RDP group and firewall persistence recovered."
+        },
+        {
+          "id": "apache_logs",
+          "weight": 11,
+          "required": true,
+          "aliases": ["Access logs", "Apache", "httpd.exe"],
+          "description": "Apache access log and httpd.exe memory evidence recovered."
+        },
+        {
+          "id": "web_attack_classes",
+          "weight": 10,
+          "required": false,
+          "aliases": ["SQL injection", "LFI", "XSS"],
+          "description": "Web attack classes classified."
+        }
+      ],
+      "forbidden": [
+        "Reasoning verdict   : LIKELY CLEAN",
+        "Total suspicion score: 0"
+      ]
+    },
+    {
+      "id": "cfreds_data_leakage",
+      "name": "CFReDS data leakage / insider exfiltration",
+      "evidence_type": "disk",
+      "expected_verdict_any": [
+        "CONFIRMED DATA LEAKAGE",
+        "Insider exfiltration workflow"
+      ],
+      "expected_findings": [
+        {
+          "id": "outlook_conspiracy",
+          "weight": 15,
+          "required": true,
+          "aliases": ["iaman.informant@nist.gov", "spy.conspirator@nist.gov", "Hello, Iaman", "Good job, buddy", "Important request"],
+          "description": "Outlook conspiracy communications reconstructed."
+        },
+        {
+          "id": "google_drive_files",
+          "weight": 15,
+          "required": true,
+          "aliases": ["happy_holiday.jpg", "do_u_wanna_build_a_snow_man.mp3", "Google Drive"],
+          "description": "Google Drive exfiltration files identified."
+        },
+        {
+          "id": "renamed_confidential_files",
+          "weight": 15,
+          "required": true,
+          "aliases": ["proposal.docx", "pricing_decision.xlsx", "landscape.png", "rename_correlations", "disguised through renamed"],
+          "description": "Confidential files correlated to disguised filenames."
+        },
+        {
+          "id": "usb_devices",
+          "weight": 12,
+          "required": true,
+          "aliases": ["SanDisk Cruzer Fit", "IAMAN $_@", "USB"],
+          "description": "Removable media evidence recovered."
+        },
+        {
+          "id": "network_share",
+          "weight": 10,
+          "required": true,
+          "aliases": ["\\\\10.11.11.128\\secured_drive", "secured_drive"],
+          "description": "Network share access recovered."
+        },
+        {
+          "id": "cd_r_sequence",
+          "weight": 13,
+          "required": true,
+          "aliases": ["CD-R", "burn_staging", "opened_cd", "burn/format/delete sequence"],
+          "description": "CD-R burn/format/delete anti-forensic sequence reconstructed."
+        },
+        {
+          "id": "anti_forensics",
+          "weight": 10,
+          "required": true,
+          "aliases": ["Eraser", "CCleaner", "anti-forensics"],
+          "description": "Anti-forensic tooling recovered."
+        },
+        {
+          "id": "final_leakage_narrative",
+          "weight": 10,
+          "required": true,
+          "aliases": ["copied", "renamed", "uploaded", "written to USB", "written to CD-R"],
+          "description": "Human-readable leakage workflow generated."
+        }
+      ],
+      "forbidden": [
+        "LOW SUSPICION",
+        "LIKELY CLEAN"
+      ]
+    },
+    {
+      "id": "ali_hadi_encrypt_them_all",
+      "name": "Ali Hadi Encrypt Them All",
+      "evidence_type": "disk",
+      "expected_verdict_any": [
+        "HIGH CONFIDENCE CRYPTO INCIDENT",
+        "Encrypt Them All workflow corroborated"
+      ],
+      "expected_findings": [
+        {
+          "id": "aes_target",
+          "weight": 10,
+          "required": true,
+          "aliases": ["README.txt.aes", "AESCrypt"],
+          "description": "AES encrypted README and AESCrypt usage identified."
+        },
+        {
+          "id": "aes_password",
+          "weight": 15,
+          "required": true,
+          "aliases": ["StarWars!", "AES password"],
+          "description": "AES password recovered from Mattermost/cache clue chain."
+        },
+        {
+          "id": "readme_plaintext",
+          "weight": 15,
+          "required": true,
+          "aliases": ["https://www.youtube.com/watch?v=66Ux1D9MDOk", "It is a very well known quote"],
+          "description": "README plaintext recovered."
+        },
+        {
+          "id": "gpg_passphrase",
+          "weight": 15,
+          "required": true,
+          "aliases": ["May the force be with you", "GPG passphrase"],
+          "description": "GPG passphrase recovered from the video clue."
+        },
+        {
+          "id": "gpg_plaintext",
+          "weight": 15,
+          "required": true,
+          "aliases": ["MT4orceBWY23", "Keys.txt decrypts", "gpg_plaintexts"],
+          "description": "Keys.txt PGP message decrypted to BitLocker password."
+        },
+        {
+          "id": "bitlocker_volume",
+          "weight": 10,
+          "required": true,
+          "aliases": ["R2D2", "BitLocker", "FVE"],
+          "description": "BitLocker volume R2D2 identified."
+        },
+        {
+          "id": "bitlocker_unlock",
+          "weight": 15,
+          "required": true,
+          "aliases": ["MT4orceBWY23 unlocks", "bitlocker_unlocks", "dislocker", "bdeinfo"],
+          "description": "BitLocker volume unlock verified."
+        },
+        {
+          "id": "noluck_clue",
+          "weight": 5,
+          "required": false,
+          "aliases": ["NoLuck.png", "no such thing as luck"],
+          "description": "NoLuck image clue/decoy recorded."
+        }
+      ],
+      "forbidden": [
+        "readme_plaintexts: 0",
+        "bitlocker_unlocks: 0",
+        "gpg_plaintexts: 0",
+        "pyAesCrypt  : NOT INSTALLED",
+        "gpg         : NOT FOUND"
+      ]
+    },
+    {
+      "id": "m57_jean_phishing",
+      "name": "M57 Jean phishing-induced data leakage",
+      "evidence_type": "disk",
+      "expected_verdict_any": [
+        "CONFIRMED DATA EXFILTRATION",
+        "Phishing-induced disclosure"
+      ],
+      "expected_findings": [
+        {
+          "id": "sensitive_attachment",
+          "weight": 20,
+          "required": true,
+          "aliases": ["m57biz.xls", "Sensitive send"],
+          "description": "Sensitive spreadsheet attachment identified."
+        },
+        {
+          "id": "external_recipient",
+          "weight": 20,
+          "required": true,
+          "aliases": ["tuckgorge@gmail.com"],
+          "description": "External Gmail recipient identified."
+        },
+        {
+          "id": "spoofed_identity",
+          "weight": 15,
+          "required": true,
+          "aliases": ["alison@m57.biz", "sender spoofing", "impersonated"],
+          "description": "Internal M57 identity spoofing/phishing recovered."
+        },
+        {
+          "id": "phishing_request",
+          "weight": 15,
+          "required": true,
+          "aliases": ["Please send me the information now", "phishing_requests=1", "phishing request"],
+          "description": "Phishing request email identified."
+        },
+        {
+          "id": "receipt_confirmation",
+          "weight": 10,
+          "required": true,
+          "aliases": ["receipt_confirmations=1", "confirmed receipt", "requested secrecy"],
+          "description": "Recipient confirmation recovered."
+        },
+        {
+          "id": "outlook_corpus",
+          "weight": 10,
+          "required": true,
+          "aliases": ["Messages   : 1020", "Outlook", "PST", "attachments=246"],
+          "description": "Outlook/PST evidence corpus parsed."
+        },
+        {
+          "id": "browser_timeline",
+          "weight": 5,
+          "required": false,
+          "aliases": ["urls=5340", "Timeline events synthesized: 1949"],
+          "description": "Browser/timeline parser recovered rich supporting context."
+        },
+        {
+          "id": "background_malware_control",
+          "weight": 5,
+          "required": false,
+          "aliases": ["Background artifacts only", "Execution evidence: None"],
+          "description": "Browser-cache malware signatures correctly treated as background artifacts."
+        }
+      ],
+      "forbidden": [
+        "Reasoning verdict   : LIKELY CLEAN",
+        "LOW SUSPICION",
+        "Win.Trojan.Ramnit -- primary incident"
+      ]
+    },
+    {
+      "id": "nitroba_harassment_pcap",
+      "name": "Nitroba harassment attribution PCAP",
+      "evidence_type": "pcap",
+      "expected_verdict_any": [
+        "HIGH CONFIDENCE ATTRIBUTION",
+        "Harassment communications corroborated"
+      ],
+      "expected_findings": [
+        {
+          "id": "primary_suspect",
+          "weight": 25,
+          "required": true,
+          "aliases": ["jcoachj@gmail.com", "Johnny Coach", "Attribution chain: jcoachj@gmail.com"],
+          "description": "Likely actor account identified and ranked as primary suspect."
+        },
+        {
+          "id": "threat_alias",
+          "weight": 20,
+          "required": true,
+          "aliases": ["the_whole_world_is_watching@nitroba.org"],
+          "description": "Threatening sender alias recovered."
+        },
+        {
+          "id": "victim",
+          "weight": 20,
+          "required": true,
+          "aliases": ["lilytuckrige@yahoo.com", "Primary victim"],
+          "description": "Victim email recovered and classified as victim."
+        },
+        {
+          "id": "internal_ip",
+          "weight": 10,
+          "required": true,
+          "aliases": ["192.168.15.4"],
+          "description": "Internal source IP linked to webmail activity."
+        },
+        {
+          "id": "webmail_attribution",
+          "weight": 10,
+          "required": true,
+          "aliases": ["Authenticated Gmail", "Webmail accounts", "HTTP POST message submission", "Communications"],
+          "description": "Webmail and HTTP communication artifacts recovered."
+        },
+        {
+          "id": "classification",
+          "weight": 10,
+          "required": true,
+          "aliases": ["HARASSMENT ATTRIBUTION", "Harassment communications"],
+          "description": "Case classified as attribution/harassment, not malware compromise."
+        },
+        {
+          "id": "gap_controller",
+          "weight": 5,
+          "required": false,
+          "aliases": ["Evidence Gap Controller", "evidence_gap_controller", "target_confidence", "gaps=0"],
+          "description": "Router-level self-correction/gap controller completed."
+        }
+      ],
+      "forbidden": [
+        "Verdict                 : HIGH CONFIDENCE COMPROMISE",
+        "Correlation verdict : HIGH CONFIDENCE COMPROMISE",
+        "Primary suspect: yahoo lilytuckrige@yahoo.com",
+        "Attribution chain: lilytuckrige@yahoo.com",
+        "podcasts@libsyn.com score",
+        "rogersmk@purdue.edu score"
+      ]
+    }
+  ]
+}
