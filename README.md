@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # PHANTOM DFIR
 ## Parallel Hypothesis Analysis with Multi-agent Threat Hunting Overlay Network
 <img width="1279" height="490" alt="image" src="https://github.com/user-attachments/assets/ce0212e3-541b-4bfa-96da-9a5b363c2d02" />
@@ -739,4 +738,3 @@ phantom-dfir/
 
 
 *PHANTOM DFIR v2.1 — Find Evil! Hackathon 2026*
->>>>>>> cf8bbe5 (feat: add skills integration, multi-LLM provider support, phantom router)
