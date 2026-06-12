@@ -116,3 +116,28 @@ python3 benchmark.py -f /path/to/memory.img --ground-truth ground_truth_base_adm
 ```
 
 This produces a scorecard with precision, recall, F1, FP rate, and hallucination rate, plus a letter grade (A+ through F).
+
+## Multi-Case Report Benchmark
+
+PHANTOM also includes a report-level benchmark for the disk, memory, and PCAP
+cases validated during development:
+
+```bash
+python3 benchmark_reports.py --all --reports-dir /home/romil --latest \
+  --output /home/romil/phantom_multi_case_benchmark.json
+```
+
+Ground truth lives in `benchmarks/ground_truth_cases.json` and currently covers:
+
+- base-admin memory compromise
+- SysInternals challenge
+- Ali Hadi Web Server compromise
+- CFReDS data leakage
+- Ali Hadi Encrypt Them All
+- M57 Jean phishing/data disclosure
+- Nitroba harassment attribution PCAP
+
+The report benchmark checks whether final PHANTOM outputs reproduce the
+case-defining evidence, verdict class, role attribution, and known false-positive
+guards. This complements the original memory benchmark by validating the
+analyst-facing reports across all evidence types.

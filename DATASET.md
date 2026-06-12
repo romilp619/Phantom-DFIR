@@ -57,3 +57,24 @@ python3 benchmark.py -f /path/to/base-admin-memory.img \
 ```
 
 All outputs are deterministic for the static rule engine. LLM outputs may vary slightly between runs due to model temperature (set to 0.1 for near-determinism).
+
+## Multi-Case Challenge Corpus
+
+Additional ground truth for the cases exercised during development is maintained
+in `benchmarks/ground_truth_cases.json`:
+
+| Case ID | Evidence Type | Primary Objective |
+|---|---:|---|
+| `sysinternals_case` | disk | Reconstruct fake SysInternals execution, HOSTS tampering, Defender exclusion, VMToolsIO, SRUM/BAM/USN/Prefetch evidence |
+| `ali_hadi_web_server` | full | Reconstruct webshell compromise, SQLMap, command injection, account creation, and RDP persistence |
+| `cfreds_data_leakage` | disk | Reconstruct Outlook, Google Drive, USB, CD-R, renamed-file, and anti-forensics exfiltration chain |
+| `ali_hadi_encrypt_them_all` | disk | Recover AES, GPG, and BitLocker secrets |
+| `m57_jean_phishing` | disk | Identify phishing-induced disclosure of `m57biz.xls` to `tuckgorge@gmail.com` |
+| `nitroba_harassment_pcap` | pcap | Attribute harassment traffic to `jcoachj@gmail.com` and identify the victim/alias chain |
+
+Run report-level scoring with:
+
+```bash
+python3 benchmark_reports.py --case nitroba_harassment_pcap \
+  --report /home/romil/phantom_unified_pcap_nitroba.pcap_20260612_174103.json
+```
