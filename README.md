@@ -40,6 +40,10 @@ Result:       19/19 sources confirmed → 🔴 CRITICAL (verified, not hallucina
 - **Python 3.10+** (pre-installed on SIFT)
 - **Volatility 3** (`pip install volatility3` — pre-installed on SIFT)
 - **Ollama** with `qwen2.5:14b` model (optional — works without LLM in `--no-llm` mode)
+- **Sleuth Kit** (`mmls`, `fls`, `icat`) for disk/E01 analysis
+- **tshark** for PCAP analysis
+- **ClamAV / clamdscan** for faster malware triage
+- **libbde / dislocker / gpg** for BitLocker and GPG challenge recovery
 
 PHANTOM DFIR supports both:
 
@@ -274,10 +278,69 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 
-pip install volatility3 fastapi uvicorn mcp pefile
+pip install volatility3 fastapi uvicorn mcp pefile pyAesCrypt
 ```
 
 ---
+
+## Step 3A: Install System DFIR Tools
+
+PHANTOM calls many native forensic tools directly. On Ubuntu/WSL/SIFT, install
+the common external dependencies with:
+
+```bash
+sudo apt update
+sudo apt install -y \
+  sleuthkit \
+  tshark \
+  ewf-tools \
+  plaso \
+  clamav \
+  clamav-daemon \
+  libbde-utils \
+  dislocker \
+  gnupg
+```
+
+Some distros package libbde differently. Verify the crypto tools with:
+
+```bash
+which gpg
+which dislocker
+which bdemount
+which bdeinfo
+```
+
+---
+
+## Step 3B: Enable ClamAV / clamdscan
+
+PHANTOM's malware triage prefers `clamdscan --multiscan` because the daemon
+keeps signatures loaded in memory. If unavailable, PHANTOM falls back to
+`clamscan`, which works but can be slower.
+
+Install and update signatures:
+
+```bash
+sudo apt install -y clamav clamav-daemon
+sudo systemctl stop clamav-freshclam 2>/dev/null || true
+sudo freshclam
+sudo systemctl enable --now clamav-daemon 2>/dev/null || sudo service clamav-daemon start
+```
+
+Verify:
+
+```bash
+which clamdscan
+clamdscan --version
+clamdscan --ping
+```
+
+If `clamdscan --ping` fails in WSL, start the daemon manually:
+
+```bash
+sudo service clamav-daemon start
+```
 
 ## Step 4: Install Ollama (Optional)
 
@@ -367,6 +430,137 @@ python3 test_mcp.py --memory /path/to/memory.img
 python3 disk_correlator.py \
   -m /path/to/memory.img \
   -d /path/to/disk.E01
+```
+
+---
+
+## Disk, E01, and PCAP Analysis
+
+Run a disk/E01 image in deep mode:
+
+```bash
+python3 disk_correlator.py -d /path/to/image.E01 --deep
+```
+
+For large E01 images where generic email settings are not relevant, skip slow
+broad email-setting string scans:
+
+```bash
+python3 disk_correlator.py \
+  -d /path/to/image.E01 \
+  --deep \
+  --skip-email-settings
+```
+
+Run a PCAP/PCAPNG:
+
+```bash
+python3 disk_correlator.py -d /path/to/network.pcap --deep
+```
+
+---
+
+## Unified Router: `phantom_router.py`
+
+Use `phantom_router.py` when you want one command that automatically detects
+whether the input is memory, disk/E01/raw, or PCAP evidence.
+
+The router:
+
+- detects evidence type from extension and file magic;
+- runs `main.py` for memory evidence;
+- runs `disk_correlator.py` for disk and PCAP evidence;
+- collects generated report paths;
+- optionally calls the configured LLM provider;
+- runs the evidence-gap controller;
+- writes unified `phantom_unified_*.json` and `phantom_unified_*.md` reports.
+
+Dry run, showing what command would execute:
+
+```bash
+python3 phantom_router.py /path/to/evidence --deep --dry-run --no-llm
+```
+
+Run without LLM:
+
+```bash
+python3 phantom_router.py /path/to/evidence --deep --no-llm
+```
+
+Run with Ollama:
+
+```bash
+python3 phantom_router.py /path/to/evidence \
+  --deep \
+  --provider ollama \
+  --model qwen2.5:14b \
+  --gap-confidence 0.85
+```
+
+Examples:
+
+```bash
+python3 phantom_router.py /cases/base-admin-memory.img --self-correct --no-llm
+python3 phantom_router.py /cases/SysInternalsCase.E01 --deep --no-llm
+python3 phantom_router.py /cases/nitroba.pcap --deep --no-llm
+```
+
+---
+
+## Multi-Case Benchmark Commands
+
+Score one final PHANTOM report:
+
+```bash
+python3 benchmark_reports.py \
+  --case <case_id> \
+  --report /path/to/phantom_report.json \
+  --output benchmark_results/<case_id>_benchmark_result.json
+```
+
+Supported case IDs:
+
+```text
+base_admin_memory
+sysinternals_case
+ali_hadi_web_server
+cfreds_data_leakage
+ali_hadi_encrypt_them_all
+m57_jean_phishing
+nitroba_harassment_pcap
+```
+
+Examples:
+
+```bash
+python3 benchmark_reports.py \
+  --case ali_hadi_encrypt_them_all \
+  --report "/home/romil/phantom_correlation_A (disk-only)_AF-Case2_E01_20260613_182951.json" \
+  --output benchmark_results/encrypt_them_all_benchmark_result.json
+
+python3 benchmark_reports.py \
+  --case nitroba_harassment_pcap \
+  --report "/home/romil/phantom_correlation_A (disk-only)_nitroba_pcap_20260613_111646.json" \
+  --output benchmark_results/nitroba_benchmark_result.json
+```
+
+Score latest reports in a flat output directory:
+
+```bash
+python3 benchmark_reports.py \
+  --all \
+  --reports-dir /path/to/final/reports \
+  --latest \
+  --output benchmark_results/all_cases_benchmark_summary.json
+```
+
+Final judge benchmark summary committed in `benchmark_results/`:
+
+```text
+Cases scored: 5
+Fully reproduced: 5
+Average adjusted score: 97.0%
+Verdicts matched: 5/5
 ```
 
 ---
@@ -479,7 +673,11 @@ phantom-dfir/
 ├── mcpserver/
 │   └── mcp_server.py     # 20 typed MCP tools (stdio + HTTP)
 ├── disk_correlator.py    # Memory↔Disk cross-reference engine
+├── phantom_router.py     # Unified evidence router + evidence-gap controller
 ├── benchmark.py          # Accuracy benchmarking (precision/recall/F1)
+├── benchmark_reports.py  # Multi-case report benchmark validator
+├── benchmark_results/    # Final judge-facing scorecards
+├── benchmarks/           # Multi-case ground truth definitions
 ├── ground_truth_base_admin.json  # Known-good ground truth for scoring
 └── test_mcp.py           # MCP server smoke test
 ```

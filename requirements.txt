@@ -1,10 +1,25 @@
-# PHANTOM DFIR — Dependencies
-# Install: pip install -r requirements.txt
-langgraph>=0.2.0
-langchain-ollama>=0.1.0
-langchain-core>=0.2.0
+# PHANTOM DFIR - Python dependencies
+#
+# Install:
+#   python3 -m pip install -r requirements.txt
+#
+# External DFIR tools such as Sleuth Kit, tshark, ClamAV/clamdscan, libbde,
+# dislocker, gpg, and Volatility symbols are installed with the OS package
+# manager, not pip. See README.md for apt commands.
 
-# Optional: MCP Server
-# mcp>=1.0.0
-# fastapi>=0.100.0
-# uvicorn>=0.20.0
+# Agent / LLM orchestration
+langgraph>=0.2.0
+langchain-core>=0.2.0
+langchain-ollama>=0.1.0
+
+# Memory forensics
+volatility3>=2.7.0
+
+# MCP / HTTP server
+fastapi>=0.100.0
+uvicorn>=0.20.0
+mcp>=1.0.0
+
+# Artifact parsing and triage helpers
+pefile>=2023.2.7
+pyAesCrypt>=6.1.1
