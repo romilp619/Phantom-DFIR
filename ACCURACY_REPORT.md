@@ -2,6 +2,33 @@
 
 ## Benchmark Results (Verified)
 
+### Multi-Case Report Benchmark (Final Judge Package)
+
+Final report-level validation was run across five disk, memory-adjacent, and
+network evidence cases using `benchmark_reports.py` and
+`benchmarks/ground_truth_cases.json`.
+
+| Case | Status | Adjusted Score | Verdict Matched |
+|------|--------|----------------|-----------------|
+| CFReDS data leakage / insider exfiltration | FULLY_REPRODUCED | 100.0% | Yes |
+| Ali Hadi Encrypt Them All | FULLY_REPRODUCED | 100.0% | Yes |
+| M57 Jean phishing-induced data leakage | FULLY_REPRODUCED | 90.0% | Yes |
+| Nitroba harassment attribution PCAP | FULLY_REPRODUCED | 95.0% | Yes |
+| SysInternals challenge | FULLY_REPRODUCED | 100.0% | Yes |
+
+Summary:
+
+- Cases scored: 5
+- Fully reproduced: 5
+- Partially reproduced: 0
+- Not reproduced: 0
+- Average adjusted score: 97.0%
+- Verdicts matched: 5/5
+
+The machine-readable scorecards are committed under `benchmark_results/`.
+
+### Memory-Orchestrator Benchmark
+
 **Grade: A+ — OUTSTANDING (F1=100.0%)**
 
 Tested against `base-admin-memory.img` (5GB, Windows 10 x64) on 2026-05-13.

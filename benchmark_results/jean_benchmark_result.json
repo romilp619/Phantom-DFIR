@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-06-13T14:08:04.589525",
+  "ground_truth": "/home/romil/phantom-dfir2/benchmarks/ground_truth_cases.json",
+  "cases_scored": 1,
+  "fully_reproduced": 1,
+  "partially_reproduced": 0,
+  "not_reproduced": 0,
+  "average_adjusted_score": 0.9,
+  "results": [
+    {
+      "case_id": "m57_jean_phishing",
+      "case_name": "M57 Jean phishing-induced data leakage",
+      "evidence_type": "disk",
+      "status": "FULLY_REPRODUCED",
+      "coverage": 0.9,
+      "required_coverage": 1.0,
+      "adjusted_score": 0.9,
+      "verdict_match": true,
+      "verdict_alias": "CONFIRMED DATA EXFILTRATION",
+      "required_misses": 0,
+      "forbidden_hits": [],
+      "findings": [
+        {
+          "id": "sensitive_attachment",
+          "description": "Sensitive spreadsheet attachment identified.",
+          "required": true,
+          "weight": 20.0,
+          "matched": true,
+          "matched_alias": "m57biz.xls"
+        },
+        {
+          "id": "external_recipient",
+          "description": "External Gmail recipient identified.",
+          "required": true,
+          "weight": 20.0,
+          "matched": true,
+          "matched_alias": "tuckgorge@gmail.com"
+        },
+        {
+          "id": "spoofed_identity",
+          "description": "Internal M57 identity spoofing/phishing recovered.",
+          "required": true,
+          "weight": 15.0,
+          "matched": true,
+          "matched_alias": "alison@m57.biz"
+        },
+        {
+          "id": "phishing_request",
+          "description": "Phishing request email identified.",
+          "required": true,
+          "weight": 15.0,
+          "matched": true,
+          "matched_alias": "Please send me the information now"
+        },
+        {
+          "id": "receipt_confirmation",
+          "description": "Recipient confirmation recovered.",
+          "required": true,
+          "weight": 10.0,
+          "matched": true,
+          "matched_alias": "confirmed receipt"
+        },
+        {
+          "id": "outlook_corpus",
+          "description": "Outlook/PST evidence corpus parsed.",
+          "required": true,
+          "weight": 10.0,
+          "matched": true,
+          "matched_alias": "Outlook"
+        },
+        {
+          "id": "browser_timeline",
+          "description": "Browser/timeline parser recovered rich supporting context.",
+          "required": false,
+          "weight": 5.0,
+          "matched": false,
+          "matched_alias": null
+        },
+        {
+          "id": "background_malware_control",
+          "description": "Browser-cache malware signatures correctly treated as background artifacts.",
+          "required": false,
+          "weight": 5.0,
+          "matched": false,
+          "matched_alias": null
+        }
+      ],
+      "reports": [
+        "/home/romil/phantom_correlation_A (disk-only)_nps-2008-jean_E01_20260613_113522.json"
+      ]
+    }
+  ]
+}

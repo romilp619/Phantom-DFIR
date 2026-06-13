@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-06-13T18:33:23.943164",
+  "ground_truth": "/home/romil/phantom-dfir2/benchmarks/ground_truth_cases.json",
+  "cases_scored": 1,
+  "fully_reproduced": 1,
+  "partially_reproduced": 0,
+  "not_reproduced": 0,
+  "average_adjusted_score": 1.0,
+  "results": [
+    {
+      "case_id": "ali_hadi_encrypt_them_all",
+      "case_name": "Ali Hadi Encrypt Them All",
+      "evidence_type": "disk",
+      "status": "FULLY_REPRODUCED",
+      "coverage": 1.0,
+      "required_coverage": 1.0,
+      "adjusted_score": 1.0,
+      "verdict_match": true,
+      "verdict_alias": "HIGH CONFIDENCE CRYPTO INCIDENT",
+      "required_misses": 0,
+      "forbidden_hits": [],
+      "findings": [
+        {
+          "id": "aes_target",
+          "description": "AES encrypted README and AESCrypt usage identified.",
+          "required": true,
+          "weight": 10.0,
+          "matched": true,
+          "matched_alias": "README.txt.aes"
+        },
+        {
+          "id": "aes_password",
+          "description": "AES password recovered from Mattermost/cache clue chain.",
+          "required": true,
+          "weight": 15.0,
+          "matched": true,
+          "matched_alias": "StarWars!"
+        },
+        {
+          "id": "readme_plaintext",
+          "description": "README plaintext recovered.",
+          "required": true,
+          "weight": 15.0,
+          "matched": true,
+          "matched_alias": "https://www.youtube.com/watch?v=66Ux1D9MDOk"
+        },
+        {
+          "id": "gpg_passphrase",
+          "description": "GPG passphrase recovered from the video clue.",
+          "required": true,
+          "weight": 15.0,
+          "matched": true,
+          "matched_alias": "May the force be with you"
+        },
+        {
+          "id": "gpg_plaintext",
+          "description": "Keys.txt PGP message decrypted to BitLocker password.",
+          "required": true,
+          "weight": 15.0,
+          "matched": true,
+          "matched_alias": "MT4orceBWY23"
+        },
+        {
+          "id": "bitlocker_volume",
+          "description": "BitLocker volume R2D2 identified.",
+          "required": true,
+          "weight": 10.0,
+          "matched": true,
+          "matched_alias": "R2D2"
+        },
+        {
+          "id": "bitlocker_unlock",
+          "description": "BitLocker volume unlock verified.",
+          "required": true,
+          "weight": 15.0,
+          "matched": true,
+          "matched_alias": "bitlocker_unlocks"
+        },
+        {
+          "id": "noluck_clue",
+          "description": "NoLuck image clue/decoy recorded.",
+          "required": false,
+          "weight": 5.0,
+          "matched": true,
+          "matched_alias": "NoLuck.png"
+        }
+      ],
+      "reports": [
+        "/home/romil/phantom_correlation_A (disk-only)_AF-Case2_E01_20260613_182951.json"
+      ]
+    }
+  ]
+}
