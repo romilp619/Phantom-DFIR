@@ -1,0 +1,504 @@
+
+╔══════════════════════════════════════════════════════════════╗
+║   PHANTOM DFIR — Intelligent Disk Correlator v3.0            ║
+║   Path-based | Process Tree | Obfuscation Detection          ║
+║   Find Evil! Hackathon 2026                                   ║
+╚══════════════════════════════════════════════════════════════╝
+
+  Mode   : DISK-ONLY (no memory image)
+  Disk   : /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd
+  Output : /home/romil
+
+  Hashing evidence in parallel...
+  ✓ Disk   SHA256: 026c143638295db1fbfa598c5b35bcac...
+
+════════════════════════════════════════════════════════════
+  PARALLEL EXTRACTION
+════════════════════════════════════════════════════════════
+  → Preparing extraction workers
+  → Routing evidence to disk, memory, or network collectors
+
+════════════════════════════════════════════════════════════
+  DISK ARTIFACT EXTRACTION
+════════════════════════════════════════════════════════════
+  → Preparing disk extraction: filesystem validation, deleted files, prefetch, registry hints, and IOC strings
+  → Detecting filesystem and partition offset
+
+════════════════════════════════════════════════════════════
+  FILESYSTEM VALIDATION SELF-CHECK
+════════════════════════════════════════════════════════════
+  Selected offset      : 206848
+  Filesystem type      : NTFS
+  Partition length     : 41734144 sectors
+  Partition desc       : NTFS / exFAT (0x07)
+  Partition candidates : 2
+     - SELECTED: offset=206848 len=41734144 fs=NTFS desc=NTFS / exFAT (0x07)
+     - candidate: offset=2048 len=204800 fs=NTFS desc=NTFS / exFAT (0x07)
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/12f0607dc39b9bf7
+  → Enumerating artifact sources from filesystem cache
+  → Scheduling parallel disk artifact tasks
+
+  Running 8 disk tasks in parallel...
+    [ 1/8] ✓ disk:mmls                 (0.0s)
+    [ 2/8] ✓ disk:strings_malware      (0.1s)
+    [ 3/8] ✓ disk:fls_deleted          (0.4s)
+    [ 4/8] ✓ disk:fls_sus              (0.5s)
+    [ 5/8] ✓ disk:prefetch             (1.6s)
+    [ 6/8] ✓ disk:registry_run         (2.2s)
+    [ 7/8] ✓ disk:strings_obfusc       (2.2s)
+    [ 8/8] ✓ disk:prefetch_dir         (2.7s)
+  → All 8 disk tasks done in 2.7s
+  ✓ Suspicious-path files: 100
+  ✓ Deleted files: 100
+  ✓ Prefetch entries: 0
+  → log2timeline running in background — won't block analysis
+  → Disk IOCs (suspicious only): 45
+  → Extraction complete in 24.0s
+
+════════════════════════════════════════════════════════════
+  DEEP FORENSIC ANALYSIS
+════════════════════════════════════════════════════════════
+  📂 Building full file system map...
+  ✓ File system entries: 104709
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/12f0607dc39b9bf7
+  🔑 Extracting registry hives...
+  → Starting registry discovery and hive extraction
+
+════════════════════════════════════════════════════════════
+  FILESYSTEM VALIDATION SELF-CHECK
+════════════════════════════════════════════════════════════
+  Selected offset      : 206848
+  Filesystem type      : NTFS
+  Partition length     : 41734144 sectors
+  Partition desc       : NTFS / exFAT (0x07)
+  Partition candidates : 2
+     - SELECTED: offset=206848 len=41734144 fs=NTFS desc=NTFS / exFAT (0x07)
+     - candidate: offset=2048 len=204800 fs=NTFS desc=NTFS / exFAT (0x07)
+  FS entries discovered: 104709
+  Enumeration complete : yes
+  Registry hives       : SAM, SECURITY, SOFTWARE, SYSTEM
+  NTUSER.DAT hives     : 5
+  → SYSTEM inode verification: istat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 59004
+  → SYSTEM extraction command: icat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 59004-128-3 > '/home/romil/phantom_extracted/SYSTEM.hive'
+  ✓ SYSTEM hive extracted (12128KB, sha256=f1979ca1268e7ec5..., method=icat:inode_ref)
+  → SECURITY inode verification: istat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 22167
+  → SECURITY extraction command: icat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 22167-128-3 > '/home/romil/phantom_extracted/SECURITY.hive'
+  ✓ SECURITY hive extracted (24KB, sha256=1beda4dc6709cb9f..., method=icat:inode_ref)
+  → SAM inode verification: istat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 58994
+  → SAM extraction command: icat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 58994-128-3 > '/home/romil/phantom_extracted/SAM.hive'
+  ✓ SAM hive extracted (168KB, sha256=20dc09fd251a0a9c..., method=icat:inode_ref)
+  → SOFTWARE inode verification: istat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 23451
+  → SOFTWARE extraction command: icat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 23451-128-3 > '/home/romil/phantom_extracted/SOFTWARE.hive'
+  ✓ SOFTWARE hive extracted (46944KB, sha256=752ab3857b4ed5c5..., method=icat:inode_ref)
+  → NTUSER_admin11 inode verification: istat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 63037
+  → NTUSER_admin11 extraction command: icat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 63037-128-1 > '/home/romil/phantom_extracted/NTUSER_admin11.hive'
+  ✓ NTUSER.DAT for 'admin11' extracted (512KB, sha256=b8e18d84ad847359..., method=icat:inode_ref)
+  → NTUSER_Default inode verification: istat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 58885
+  → NTUSER_Default extraction command: icat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 58885-128-3 > '/home/romil/phantom_extracted/NTUSER_Default.hive'
+  ✓ NTUSER.DAT for 'Default' extracted (256KB, sha256=c6ace4da18b1a4a9..., method=icat:inode_ref)
+  → NTUSER_informant inode verification: istat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 521
+  → NTUSER_informant extraction command: icat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 521-128-1 > '/home/romil/phantom_extracted/NTUSER_informant.hive'
+  ✓ NTUSER.DAT for 'informant' extracted (1024KB, sha256=2190b57e2908d36f..., method=icat:inode_ref)
+  → NTUSER_temporary inode verification: istat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 64940
+  → NTUSER_temporary extraction command: icat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 64940-128-1 > '/home/romil/phantom_extracted/NTUSER_temporary.hive'
+  ✓ NTUSER.DAT for 'temporary' extracted (512KB, sha256=0edc2037f4daf584..., method=icat:inode_ref)
+  → NTUSER_unknown inode verification: istat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 27120
+  → NTUSER_unknown extraction command: icat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 27120-128-3 > '/home/romil/phantom_extracted/NTUSER_unknown.hive'
+  ✓ NTUSER.DAT for 'unknown' extracted (256KB, sha256=6902d7595eecb155..., method=icat:inode_ref)
+
+════════════════════════════════════════════════════════════
+  REGISTRY EXTRACTION COVERAGE
+════════════════════════════════════════════════════════════
+  Discovered hives : SAM, SECURITY, SOFTWARE, SYSTEM
+  Extracted hives  : SAM, SECURITY, SOFTWARE, SYSTEM
+  Failed hives     : none
+     ✓ NTUSER_Default: 256KB sha256=c6ace4da18b1a4a9... method=icat:inode_ref
+     ✓ NTUSER_admin11: 512KB sha256=b8e18d84ad847359... method=icat:inode_ref
+     ✓ NTUSER_informant: 1024KB sha256=2190b57e2908d36f... method=icat:inode_ref
+     ✓ NTUSER_temporary: 512KB sha256=0edc2037f4daf584... method=icat:inode_ref
+     ✓ NTUSER_unknown: 256KB sha256=6902d7595eecb155... method=icat:inode_ref
+     ✓ SAM: 168KB sha256=20dc09fd251a0a9c... method=icat:inode_ref
+     ✓ SECURITY: 24KB sha256=1beda4dc6709cb9f... method=icat:inode_ref
+     ✓ SOFTWARE: 46944KB sha256=752ab3857b4ed5c5... method=icat:inode_ref
+     ✓ SYSTEM: 12128KB sha256=f1979ca1268e7ec5... method=icat:inode_ref
+  🔍 Parsing registry with RegRipper...
+  🗑️  Analyzing Recycle Bin...
+  ✓ Recycle Bin executables: 3
+  📦 Scanning installed programs...
+  ✓ Installed programs: 83
+  ✓ Potential hacking tools: 0
+  📧 Searching email artifacts...
+  📨 Parsing Outlook PST/OST stores...
+  ✓ Email addresses found: 12 (12 high confidence)
+  💬 Searching IRC artifacts...
+  🔧 Extracting mIRC config files...
+  🌐 Searching web history...
+  ✓ Web history entries: 1
+  🔌 Extracting network/email settings...
+  🔍 Searching Look@LAN config...
+  📨 Extracting email client settings...
+  📰 Extracting newsgroup subscriptions...
+  📝 Searching IRC channel logs...
+  📡 Searching packet capture files...
+  🌐 Searching webmail artifacts...
+  ✓ Webmail artifacts: 1
+
+════════════════════════════════════════════════════════════
+  DATA LEAKAGE ARTIFACT COVERAGE
+════════════════════════════════════════════════════════════
+  📨 Outlook/PST/OST forensics...
+     mailstores=1 mailboxes=1 messages=22 addresses=12 subjects=22 attachments=0 deleted=7
+  🌐 Browser forensics...
+  -> Browser parser coverage: Firefox=0 LegacyIE=6 Chromium/Edge=0 rows=783 downloads=0 errors=0
+     chrome_history=2 webcache=3 urls=783 searches=400 downloads=0
+  ☁️  Google Drive forensics...
+     files=20 accounts=3 sync_events=18 cloud_entries=4
+  🔌 USB device forensics...
+     devices=2 volume_labels=1 setupapi_hits=948
+  💿 Optical media forensics...
+     burn_staging=3 tmp_markers=106 opened_cd=6
+  🗂️  Network drive and Explorer traces...
+     unc_paths=1 mapped=1 recent=53 interesting_files=10 windows_edb=1
+  🧭 Timeline events synthesized: 849
+  📊 CFReDS coverage categories: 7
+
+════════════════════════════════════════════════════════════
+  MALWARE INTELLIGENCE / AV CHECK
+════════════════════════════════════════════════════════════
+  → Using clamdscan --multiscan (daemon signatures already resident in RAM)
+  → Candidate executable files: 120
+  → Malware extraction progress: 20/120
+  → Malware extraction progress: 40/120
+  → Malware extraction progress: 60/120
+  → Malware extraction progress: 80/120
+  → Malware extraction progress: 100/120
+  → Malware extraction progress: 120/120
+  AV available     : yes (clamdscan)
+  YARA available   : yes
+  Mode             : balanced
+  Scan root        : /dev/shm/phantom_malware_scan_33648
+  Candidates       : 120
+  Extraction attempts : 120
+  Extraction successes: 119
+  Extraction failures : 1
+  Unique extracted : 117
+  Slow-path scanned: 34
+  Clean files      : 34
+  Cache hits       : 119
+  Duplicates       : 2
+  Malware findings : 0
+  AV detections    : 0
+  YARA hits        : 0
+  Offensive tools  : 0
+  Anti-forensic tools: 1
+  Legit applications: 0
+  Suspicious PE    : 6
+  Legit installers : 58
+  PE heuristics suppressed: 41
+  Timing           : extract/triage=12.8s, AV=3.5s, YARA=0.0s, total=16.4s
+
+  EXTRACTION FAILURE SAMPLES:
+     inode=0 skipped large file (79953920 bytes)
+
+  MALWARE DETECTIONS:
+     none
+
+  OFFENSIVE SECURITY TOOLS:
+     none
+
+  ANTI-FORENSIC TOOLS:
+     • Eraser - -/r * 75101-128-4:	Users/informant/Desktop/Download/Eraser 6.2.0.2962.exe
+
+  LEGITIMATE APPLICATIONS:
+     none
+
+  INSTALLER REPUTATION:
+     LEGITIMATE_INSTALLER
+     • ccsetup504.exe [piriform]
+     • PresentationBuildTasks.dll [microsoft]
+     • PresentationFramework.Aero.dll [microsoft]
+     • PresentationFramework.Classic.dll [microsoft]
+     • PresentationFramework.Luna.dll [microsoft]
+     • PresentationFramework.Royale.dll [microsoft]
+     • ReachFramework.dll [microsoft]
+     • System.IdentityModel.dll [microsoft]
+     • System.IdentityModel.Selectors.dll [microsoft]
+     • System.IO.Log.dll [microsoft]
+     • System.Printing.dll [microsoft]
+     • System.Runtime.Serialization.dll [microsoft]
+     • System.Speech.dll [microsoft]
+     • System.Workflow.Activities.dll [microsoft]
+     • System.Workflow.Runtime.dll [microsoft]
+
+  YARA MATCHES:
+     none
+
+  PE HEURISTICS:
+     [LOW] suspicious PE imports/strings
+            source: r/r 22314-128-3:	Users/informant/AppData/Local/Temp/ose00000.exe
+     [LOW] suspicious PE imports/strings
+            source: r/r 70828-128-1:	Users/informant/AppData/Local/Google/Chrome/User Data/WidevineCDM/1.4.7.771/_platform_specifi
+     [LOW] high entropy (7.88)
+            source: r/r 72145-128-5:	Users/informant/Downloads/googledrivesync.exe
+     [LOW] suspicious PE imports/strings
+            source: r/r 75461-128-1:	Users/informant/AppData/Local/Temp/Microsoft .NET Framework 4 Setup_4.0.30319/SetupEngine.dll
+     [LOW] suspicious PE imports/strings
+            source: r/r 75462-128-1:	Users/informant/AppData/Local/Temp/Microsoft .NET Framework 4 Setup_4.0.30319/SetupUi.dll
+     [LOW] suspicious PE imports/strings
+            source: r/r 75466-128-1:	Users/informant/AppData/Local/Temp/Microsoft .NET Framework 4 Setup_4.0.30319/sqmapi.dll
+
+  MALWARE ASSESSMENT
+  ──────────────────────────────────────────────────────────
+  Assessment        : No malware artifacts detected
+  Execution evidence: None
+  Confidence        : Medium
+
+════════════════════════════════════════════════════════════
+  DEEP FORENSIC SUMMARY
+════════════════════════════════════════════════════════════
+  🖥️  Computer Name    : INFORMANT-PC
+  ⏹️  Last Shutdown    : 2015-03-24 21:07:29
+  👥 Total Accounts   : 6
+
+  📋 USER ACCOUNTS:
+     • Administrator [500] (last login: 2010-11-21 03:47:20Z)
+     • Guest [501] (last login: Never)
+     • informant [1000] (last login: 2015-03-25 13:06:08Z)
+     • admin11 [1001] (last login: 2015-03-22 15:57:02Z)
+     • ITechTeam [1002] (last login: Never)
+     • temporary [1003] (last login: 2015-03-22 15:55:57Z)
+
+  🗑️  RECYCLE BIN EXECUTABLES (3):
+     • -/r * 74418-128-1:	$Recycle.Bin/S-1-5-21-2425377081-3129163575-2985601102-1000/$RJEMT64.exe
+     • -/r * 74418-128-4:	$Recycle.Bin/S-1-5-21-2425377081-3129163575-2985601102-1000/$RJEMT64.exe:Zone.Ide
+     • -/r * 74761-128-1:	$Recycle.Bin/S-1-5-21-2425377081-3129163575-2985601102-1000/$IJEMT64.exe
+
+  🌐 BROWSER FORENSICS:
+     URLs       : 783
+     Searches   : 400
+     Downloads  : 0
+     Incident-relevant searches: none identified
+
+  📨 OUTLOOK FORENSICS:
+     Mailstores : 1
+     Mailboxes  : 1
+     Messages   : 22
+     Addresses  : 12
+     Subjects   : 22
+     Attachments: 0
+     Deleted    : 7
+     • Important request
+     • Important request
+     • Last request
+     • Last request
+     • RE: Important request
+     • RE: Last request
+     • RE: Good job, buddy.
+     • RE: Good job, buddy.
+
+  ☁️  GOOGLE DRIVE:
+     Accounts   : 3
+     Sync events: 18
+     DB entries : 4
+     • 2015-03-23 16:04:54,671 INFO: 2015-03-23 16:04:54,671 -0400 INFO pid=2576 1224:MainThread      common.service.user:64 In
+     • 2015-03-23 16:05:32,279 INFO: 2015-03-23 16:05:32,279 -0400 INFO pid=2576 2828:LaunchThreads   common.service.user:64 In
+     • 2015-03-23 16:06:05,256 DELETE: \\\C:\\Users\\informant\\Google Drive\\How to get started with Drive
+     • 2015-03-23 16:06:08,456 INFO: \\\C:\\Users\\informant\\Google Drive
+     • 2015-03-23 16:32:35,072 CREATE: \\\C:\\Users\\informant\\Google Drive\\happy_holiday.jpg
+     • 2015-03-23 16:32:35,072 MODIFY: \\\C:\\Users\\informant\\Google Drive\\happy_holiday.jpg
+     • 2015-03-23 16:32:35,086 MODIFY: \\\C:\\Users\\informant\\Google Drive\\happy_holiday.jpg
+     • 2015-03-23 16:32:35,086 CREATE: \\\C:\\Users\\informant\\Google Drive\\do_u_wanna_build_a_snow_man.mp3
+
+  🔌 USB FORENSICS:
+     • SanDisk Cruzer Fit serial=4C530012450531101593
+     • SanDisk Cruzer Fit serial=4C530012550531106501
+     • volume=IAMAN $_@
+
+  🗂️  NETWORK DRIVE:
+     UNC paths  : 1
+     Mappings   : 1
+     • \\10.11.11.128\secured_drive
+
+  💿 OPTICAL MEDIA:
+     Burn staging files: 3
+     Burn temp markers : 106
+     Opened CD traces  : 6
+
+  🧭 DATA LEAKAGE NARRATIVE:
+     The recovered artifacts support a data exfiltration workflow: web research into leakage and anti-forensics, Outlook communications, sample sharing through Google Drive, access to network share, copying to USB media, CD burning activity.
+     Timeline events: 849
+
+  📧 EMAIL ADDRESSES (12 total, 12 high, 0 medium):
+     • iaman.informant@nist.gov [HIGH] (outlook_store)
+     • 1b788828-c8a2-4681-bf6f-b1df9935415b@nist.gov [HIGH] (outlook_store)
+     • spy.conspirator@nist.gov [HIGH] (outlook_store)
+     • bl2pr09mb099fbf1529018a3e8ae5727840d0@bl2pr09mb099.namprd09.prod.outlook.com [HIGH] (outlook_store)
+     • bn1pr09mb0156f9850927fc57f4601e378c0d0@bn1pr09mb0156.namprd09.prod.outlook.com [HIGH] (outlook_store)
+     • bn1pr09mb015610aa8dcfb833d29557538c0a0@bn1pr09mb0156.namprd09.prod.outlook.com [HIGH] (outlook_store)
+     • bl2pr09mb099696eee174eb0b2e5bd70840d0@bl2pr09mb099.namprd09.prod.outlook.com [HIGH] (outlook_store)
+     • bn1pr09mb0156aab40f3d3aefecd4c1078c0d0@bn1pr09mb0156.namprd09.prod.outlook.com [HIGH] (outlook_store)
+     • bn1pr09mb0156cb1c7533f5f2094f2f778c0d0@bn1pr09mb0156.namprd09.prod.outlook.com [HIGH] (outlook_store)
+     • bn1pr09mb01564098b5c82edb2ae0cd618c0d0@bn1pr09mb0156.namprd09.prod.outlook.com [HIGH] (outlook_store)
+
+  📬 WEBMAIL ARTIFACTS (1):
+     • [TIMEOUT after 60s]
+
+  🧾 REGISTRY COVERAGE:
+     Discovered : 4
+     Extracted  : 4
+     Failed     : 0
+
+  🛡️  MALWARE ASSESSMENT:
+     Assessment        : No malware artifacts detected
+     Execution evidence: None
+     Confidence        : Medium
+     Scanned    : 34
+     Clean      : 34
+     Findings   : 0
+     AV hits    : 0
+     YARA hits  : 0
+     PE flags   : 6
+     [LOW] PE: suspicious PE imports/strings
+     [LOW] PE: suspicious PE imports/strings
+     [LOW] PE: high entropy (7.88)
+     [LOW] PE: suspicious PE imports/strings
+     [LOW] PE: suspicious PE imports/strings
+
+  → $UsnJrnl:$J inode verification: istat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 59016
+  → $UsnJrnl:$J extraction command: icat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 59016-128-3 > '/home/romil/phantom_extracted/sysinternals_artifacts/UsnJrnl_J.bin'
+  🔧 Extracting SysInternals artifacts (UserAssist, Amcache, BAM, SRUM)...
+  → $UsnJrnl:$J inode verification: istat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 59016
+  → $UsnJrnl:$J extraction command: icat -o 206848 /home/romil/cases/data_leakage/cfreds_2015_data_leakage_pc.dd 59016-128-3 > '/home/romil/phantom_extracted/sysinternals_artifacts/UsnJrnl_J.bin'
+
+  🔧 SYSINTERNALS ARTIFACTS:
+     UserAssist: 88
+     Amcache: 0
+     BAM: 0
+     SRUM: 0
+     Hosts: 0
+     Defender: 3
+     Services: 28
+     Event7045: 1
+     RecentDocs: 91
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/12f0607dc39b9bf7
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/12f0607dc39b9bf7
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/12f0607dc39b9bf7
+     [ETA-DEBUG 2026-06-13T07:40:11Z] AES: starting README/AES recovery | targets= | candidates=36 | python=/usr/bin/python3
+
+  🔐 ENCRYPT THEM ALL RECONSTRUCTION:
+     aes_files: 0
+     bitlocker_candidates: 2
+     gpg_artifacts: 0
+     pgp_messages: 0
+     keys_txt: 0
+     execution_hits: 5
+     filename_context: 20
+     aes_tool_context: 0
+     candidate_passwords: 36
+     readme_plaintexts: 0
+     bitlocker_unlocks: 0
+     gpg_plaintexts: 0
+     workflows: AES=False BitLocker=True GPG=False
+
+════════════════════════════════════════════════════════════
+  FORENSIC REASONING ENGINE
+════════════════════════════════════════════════════════════
+  [SCORE] Calculating clustered, time-aware threat score...
+  [ALI] Promoting Ali Hadi web/memory compromise evidence...
+  ALI HADI PROMOTION:
+     Active signals       : 4
+     Memory evidence rows : 0
+
+  TIMELINE EVENTS (34):
+     [2010-11-21 03:47:20Z] [ACTIVE] User 'Administrator' logged on
+     [2015-03-22 15:55:57Z] [ACTIVE] User 'temporary' logged on
+     [2015-03-22 15:57:02Z] [ACTIVE] User 'admin11' logged on
+     [2015-03-25 13:06:08Z] [ACTIVE] User 'informant' logged on
+     [undated] [DELETED] Executable files found in Recycle Bin
+     [undated] [event] {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\NOTEPAD.EXE (1)
+     [undated] [event] {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\calc.exe (12)
+     [undated] [event] {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\SnippingTool.exe (10)
+     [undated] [event] {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\mspaint.exe (9)
+     [undated] [event] {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\magnify.exe (7)
+     [undated] [event] {6D809377-6AF0-444B-8957-A3773F02200E}\Microsoft Games\Solitaire\solitaire.exe (6)
+     [undated] [event] {9E3995AB-1F9C-4F13-B827-48B24B6C7174}\TaskBar\Windows Explorer.lnk (1)
+     [undated] [event] C:\Users\Public\Desktop\Google Chrome.lnk (1)
+     [undated] [event] {0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\Accessories\Welcome Center.lnk (14)
+     [undated] [event] {0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\Media Center.lnk (13)
+     [undated] [event] {0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\Accessories\Calculator.lnk (12)
+     [undated] [event] {0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}\Accessories\Sticky Notes.lnk (11)
+     [2015-03-22 15:28:13.944581] [CORROBORATED] Web activity: https://support.office.com/en-nz/article/Set-up-email-in-Outlook-2010-or-Outlook-2013-for-Office-365-or-Exchange-based-accounts-6e27792a-9267-4aa4-8bb6-c84ef146101b
+     [2015-03-22 15:28:13.944581] [CORROBORATED] browser visit: https://support.office.com/en-nz/article/Set-up-email-in-Outlook-2010-or-Outlook-2013-for-Office-365-or-Exchange-based-accounts-6e27792a-9267-4aa4-8bb6-c84ef146101b
+     [2015-03-24 21:07:29] [CONFIG] System shutdown recorded
+     [undated] [event] http://www.google.com/url?url=http://windows.microsoft.com/en-us/internet-explorer/download-ie&rct=j&frm=1&q=&esrc=s&sa=U&ei=6ykQVZWLGbeJsQT7goDACg&ved=0CB8QFjAA&usg=AFQjCNEwsIz17kY-jTXbaWPcQDfBbVEi7A
+     [undated] [event] http://windows.microsoft.com/en-us/internet-explorer/download-ie
+
+  EXECUTION CHAIN (7 steps):
+     [2010-11-21 03:47:20Z] User session began -> User 'Administrator' logged on
+     [undated] Cleanup / deletion artifacts observed -> Executable files found in Recycle Bin
+     [2015-03-24 21:07:29] System shutdown recorded -> System shutdown recorded
+     [undated] Defender exclusion/configuration -> Microsoft\Windows Defender :: LastWrite Time 2015-03-25 10:17:57Z
+     [undated] Program execution -> {1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\NOTEPAD.EXE (1)
+     [2015-03-22 15:28:13.944581] Web activity -> https://support.office.com/en-nz/article/Set-up-email-in-Outlook-2010-or-Outlook-2013-for-Office-365-or-Exchange-based-accounts-6e27792a-9267-4aa4-8bb6-c84ef146101b
+     [2015-03-22 15:28:13.944581] browser visit -> https://support.office.com/en-nz/article/Set-up-email-in-Outlook-2010-or-Outlook-2013-for-Office-365-or-Exchange-based-accounts-6e27792a-9267-4aa4-8bb6-c84ef146101b
+
+════════════════════════════════════════════════════════════
+  FORENSIC REASONING VERDICT
+════════════════════════════════════════════════════════════
+
+  Raw Threat Score : 684
+  Normalized Risk  : 100/100
+  Confidence Score : 100/100 (VERY_HIGH)
+  Verdict          : DEFINITIVE COMPROMISE - Ali Hadi web-server attack chain corroborated
+  Patterns         : 9 attack behaviors
+  Attribution      : 0 identity links
+  Anti-forensic    : 2 cleanup indicators
+  Timeline         : 34 event(s), 7 chain step(s)
+
+  SCORE BREAKDOWN:
+     +31: [DELETED/deleted x0.80] Anti-forensics / cleanup indicators
+     +120: [CORROBORATED/config x0.85] CFReDS data leakage workflow: browser research into leakage/anti-forensics; Outlook mail store and nist.gov communication evidence; Google Drive sync/upload activity; USB removable-media use; secured network share access; CD/DVD burning activity
+     +20: [PRESENT/registry x0.50] Windows Defender exclusion/configuration evidence (3 finding(s))
+     +25: [PRESENT/registry x0.50] Service installation/persistence evidence (28 service row(s), 1 Event7045 candidate(s))
+     +95: [ACTIVE/active x1.00] Ali Hadi webshell/webserver compromise evidence
+     +49: [CONFIG/config x0.70] Apache access.log SQLMap / SQL injection evidence
+     +85: [ACTIVE/active x1.00] Memory evidence of net user account creation
+     +80: [ACTIVE/active x1.00] Memory evidence of netsh firewall/RDP enablement
+     +110: [ACTIVE/active x1.00] Corroborated Ali Hadi attack chain: web compromise, command execution, account creation, RDP/firewall persistence
+
+  ANALYST NARRATIVE:
+     The analyzed system (INFORMANT-PC) runs Windows. Primary user account is 'informant'. A temporal execution chain with 3 step(s) was reconstructed. 3 Recycle Bin executable(s) indicate cleanup attempt. Malware/offensive-tool intelligence verdict: NO MALWARE DETECTED. Findings are clustered by capability and weighted by evidence strength, temporal freshness, and corroboration. CFReDS artifact coverage shows a staged insider data leakage workflow across email, cloud, network share, USB, and optical media. SysInternals artifact bridge: Defender exclusion/configuration evidence; service installation/persistence evidence were surfaced into the reasoning timeline and weighted through the existing scoring model. Ali Hadi web-server bridge: webshell/web application compromise, memory-recovered account creation, RDP/firewall persistence, and Apache/web exploit indicators were promoted into forensic reasoning.
+
+════════════════════════════════════════════════════════════
+  INTELLIGENT CORRELATION ENGINE
+════════════════════════════════════════════════════════════
+  → Confirmed by both: 0
+  → Fileless indicators: 0
+  → Staged payloads (suspicious paths): 0
+  → Total suspicion score: 0
+  → Score breakdown: []
+
+════════════════════════════════════════════════════════════
+  REPORT GENERATION
+════════════════════════════════════════════════════════════
+  ✓ JSON: /home/romil/phantom_correlation_A (disk-only)_cfreds_2015_data_lea_20260613_131012.json
+  ✓ MD: /home/romil/phantom_correlation_A (disk-only)_cfreds_2015_data_lea_20260613_131012.md
+VERDICT MISMATCH: report='LOW SUSPICION — LIKELY CLEAN' reasoning='DEFINITIVE COMPROMISE - Ali Hadi web-server attack chain corroborated'
+  ✓ Deep forensic JSON: /home/romil/phantom_correlation_A (disk-only)_cfreds_2015_data_lea_20260613_131012_forensic_exam.json
+  ✓ Challenge report MD: /home/romil/phantom_correlation_A (disk-only)_cfreds_2015_data_lea_20260613_131012_challenge_report.md
+  → Starting malware triage report preservation
+  ✓ Malware intel MD: /home/romil/phantom_correlation_A (disk-only)_cfreds_2015_data_lea_20260613_131012_malware_intel.md
+
+  VERDICT DIAGNOSTICS:
+     Correlation verdict : LOW SUSPICION - LIKELY CLEAN (score=0)
+     Reasoning verdict   : DEFINITIVE COMPROMISE - Ali Hadi web-server attack chain corroborated
+     Evidence classes    : Suspicious executables on disk, Anti-forensic tooling
+VERDICT MISMATCH: completion_banner='DEFINITIVE COMPROMISE - Ali Hadi web-server attack chain corroborated' report='LOW SUSPICION — LIKELY CLEAN'
+
+╔══════════════════════════════════════════════════════════════╗
+║  COMPLETE in 810s
+║  Verdict : LOW SUSPICION — LIKELY CLEAN
+║  Score   : 684 raw / 100/100 risk (breakdown in report)
+║  JSON    : phantom_correlation_A (disk-only)_cfreds_2015_data_lea_20260613_131012.json
+║  MD      : phantom_correlation_A (disk-only)_cfreds_2015_data_lea_20260613_131012.md
+╚══════════════════════════════════════════════════════════════╝

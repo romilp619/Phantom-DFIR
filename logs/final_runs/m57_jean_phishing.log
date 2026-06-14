@@ -1,0 +1,486 @@
+
+╔══════════════════════════════════════════════════════════════╗
+║   PHANTOM DFIR — Intelligent Disk Correlator v3.0            ║
+║   Path-based | Process Tree | Obfuscation Detection          ║
+║   Find Evil! Hackathon 2026                                   ║
+╚══════════════════════════════════════════════════════════════╝
+
+  Mode   : DISK-ONLY (no memory image)
+  Disk   : /home/romil/cases/jeanperasing/nps-2008-jean.E01
+  Output : /home/romil
+
+  Hashing evidence in parallel...
+  ✓ Disk   SHA256: df3a995c7a594e0ba6d95b9aae735a44...
+
+════════════════════════════════════════════════════════════
+  PARALLEL EXTRACTION
+════════════════════════════════════════════════════════════
+  → Preparing extraction workers
+  → Routing evidence to disk, memory, or network collectors
+
+════════════════════════════════════════════════════════════
+  DISK ARTIFACT EXTRACTION
+════════════════════════════════════════════════════════════
+  → Preparing disk extraction: filesystem validation, deleted files, prefetch, registry hints, and IOC strings
+  → Detecting filesystem and partition offset
+
+════════════════════════════════════════════════════════════
+  FILESYSTEM VALIDATION SELF-CHECK
+════════════════════════════════════════════════════════════
+  Selected offset      : 63
+  Filesystem type      : NTFS
+  Partition length     : 20948697 sectors
+  Partition desc       : NTFS / exFAT (0x07)
+  Partition candidates : 1
+     - SELECTED: offset=63 len=20948697 fs=NTFS desc=NTFS / exFAT (0x07)
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/4339cd85d8f9e94f
+  → Enumerating artifact sources from filesystem cache
+  → Scheduling parallel disk artifact tasks
+
+  Running 8 disk tasks in parallel...
+    [ 1/8] ✓ disk:strings_malware      (0.0s)
+    [ 2/8] ✓ disk:mmls                 (0.1s)
+    [ 3/8] ✓ disk:fls_deleted          (0.4s)
+    [ 4/8] ✓ disk:fls_sus              (1.0s)
+    [ 5/8] ✓ disk:strings_obfusc       (1.0s)
+    [ 6/8] ✓ disk:registry_run         (2.1s)
+    [ 7/8] ✓ disk:prefetch_dir         (4.4s)
+    [ 8/8] ✓ disk:prefetch             (16.8s)
+  → All 8 disk tasks done in 16.8s
+  ✓ Suspicious-path files: 100
+  ✓ Deleted files: 100
+  ✓ Prefetch entries: 0
+  → log2timeline running in background — won't block analysis
+  → Disk IOCs (suspicious only): 72
+  → Extraction complete in 18.6s
+
+════════════════════════════════════════════════════════════
+  PRIMARY INCIDENT SUMMARY
+════════════════════════════════════════════════════════════
+  External sender tuckgorge@gmail.com impersonated alison@m57.biz. Jean transmitted m57biz.xls containing employee data to tuckgorge@gmail.com. The recipient later confirmed receipt and requested secrecy.
+
+  M57 PHISHING / EXFILTRATION EVIDENCE:
+     correlated_messages: 259
+     phishing_requests: 1
+     external_sensitive_sends: 1
+     receipt_confirmations: 1
+     confirmed_phishing_induced_exfiltration: True
+     Sensitive send: m57biz.xls -> tuckgorge@gmail.com
+
+════════════════════════════════════════════════════════════
+  DEEP FORENSIC ANALYSIS
+════════════════════════════════════════════════════════════
+  📂 Building full file system map...
+  ✓ File system entries: 34797
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/4339cd85d8f9e94f
+  🔑 Extracting registry hives...
+  → Starting registry discovery and hive extraction
+
+════════════════════════════════════════════════════════════
+  FILESYSTEM VALIDATION SELF-CHECK
+════════════════════════════════════════════════════════════
+  Selected offset      : 63
+  Filesystem type      : NTFS
+  Partition length     : 20948697 sectors
+  Partition desc       : NTFS / exFAT (0x07)
+  Partition candidates : 1
+     - SELECTED: offset=63 len=20948697 fs=NTFS desc=NTFS / exFAT (0x07)
+  FS entries discovered: 34797
+  Enumeration complete : yes
+  Registry hives       : SAM, SECURITY, SOFTWARE, SYSTEM
+  NTUSER.DAT hives     : 4
+  → SYSTEM inode verification: istat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 1892
+  → SYSTEM extraction command: icat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 1892-128-3 > '/home/romil/phantom_extracted/SYSTEM.hive'
+  ✓ SYSTEM hive extracted (3840KB, sha256=d7e65edc2e6cceab..., method=icat:inode_ref)
+  → SECURITY inode verification: istat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 3514
+  → SECURITY extraction command: icat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 3514-128-3 > '/home/romil/phantom_extracted/SECURITY.hive'
+  ✓ SECURITY hive extracted (256KB, sha256=974f2250e9851681..., method=icat:inode_ref)
+  → SAM inode verification: istat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 3515
+  → SAM extraction command: icat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 3515-128-3 > '/home/romil/phantom_extracted/SAM.hive'
+  ✓ SAM hive extracted (256KB, sha256=db2d48497937dc6a..., method=icat:inode_ref)
+  → SOFTWARE inode verification: istat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 3386
+  → SOFTWARE extraction command: icat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 3386-128-3 > '/home/romil/phantom_extracted/SOFTWARE.hive'
+  ✓ SOFTWARE hive extracted (12032KB, sha256=a3ee0aa78d1fa79a..., method=icat:inode_ref)
+  → NTUSER_Administrator inode verification: istat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 10226
+  → NTUSER_Administrator extraction command: icat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 10226-128-4 > '/home/romil/phantom_extracted/NTUSER_Administrator.hive'
+  ✓ NTUSER.DAT for 'Administrator' extracted (768KB, sha256=ceec494e15140f61..., method=icat:inode_ref)
+  → NTUSER_Devon inode verification: istat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 23922
+  → NTUSER_Devon extraction command: icat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 23922-128-4 > '/home/romil/phantom_extracted/NTUSER_Devon.hive'
+  ✓ NTUSER.DAT for 'Devon' extracted (512KB, sha256=74e5883c6dc8f8a0..., method=icat:inode_ref)
+  → NTUSER_Jean inode verification: istat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 16145
+  → NTUSER_Jean extraction command: icat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 16145-128-4 > '/home/romil/phantom_extracted/NTUSER_Jean.hive'
+  ✓ NTUSER.DAT for 'Jean' extracted (768KB, sha256=2fc68060b97f4c67..., method=icat:inode_ref)
+  → NTUSER_unknown inode verification: istat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 10114
+  → NTUSER_unknown extraction command: icat -o 63 /home/romil/cases/jeanperasing/nps-2008-jean.E01 10114-128-3 > '/home/romil/phantom_extracted/NTUSER_unknown.hive'
+  ✓ NTUSER.DAT for 'unknown' extracted (224KB, sha256=df56102dd1e0e354..., method=icat:inode_ref)
+
+════════════════════════════════════════════════════════════
+  REGISTRY EXTRACTION COVERAGE
+════════════════════════════════════════════════════════════
+  Discovered hives : SAM, SECURITY, SOFTWARE, SYSTEM
+  Extracted hives  : SAM, SECURITY, SOFTWARE, SYSTEM
+  Failed hives     : none
+     ✓ NTUSER_Administrator: 768KB sha256=ceec494e15140f61... method=icat:inode_ref
+     ✓ NTUSER_Devon: 512KB sha256=74e5883c6dc8f8a0... method=icat:inode_ref
+     ✓ NTUSER_Jean: 768KB sha256=2fc68060b97f4c67... method=icat:inode_ref
+     ✓ NTUSER_unknown: 224KB sha256=df56102dd1e0e354... method=icat:inode_ref
+     ✓ SAM: 256KB sha256=db2d48497937dc6a... method=icat:inode_ref
+     ✓ SECURITY: 256KB sha256=974f2250e9851681... method=icat:inode_ref
+     ✓ SOFTWARE: 12032KB sha256=a3ee0aa78d1fa79a... method=icat:inode_ref
+     ✓ SYSTEM: 3840KB sha256=d7e65edc2e6cceab... method=icat:inode_ref
+  🔍 Parsing registry with RegRipper...
+  🗑️  Analyzing Recycle Bin...
+  ✓ Recycle Bin executables: 0
+  📦 Scanning installed programs...
+  ✓ Installed programs: 50
+  ✓ Potential hacking tools: 0
+  📧 Searching email artifacts...
+  📨 Parsing Outlook PST/OST stores...
+  ✓ Email addresses found: 472 (444 high confidence)
+  💬 Searching IRC artifacts...
+  🔧 Extracting mIRC config files...
+  🌐 Searching web history...
+  ✓ Web history entries: 30
+  🔌 Extracting network/email settings...
+  🔍 Searching Look@LAN config...
+  📨 Extracting email client settings...
+  📰 Extracting newsgroup subscriptions...
+  📝 Searching IRC channel logs...
+  📡 Searching packet capture files...
+  🌐 Searching webmail artifacts...
+  ✓ Webmail artifacts: 20
+
+════════════════════════════════════════════════════════════
+  DATA LEAKAGE ARTIFACT COVERAGE
+════════════════════════════════════════════════════════════
+  📨 Outlook/PST/OST forensics...
+     mailstores=2 mailboxes=0 messages=1020 addresses=436 subjects=523 attachments=246 deleted=42
+  🌐 Browser forensics...
+  -> Browser parser coverage: Firefox=2 LegacyIE=25 Chromium/Edge=0 rows=5340 downloads=0 errors=0
+     chrome_history=0 webcache=0 urls=5340 searches=332 downloads=0
+  ☁️  Google Drive forensics...
+     files=0 accounts=0 sync_events=0 cloud_entries=0
+  🔌 USB device forensics...
+     devices=0 volume_labels=0 setupapi_hits=0
+  💿 Optical media forensics...
+     burn_staging=0 tmp_markers=10 opened_cd=0
+  🗂️  Network drive and Explorer traces...
+     unc_paths=0 mapped=0 recent=0 interesting_files=0 windows_edb=0
+  🧭 Timeline events synthesized: 1952
+  📊 CFReDS coverage categories: 7
+
+════════════════════════════════════════════════════════════
+  MALWARE INTELLIGENCE / AV CHECK
+════════════════════════════════════════════════════════════
+  → Using clamdscan --multiscan (daemon signatures already resident in RAM)
+  → Candidate executable files: 120
+  → Malware extraction progress: 20/120
+  → Malware extraction progress: 40/120
+  → Malware extraction progress: 60/120
+  → Malware extraction progress: 80/120
+  → Malware extraction progress: 100/120
+  → Malware extraction progress: 120/120
+  ⚠  BACKGROUND AV ARTIFACT: /dev/shm/phantom_malware_scan_22334/slow_path/9_3ea0b2992282254c.bin: Win.Trojan.Ramnit-7617 FOUND
+  ⚠  BACKGROUND AV ARTIFACT: /dev/shm/phantom_malware_scan_22334/slow_path/5_ba53def4a01bbd26.bin: Win.Trojan.Ramnit-7617 FOUND
+  ⚠  BACKGROUND AV ARTIFACT: /dev/shm/phantom_malware_scan_22334/slow_path/1_4f71681f2370d005.bin: Win.Worm.Chir-529 FOUND
+  AV available     : yes (clamdscan)
+  YARA available   : yes
+  Mode             : balanced
+  Scan root        : /dev/shm/phantom_malware_scan_22334
+  Candidates       : 120
+  Extraction attempts : 120
+  Extraction successes: 119
+  Extraction failures : 1
+  Unique extracted : 115
+  Slow-path scanned: 40
+  Clean files      : 37
+  Cache hits       : 119
+  Duplicates       : 4
+  Malware findings : 3
+  AV detections    : 3
+  YARA hits        : 0
+  Offensive tools  : 0
+  Anti-forensic tools: 0
+  Legit applications: 0
+  Suspicious PE    : 66
+  Legit installers : 3
+  PE heuristics suppressed: 0
+  Timing           : extract/triage=16.4s, AV=66.8s, YARA=0.0s, total=83.2s
+
+  EXTRACTION FAILURE SAMPLES:
+     inode=7451 empty extraction
+
+  MALWARE DETECTIONS:
+     [BACKGROUND / EXECUTION UNCONFIRMED] /dev/shm/phantom_malware_scan_22334/slow_path/9_3ea0b2992282254c.bin: Win.Trojan.Ramnit-7617 FOUND
+            source: r/r 27573-128-3:	Documents and Settings/Jean/Local Settings/Temp/AIM_6.8.10.1/ocpinst.exe
+     [BACKGROUND / EXECUTION UNCONFIRMED] /dev/shm/phantom_malware_scan_22334/slow_path/5_ba53def4a01bbd26.bin: Win.Trojan.Ramnit-7617 FOUND
+            source: r/r 27419-128-7:	Documents and Settings/Jean/Local Settings/Temporary Internet Files/Content.IE5/VU2XMM4X/Inst
+     [BACKGROUND / EXECUTION UNCONFIRMED] /dev/shm/phantom_malware_scan_22334/slow_path/1_4f71681f2370d005.bin: Win.Worm.Chir-529 FOUND
+            source: r/r 11323-128-7:	Documents and Settings/Administrator/Local Settings/Temporary Internet Files/Content.IE5/WTUR
+
+  OFFENSIVE SECURITY TOOLS:
+     none
+
+  ANTI-FORENSIC TOOLS:
+     none
+
+  LEGITIMATE APPLICATIONS:
+     none
+
+  INSTALLER REPUTATION:
+     LEGITIMATE_INSTALLER
+     • install_flash_player.exe [microsoft]
+     • QQBubble.exe [microsoft]
+     • TreasureHunter.exe [microsoft]
+
+  YARA MATCHES:
+     none
+
+  PE HEURISTICS:
+     [LOW] suspicious PE imports/strings
+            source: r/r 10330-128-3:	Documents and Settings/Administrator/Local Settings/Temp/upgrader.exe
+     [LOW] suspicious PE imports/strings
+            source: r/r 10374-128-3:	Documents and Settings/Administrator/Local Settings/Temp/00006b1c/System32/Ansi/atl71.dll
+     [LOW] suspicious PE imports/strings
+            source: r/r 10380-128-3:	Documents and Settings/Administrator/Local Settings/Temp/00006b1c/System32/Redist/MS/System/a
+     [LOW] suspicious PE imports/strings
+            source: r/r 10382-128-3:	Documents and Settings/Administrator/Local Settings/Temp/00006b1c/System32/Redist/MS/System/m
+     [LOW] suspicious PE imports/strings
+            source: r/r 10384-128-3:	Documents and Settings/Administrator/Local Settings/Temp/00006b1c/System32/Redist/MS/System/m
+     [LOW] suspicious PE imports/strings
+            source: r/r 10385-128-3:	Documents and Settings/Administrator/Local Settings/Temp/00006b1c/System32/Redist/MS/System/o
+     [LOW] suspicious PE imports/strings
+            source: r/r 10386-128-3:	Documents and Settings/Administrator/Local Settings/Temp/00006b1c/System32/Redist/MS/System/o
+     [LOW] suspicious PE imports/strings
+            source: r/r 10388-128-3:	Documents and Settings/Administrator/Local Settings/Temp/00006b1c/System32/TPSvc.dll
+     [LOW] suspicious PE imports/strings
+            source: r/r 10389-128-3:	Documents and Settings/Administrator/Local Settings/Temp/00006b1c/System32/TPVMMon.dll
+     [LOW] suspicious PE imports/strings
+            source: r/r 10390-128-4:	Documents and Settings/Administrator/Local Settings/Temp/00006b1c/System32/TPVMMonUI.dll
+
+  MALWARE ASSESSMENT
+  ──────────────────────────────────────────────────────────
+  Assessment        : Background artifacts only
+  Execution evidence: None
+  Confidence        : Medium
+  Note             : AV labels may include hacktools/offensive utilities; this is detection, not proof of active infection.
+
+════════════════════════════════════════════════════════════
+  DEEP FORENSIC SUMMARY
+════════════════════════════════════════════════════════════
+  🖥️  Computer Name    : JEAN-13FBF038A3
+  ⏹️  Last Shutdown    : 2008-07-21 01:31:32
+  👥 Total Accounts   : 10
+
+  📋 USER ACCOUNTS:
+     • Administrator [500] (last login: 2008-07-21 01:22:18Z)
+     • Guest [501] (last login: Never)
+     • HelpAssistant [1000] (last login: Never)
+     • SUPPORT_388945a0 [1002] (last login: Never)
+     • Kim [1003] (last login: Never)
+     • Jean [1004] (last login: 2008-07-20 00:00:41Z)
+     • Addison [1005] (last login: Never)
+     • Abijah [1006] (last login: Never)
+     • Devon [1007] (last login: 2008-07-12 03:02:47Z)
+     • Sacha [1008] (last login: Never)
+
+  🌐 BROWSER FORENSICS:
+     URLs       : 5340
+     Searches   : 332
+     Downloads  : 0
+     Incident-relevant searches: none identified
+
+  📨 OUTLOOK FORENSICS:
+     Mailstores : 2
+     Mailboxes  : 0
+     Messages   : 1020
+     Addresses  : 436
+     Subjects   : 523
+     Attachments: 246
+     Deleted    : 42
+     • Click to confirm your Google Alert
+     • Click to confirm your Google Alert
+     • Click to confirm your Google Alert
+     • Click to confirm your Google Alert
+     • Please send me the information now
+     • Please send me the information now
+     • Please send me the information now
+     • RE: Please send me the information now
+
+  ☁️  GOOGLE DRIVE:
+     Accounts   : 0
+     Sync events: 0
+     DB entries : 0
+
+  🔌 USB FORENSICS:
+
+  🗂️  NETWORK DRIVE:
+     UNC paths  : 0
+     Mappings   : 0
+
+  💿 OPTICAL MEDIA:
+     Burn staging files: 0
+     Burn temp markers : 10
+     Opened CD traces  : 0
+
+  📧 EMAIL ADDRESSES (472 total, 444 high, 23 medium):
+     • 9aidanl@ntdev.microsoft.com [HIGH] (strings)
+     • blaker1234@aol.com [HIGH] (strings)
+     • burton@ntopsupport.com [HIGH] (strings)
+     • caprivacyinfoan@aol.com [HIGH] (strings)
+     • cps-requests@verisign.com [HIGH] (strings)
+     • dgreer@mycompany.com [HIGH] (strings)
+     • imridshkzvkvqym4aab@tnuc.imrworldwide.com [HIGH] (strings)
+     • msn9sign@sign.msnint.com [HIGH] (strings)
+     • jean@m57.biz [HIGH] (irc_config)
+     • alex@m57.biz [HIGH] (outlook_store)
+
+  📬 WEBMAIL ARTIFACTS (20):
+     • <li><a href="http://us.lrd.yahoo.com/;_ylt=AqIk10Iz_Px.zLuI8Hqgtph7pxx.;_ylv=3/**http%3a%2F%2Fmail.y
+     • <style type="text/css"><!--@import url("http://us.js2.yimg.com/us.js.yimg.com/lib/hdr/ygma_2.19.css"
+     • m_username += "@hotmail.com";
+     • am.call(this,m_socket,"Connect","messenger.hotmail.com",1863);
+     • "if you have just upgraded from a free msn.com/hotmail.com account to " + szBrand + ".";
+
+  🧾 REGISTRY COVERAGE:
+     Discovered : 4
+     Extracted  : 4
+     Failed     : 0
+
+  🛡️  MALWARE ASSESSMENT:
+     Assessment        : Background artifacts only
+     Execution evidence: None
+     Confidence        : Medium
+     Scanned    : 40
+     Clean      : 37
+     Findings   : 3
+     AV hits    : 3
+     YARA hits  : 0
+     PE flags   : 66
+     [HIGH] AV  : /dev/shm/phantom_malware_scan_22334/slow_path/9_3ea0b2992282254c.bin: Win.Trojan.Ramnit-7617 FOUND
+     [HIGH] AV  : /dev/shm/phantom_malware_scan_22334/slow_path/5_ba53def4a01bbd26.bin: Win.Trojan.Ramnit-7617 FOUND
+     [HIGH] AV  : /dev/shm/phantom_malware_scan_22334/slow_path/1_4f71681f2370d005.bin: Win.Worm.Chir-529 FOUND
+     [LOW] PE: suspicious PE imports/strings
+     [LOW] PE: suspicious PE imports/strings
+     [LOW] PE: suspicious PE imports/strings
+     [LOW] PE: suspicious PE imports/strings
+     [LOW] PE: suspicious PE imports/strings
+
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/4339cd85d8f9e94f
+  🔧 Extracting SysInternals artifacts (UserAssist, Amcache, BAM, SRUM)...
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/4339cd85d8f9e94f
+
+  🔧 SYSINTERNALS ARTIFACTS:
+     UserAssist: 16
+     Amcache: 0
+     BAM: 0
+     SRUM: 0
+     Hosts: 0
+     Defender: 0
+     Services: 0
+     Event7045: 0
+     RecentDocs: 0
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/4339cd85d8f9e94f
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/4339cd85d8f9e94f
+  → Filesystem scan cache: /home/romil/phantom_fs_cache/4339cd85d8f9e94f
+     [ETA-DEBUG 2026-06-13T06:05:19Z] AES: starting README/AES recovery | targets= | candidates=12 | python=/usr/bin/python3
+
+════════════════════════════════════════════════════════════
+  FORENSIC REASONING ENGINE
+════════════════════════════════════════════════════════════
+  [SCORE] Calculating clustered, time-aware threat score...
+  [M57] Correlating Outlook sender identity, recipients, and attachments...
+
+  M57 PHISHING / EXFILTRATION EVIDENCE:
+     correlated_messages: 259
+     phishing_requests: 1
+     external_sensitive_sends: 1
+     receipt_confirmations: 1
+     confirmed_phishing_induced_exfiltration: True
+
+  INCIDENT TIMELINE CLUSTERS:
+     Cluster 1: Social engineering [2008-07-20T01:22:45Z]
+        - External sender tuckgorge@gmail.com impersonated alison@m57.biz and requested employee names, salaries, and SSNs
+        - tuckgorge@gmail.com confirmed receipt of the file and requested secrecy
+     Cluster 2: Sensitive attachment transmitted [2008-07-20T01:28:47Z]
+        - jean@m57.biz sent m57biz.xls to tuckgorge@gmail.com
+     Cluster 3: External recipient confirmation [2008-07-20T05:03:40Z]
+        - tuckgorge@gmail.com confirmed receipt of the file and requested secrecy
+
+  TIMELINE EVENTS (14):
+     [2008-07-12 03:02:47Z] [ACTIVE] User 'Devon' logged on
+     [2008-07-20 00:00:41Z] [ACTIVE] User 'Jean' logged on
+     [2008-07-21 01:22:18Z] [ACTIVE] User 'Administrator' logged on
+     [2008-07-21 01:31:32] [CONFIG] System shutdown recorded
+     [undated] [Download/source evidence] http://download.mozilla.org/?product=firefox-3.0b5&os=win&lang=en-US
+     [undated] [Download/source evidence] http://www.mozilla.com/style/dalvay/download.css
+     [undated] [Download/source evidence] http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab
+     [undated] [Download/source evidence] http://download.newaol.com/aim/win95/Install_AIM.exe
+     [undated] [Download/source evidence] http://download.newaol.com/aim/win95/Install_AIM.exe
+     [undated] [Download/source evidence] http://office.microsoft.com/en-us/downloads/default.aspx
+     [undated] [Program execution] UEME_RUNPATH:AIM 6.lnk (1)
+     [2008-07-20T01:22:45Z] [CORROBORATED] Phishing request received: External sender tuckgorge@gmail.com impersonated alison@m57.biz and requested employee names, salaries, and SSNs
+     [2008-07-20T01:28:47Z] [CORROBORATED] Sensitive attachment sent externally: jean@m57.biz sent m57biz.xls to tuckgorge@gmail.com
+     [2008-07-20T05:03:40Z] [CORROBORATED] External recipient confirmed receipt: tuckgorge@gmail.com confirmed receipt of the file and requested secrecy
+
+  EXECUTION CHAIN (6 steps):
+     [2008-07-12 03:02:47Z] User session began -> User 'Devon' logged on
+     [2008-07-21 01:31:32] System shutdown recorded -> System shutdown recorded
+     [undated] Step -> UEME_RUNPATH:AIM 6.lnk (1)
+     [2008-07-20T01:22:45Z] Phishing request received -> External sender tuckgorge@gmail.com impersonated alison@m57.biz and requested employee names, salaries, and SSNs
+     [2008-07-20T01:28:47Z] Sensitive attachment sent externally -> jean@m57.biz sent m57biz.xls to tuckgorge@gmail.com
+     [2008-07-20T05:03:40Z] External recipient confirmed receipt -> tuckgorge@gmail.com confirmed receipt of the file and requested secrecy
+
+════════════════════════════════════════════════════════════
+  FORENSIC REASONING VERDICT
+════════════════════════════════════════════════════════════
+
+  Raw Threat Score : 219
+  Normalized Risk  : 46/100
+  Risk Band        : Medium
+  Risk Scale       : 0-20 Informational | 21-40 Low | 41-60 Medium | 61-80 High | 81-100 Critical
+  Confidence Score : 63/100 (MEDIUM)
+  Verdict          : CONFIRMED DATA EXFILTRATION - Phishing-induced disclosure
+  Patterns         : 1 attack behaviors
+  Attribution      : 0 identity links
+  Anti-forensic    : 1 cleanup indicators
+  Timeline         : 14 event(s), 6 chain step(s)
+
+  SCORE BREAKDOWN:
+     +12: [DELETED/deleted x0.80] Anti-forensics / cleanup indicators
+     +49: [CONFIG/config x0.70] External Gmail sender impersonated an internal M57 identity and requested employee names, salaries, and SSNs
+     +120: [ACTIVE/active x1.00] Jean sent a sensitive spreadsheet attachment to the external account
+     +38: [CONFIG/config x0.70] External recipient confirmed receipt of the file and requested secrecy
+
+  ANALYST NARRATIVE:
+     Jean was deceived by an email whose displayed identity referenced an internal M57 address while the actual sender was external. She replied through Outlook with a sensitive spreadsheet attachment to the external account, which later confirmed receipt. The evidence supports phishing-induced disclosure; it does not establish Jean as a malicious insider.
+
+════════════════════════════════════════════════════════════
+  INCIDENT CORRELATION SUMMARY
+════════════════════════════════════════════════════════════
+  Confirmed incident       : CONFIRMED DATA EXFILTRATION - Phishing-induced disclosure
+  Correlation score        : 219
+  Correlation basis        : Outlook phishing request, external spreadsheet disclosure, and receipt confirmation
+
+════════════════════════════════════════════════════════════
+  REPORT GENERATION
+════════════════════════════════════════════════════════════
+  ✓ JSON: /home/romil/phantom_correlation_A (disk-only)_nps-2008-jean_E01_20260613_113522.json
+  ✓ MD: /home/romil/phantom_correlation_A (disk-only)_nps-2008-jean_E01_20260613_113522.md
+  ✓ Deep forensic JSON: /home/romil/phantom_correlation_A (disk-only)_nps-2008-jean_E01_20260613_113522_forensic_exam.json
+  ✓ Challenge report MD: /home/romil/phantom_correlation_A (disk-only)_nps-2008-jean_E01_20260613_113522_challenge_report.md
+  → Starting malware triage report preservation
+  ✓ Malware intel MD: /home/romil/phantom_correlation_A (disk-only)_nps-2008-jean_E01_20260613_113522_malware_intel.md
+
+  VERDICT DIAGNOSTICS:
+     Correlation verdict : CONFIRMED DATA EXFILTRATION - Phishing-induced disclosure (score=219) (reasoning-promoted M57 Outlook chain)
+     Reasoning verdict   : CONFIRMED DATA EXFILTRATION - Phishing-induced disclosure
+     Evidence classes    : Phishing / sender spoofing, Confirmed sensitive-data exfiltration by email
+
+╔══════════════════════════════════════════════════════════════╗
+║  COMPLETE in 472s
+║  Verdict : CONFIRMED DATA EXFILTRATION - Phishing-induced disclosure
+║  Score   : 219 raw / 46/100 risk (breakdown in report)
+║  JSON    : phantom_correlation_A (disk-only)_nps-2008-jean_E01_20260613_113522.json
+║  MD      : phantom_correlation_A (disk-only)_nps-2008-jean_E01_20260613_113522.md
+╚══════════════════════════════════════════════════════════════╝

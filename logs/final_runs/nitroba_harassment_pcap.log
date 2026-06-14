@@ -1,0 +1,111 @@
+
+╔══════════════════════════════════════════════════════════════╗
+║   PHANTOM DFIR — Intelligent Disk Correlator v3.0            ║
+║   Path-based | Process Tree | Obfuscation Detection          ║
+║   Find Evil! Hackathon 2026                                   ║
+╚══════════════════════════════════════════════════════════════╝
+
+  Mode   : NETWORK-PCAP
+  PCAP   : /home/romil/cases/jeanperasing/nitroba.pcap
+  Output : /home/romil
+
+  Hashing evidence in parallel...
+  ✓ Disk   SHA256: 2b77a9eaefc1d6af163d1ba793c96dbc...
+
+════════════════════════════════════════════════════════════
+  PARALLEL EXTRACTION
+════════════════════════════════════════════════════════════
+  → Preparing extraction workers
+  → Routing evidence to disk, memory, or network collectors
+
+════════════════════════════════════════════════════════════
+  NETWORK ARTIFACT EXTRACTION
+════════════════════════════════════════════════════════════
+  → PCAP/PCAPNG input detected — using network forensics route
+  → Skipping NTFS, registry, prefetch, installed-program, and disk timeline extraction
+
+  Running 10 network tasks with tshark...
+    [ 1/10] ✓ network:protocols     
+    [ 2/10] ✓ network:conv_ip       
+    [ 3/10] ✓ network:conv_tcp      
+    [ 4/10] ✓ network:conv_udp      
+    [ 5/10] ✓ network:dns           
+    [ 6/10] ✓ network:http          
+    [ 7/10] ✗ network:mail          
+    [ 8/10] ✗ network:irc           
+    [ 9/10] ✓ network:credentials   
+    [10/10] ✓ network:files         
+  ✓ Network conversations: 100
+  ✓ Hosts observed: 295
+  ✓ DNS records: 200
+  ✓ HTTP requests: 200
+  ✓ Mail protocol rows: 0
+  ✓ IRC rows: 0
+
+════════════════════════════════════════════════════════════
+  NETWORK SOC ENRICHMENT
+════════════════════════════════════════════════════════════
+  ✓ Http Responses: 500
+  ✓ Tls: 500
+  ✓ Http Posts: 372
+  ✓ Flow Packets: 90379
+  ✓ Syn Scan: 500
+  ✓ Flow summaries: 500
+  ✓ HTTP responses: 500
+  ✓ TLS rows: 500
+  ✓ Exported HTTP objects: 200
+  ⚠  Beaconing indicators: 4
+  ⚠  Scanning indicators: 2
+  ⚠  C2 indicators: 4
+
+════════════════════════════════════════════════════════════
+  GENERIC ATTRIBUTION / IDENTITY CORRELATION
+════════════════════════════════════════════════════════════
+  ✓ Identity entities: 217
+  ✓ Webmail accounts: 30
+  ✓ Primary suspect identities: 2
+  ✓ Primary victim identities: 2
+  ✓ Communication participants: 0
+  ✓ Secondary identities: 1
+  ✓ Background identities: 25
+  ✓ Session/tracking/request tokens: 256
+  ✓ Communications: 47
+  ✓ Cloud accounts/activity: 8
+  ✓ Threat indicators: 5
+  → Primary suspect: gmail jcoachj@gmail.com score=420 confidence=high
+  → Primary suspect: nitroba.org the_whole_world_is_watching@nitroba.org score=400 confidence=medium
+  → Primary victim: yahoo lilytuckrige@yahoo.com score=920 confidence=medium
+  → Primary victim: gmail elisabeth.ix.chel@gmail.com score=135 confidence=medium
+  → Secondary identity: gmail elishevet@gmail.com score=75 confidence=high
+  → Attribution chain: jcoachj@gmail.com confidence=HIGH
+  → Extraction complete in 101.0s
+  → Deep disk forensic modules skipped for PCAP input
+
+════════════════════════════════════════════════════════════
+  NETWORK ATTRIBUTION CORRELATION
+════════════════════════════════════════════════════════════
+  Verdict                 : HIGH CONFIDENCE ATTRIBUTION - Harassment communications corroborated
+  Correlation score       : 185
+  Webmail accounts        : 30
+  Identity entities       : 217
+  Communications          : 47
+  Threat indicators       : 5
+
+════════════════════════════════════════════════════════════
+  REPORT GENERATION
+════════════════════════════════════════════════════════════
+  ✓ JSON: /home/romil/phantom_correlation_A (disk-only)_nitroba_pcap_20260612_110621.json
+  ✓ MD: /home/romil/phantom_correlation_A (disk-only)_nitroba_pcap_20260612_110621.md
+
+  VERDICT DIAGNOSTICS:
+     Correlation verdict : HIGH CONFIDENCE ATTRIBUTION - Harassment communications corroborated (score=185)
+     Reasoning verdict   : N/A
+     Evidence classes    : N/A
+
+╔══════════════════════════════════════════════════════════════╗
+║  COMPLETE in 108s
+║  Verdict : HIGH CONFIDENCE ATTRIBUTION - Harassment communications corroborated
+║  Score   : 185 (breakdown in report)
+║  JSON    : phantom_correlation_A (disk-only)_nitroba_pcap_20260612_110621.json
+║  MD      : phantom_correlation_A (disk-only)_nitroba_pcap_20260612_110621.md
+╚══════════════════════════════════════════════════════════════╝

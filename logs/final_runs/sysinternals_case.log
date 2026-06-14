@@ -1,0 +1,618 @@
+
+╔══════════════════════════════════════════════════════════════╗
+║   PHANTOM DFIR — Intelligent Disk Correlator v3.0            ║
+║   Path-based | Process Tree | Obfuscation Detection          ║
+║   Find Evil! Hackathon 2026                                   ║
+╚══════════════════════════════════════════════════════════════╝
+
+  Mode   : DISK-ONLY (no memory image)
+  Disk   : /home/romil/cases/susinternal/SysInternalsCase.E01
+  Output : /home/romil/phantom_final_logs/sysinternals
+
+  Hashing evidence in parallel...
+  ✓ Disk   SHA256: d6c85c6eb38f2fbe157e5ede8d6528bc...
+
+════════════════════════════════════════════════════════════
+  PARALLEL EXTRACTION
+════════════════════════════════════════════════════════════
+  → Preparing extraction workers
+  → Routing evidence to disk, memory, or network collectors
+
+════════════════════════════════════════════════════════════
+  DISK ARTIFACT EXTRACTION
+════════════════════════════════════════════════════════════
+  → Preparing disk extraction: filesystem validation, deleted files, prefetch, registry hints, and IOC strings
+  → Detecting filesystem and partition offset
+
+════════════════════════════════════════════════════════════
+  FILESYSTEM VALIDATION SELF-CHECK
+════════════════════════════════════════════════════════════
+  Selected offset      : 0
+  Filesystem type      : NTFS
+  Partition length     : 0 sectors
+  Partition desc       : whole image
+  → Building filesystem scan cache via tsk_recover — normalizes DD/E01 string searches
+  ✓ Filesystem scan cache ready: /home/romil/phantom_final_logs/sysinternals/phantom_fs_cache/321777d55d454e18
+  → Enumerating artifact sources from filesystem cache
+  → Scheduling parallel disk artifact tasks
+
+  Running 8 disk tasks in parallel...
+    [ 1/8] ✓ disk:mmls                 (0.1s)
+    [ 2/8] ✓ disk:strings_malware      (0.2s)
+    [ 3/8] ✓ disk:registry_run         (0.8s)
+    [ 4/8] ✓ disk:fls_deleted          (0.8s)
+    [ 5/8] ✓ disk:fls_sus              (0.9s)
+    [ 6/8] ✓ disk:prefetch             (1.2s)
+    [ 7/8] ✓ disk:strings_obfusc       (6.0s)
+    [ 8/8] ✓ disk:prefetch_dir         (21.4s)
+  → All 8 disk tasks done in 21.4s
+  ✓ Suspicious-path files: 100
+  ⚠  Deleted executable: get-packageparameters.ps1
+  ⚠  Deleted executable: install-chocolateyshortcut.ps1
+  ⚠  Deleted executable: uninstall-binfile.ps1
+  ✓ Deleted files: 100
+  ✓ Prefetch entries: 2
+  → log2timeline running in background — won't block analysis
+  → Disk IOCs (suspicious only): 64
+  → Extraction complete in 195.1s
+
+════════════════════════════════════════════════════════════
+  DEEP FORENSIC ANALYSIS
+════════════════════════════════════════════════════════════
+  📂 Building full file system map...
+  ✓ File system entries: 164453
+  → Filesystem scan cache: /home/romil/phantom_final_logs/sysinternals/phantom_fs_cache/321777d55d454e18
+  🔑 Extracting registry hives...
+  → Starting registry discovery and hive extraction
+
+════════════════════════════════════════════════════════════
+  FILESYSTEM VALIDATION SELF-CHECK
+════════════════════════════════════════════════════════════
+  Selected offset      : 0
+  Filesystem type      : NTFS
+  Partition length     : 0 sectors
+  Partition desc       : whole image
+  FS entries discovered: 164453
+  Enumeration complete : yes
+  Registry hives       : SAM, SECURITY, SOFTWARE, SYSTEM
+  NTUSER.DAT hives     : 3
+  → SYSTEM inode verification: istat /home/romil/cases/susinternal/SysInternalsCase.E01 42054
+  → SYSTEM extraction command: icat /home/romil/cases/susinternal/SysInternalsCase.E01 42054-128-4 > '/home/romil/phantom_final_logs/sysinternals/phantom_extracted/SYSTEM.hive'
+  ✓ SYSTEM hive extracted (10752KB, sha256=077b8e5c30fb9e2e..., method=icat:inode_ref)
+  → SECURITY inode verification: istat /home/romil/cases/susinternal/SysInternalsCase.E01 41763
+  → SECURITY extraction command: icat /home/romil/cases/susinternal/SysInternalsCase.E01 41763-128-4 > '/home/romil/phantom_final_logs/sysinternals/phantom_extracted/SECURITY.hive'
+  ✓ SECURITY hive extracted (64KB, sha256=04b70a7623d6b078..., method=icat:inode_ref)
+  → SAM inode verification: istat /home/romil/cases/susinternal/SysInternalsCase.E01 41760
+  → SAM extraction command: icat /home/romil/cases/susinternal/SysInternalsCase.E01 41760-128-4 > '/home/romil/phantom_final_logs/sysinternals/phantom_extracted/SAM.hive'
+  ✓ SAM hive extracted (64KB, sha256=41c92c5254486033..., method=icat:inode_ref)
+  → SOFTWARE inode verification: istat /home/romil/cases/susinternal/SysInternalsCase.E01 46340
+  → SOFTWARE extraction command: icat /home/romil/cases/susinternal/SysInternalsCase.E01 46340-128-4 > '/home/romil/phantom_final_logs/sysinternals/phantom_extracted/SOFTWARE.hive'
+  ✓ SOFTWARE hive extracted (70656KB, sha256=87d1ef70c7805265..., method=icat:inode_ref)
+  → NTUSER_Default inode verification: istat /home/romil/cases/susinternal/SysInternalsCase.E01 27535
+  → NTUSER_Default extraction command: icat /home/romil/cases/susinternal/SysInternalsCase.E01 27535-128-3 > '/home/romil/phantom_final_logs/sysinternals/phantom_extracted/NTUSER_Default.hive'
+  ✓ NTUSER.DAT for 'Default' extracted (256KB, sha256=42e281d0c4abe48b..., method=icat:inode_ref)
+  → NTUSER_IEUser inode verification: istat /home/romil/cases/susinternal/SysInternalsCase.E01 83438
+  → NTUSER_IEUser extraction command: icat /home/romil/cases/susinternal/SysInternalsCase.E01 83438-128-4 > '/home/romil/phantom_final_logs/sysinternals/phantom_extracted/NTUSER_IEUser.hive'
+  ✓ NTUSER.DAT for 'IEUser' extracted (1024KB, sha256=37feda40dd1392c5..., method=icat:inode_ref)
+  → NTUSER_unknown inode verification: istat /home/romil/cases/susinternal/SysInternalsCase.E01 80640
+  → NTUSER_unknown extraction command: icat /home/romil/cases/susinternal/SysInternalsCase.E01 80640-128-3 > '/home/romil/phantom_final_logs/sysinternals/phantom_extracted/NTUSER_unknown.hive'
+  ✓ NTUSER.DAT for 'unknown' extracted (256KB, sha256=5468715e2a3876fb..., method=icat:inode_ref)
+
+════════════════════════════════════════════════════════════
+  REGISTRY EXTRACTION COVERAGE
+════════════════════════════════════════════════════════════
+  Discovered hives : SAM, SECURITY, SOFTWARE, SYSTEM
+  Extracted hives  : SAM, SECURITY, SOFTWARE, SYSTEM
+  Failed hives     : none
+     ✓ NTUSER_Default: 256KB sha256=42e281d0c4abe48b... method=icat:inode_ref
+     ✓ NTUSER_IEUser: 1024KB sha256=37feda40dd1392c5... method=icat:inode_ref
+     ✓ NTUSER_unknown: 256KB sha256=5468715e2a3876fb... method=icat:inode_ref
+     ✓ SAM: 64KB sha256=41c92c5254486033... method=icat:inode_ref
+     ✓ SECURITY: 64KB sha256=04b70a7623d6b078... method=icat:inode_ref
+     ✓ SOFTWARE: 70656KB sha256=87d1ef70c7805265... method=icat:inode_ref
+     ✓ SYSTEM: 10752KB sha256=077b8e5c30fb9e2e... method=icat:inode_ref
+  🔍 Parsing registry with RegRipper...
+  🗑️  Analyzing Recycle Bin...
+  ✓ Recycle Bin executables: 0
+  📦 Scanning installed programs...
+  ✓ Installed programs: 32
+  ✓ Potential hacking tools: 0
+  📧 Searching email artifacts...
+  📨 Parsing Outlook PST/OST stores...
+  ✓ Email addresses found: 0 (0 high confidence)
+  💬 Searching IRC artifacts...
+  🔧 Extracting mIRC config files...
+  🌐 Searching web history...
+  ✓ Web history entries: 1
+  🔌 Extracting network/email settings...
+  🔍 Searching Look@LAN config...
+  📨 Extracting email client settings...
+  📰 Extracting newsgroup subscriptions...
+  📝 Searching IRC channel logs...
+  📡 Searching packet capture files...
+  ✓ Packet capture candidates found: 8
+  🌐 Searching webmail artifacts...
+  ✓ Webmail artifacts: 1
+
+════════════════════════════════════════════════════════════
+  DATA LEAKAGE ARTIFACT COVERAGE
+════════════════════════════════════════════════════════════
+  📨 Outlook/PST/OST forensics...
+     mailstores=0 mailboxes=0 messages=0 addresses=0 subjects=0 attachments=0 deleted=0
+  🌐 Browser forensics...
+     chrome_history=0 webcache=1 urls=17 searches=0 downloads=0
+  ☁️  Google Drive forensics...
+     files=0 accounts=0 sync_events=0 cloud_entries=0
+  🔌 USB device forensics...
+     devices=0 volume_labels=0 setupapi_hits=725
+  💿 Optical media forensics...
+     burn_staging=1 tmp_markers=120 opened_cd=0
+  🗂️  Network drive and Explorer traces...
+     unc_paths=0 mapped=0 recent=11 interesting_files=9 windows_edb=1
+  🧭 Timeline events synthesized: 18
+  📊 CFReDS coverage categories: 7
+
+════════════════════════════════════════════════════════════
+  MALWARE INTELLIGENCE / AV CHECK
+════════════════════════════════════════════════════════════
+  → Using clamdscan --multiscan (daemon signatures already resident in RAM)
+  → Candidate executable files: 120
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_81009.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/2292bcf15095046c4e7c7be5958e5fb2ca4a842bc78272e007be6050050c2f72.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_81010.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/156d87f63524ad620783128d73a5aa51b5911861eb528e3b6f2c271d9b0b85b4.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80994.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/442dcd6e6195349046166f3ba702294590deaf618406211f9df04e17b6f8a6c6.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80995.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/fbade960b719dddc510c4ef135aa010fc324138ad1e8fbc0a01b103c6e7ee2e7.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80653.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/4d334c860639bd65b553f511ee86d7d93e6e770fa78712fd09c2b8360f6daa9e.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80977.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/8bce65d7ba70aba70cf2918e64f44ebcbcf380e9ff934bcc28ed094ad1552c80.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_81157.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/c1e8cfa2abdb148c4a19bfa2d3f024ed4a781142a0e3a7dead8923dc25db43f0.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_81197.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/c2981d469fb4cf2e7d9ace82c49710d4346c88ac9455194d4f0f3cd7613f9ebf.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_81194.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/ecb84fe97608c0b346bde6d81e4033ff9a785dcf437025b28bcde85617f35738.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_81345.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/9b251737a6b6ace9fde45b64fd653b04575c6416f15112fbe1697a47b14990e6.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62823.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/be251d1c8d0b2f22002e0ec13973f65788553ae299611e31208fbf9d567ed9c1.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62824.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/b56c795d58f2370eb9accb10bc251041737067ade6ca733cb5a81b04f46a2935.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62831.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/806150915c3c7d3d1cb789d25733b879287959f1c0458e06c17788e3c888a29d.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62818.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/8a67da60fa73778e0133cb72e573e50e0a137f9e715bed9b07365ccba2cca858.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62833.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/658bdbe7abcdfd39b7e5fbe87b5ac26ff4f8fdd81bbe3bba5fea57459172ed40.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62832.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/74470024c523f59fa205d6dd3369de004ea85ce9e98854fbe2cf8d30a0758518.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62834.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/138acb663fdb21d3c52fa71249ec5d87810f99bce05d2e31d6abbf1a4dc33d1e.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62835.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/806ef5c32eb18054356c445af80ef40499d853814fa7ad05e331a8f2f371a09f.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62836.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/0b033326d93eb3e30fc51b290f813f26b4ef6b15e385446f8a558d702f3a23f5.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62837.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/4e52ef3b61a6630b0ecd990a2a6d7fb1230a442fdb09f993f9b767610e78ba47.bin
+  → Malware extraction progress: 20/120
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62838.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/9a8419ff2f5c5a7e63495260057552d61c88a435150dc944ae1acddde6523ade.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62840.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/ff5e80a0a68011ac62be1ab6377e6b531c390604a4d87f23c889699c2e63052b.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62841.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/748f38c350d0a29385620d8a866b76cc6d92b9e797dbead02c909bf45531911e.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62843.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/19c68f71c873edb79d7583145c5bf6f345820db75bb2b9bce5a3cfb8c15a7fd8.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62844.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/f09865a76d2b05cc93f83186d1d93274153a028444298d8482bc4c6fb6cc59f5.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62845.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/7acaeb4650955ecdd5fb93059151b6f930d3e7cc5d0ea380936af4deae3566a4.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62846.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/4a37757052d35704173f76f7630bf0da4f5e35acacfa78f185d69db641c1e16f.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62847.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/abd2724256e1338aca385b9fc42058a3cf4228f7ebba530ba66361499ebe6735.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80362.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/c6abce39818c5618028c5f7403e296e753ced599c07ba8bfff3def058d229622.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80365.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/f8965ae159a6ea350bc75f5c74f48e125a4be0b345f619f1d687723780b46188.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80366.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/0ae97c186c5216d7e2a7d5140419f7494c0c24998b39a9e7c69f3a76194bd079.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80368.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/05a6ef9b537a2af8dfcd08168d6fd99aa4ea0a11ebd33828e02890d3119ace2c.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80369.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/c38ab2b63815cf50907b0b12aee202b2a46073def2ff44196b730fc37daa7108.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80371.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/d06d018b1e6e08448dd016234d4f82ad1b201bca3d889810cfa579580cf3e3b8.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62848.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/69ba7c35f9b6c3ebbd97947e4894f01935586ce561eff0223e2d440e4c319649.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80372.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/816d3ea82b33a28c06ccee50e27ce63bbcd99066c0d49a6449ca20df318fc58d.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80374.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/e23c9bc355b292c037a3ececa3167e7433b1ecda3e6c5fcf2efc5ce5f232d99b.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80377.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/02c3ed22b260e79d295e47eab468b9dbe49492dca8c644ee0915f879eec14d16.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80378.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/699121f197a6343af9b5ea5bfba823766b7ad1b4bac8cebde7608ddb639acc72.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80380.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/ed09693e579cb840cfbe01e3b99c8e49331fff2ed0ff7cde5dd96c8301d7c4cc.bin
+  → Malware extraction progress: 40/120
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80382.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/6a61afa6b9e36f4f1fd5064dafbcca38b0c780baa3662adacfe2df6ebb247622.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80383.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/1325011e1a3a88d47d817415cdd9a1f9aee5ecf8ca1394f1628e21278174a40e.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80385.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/1a8218202dd326f232c047dc82ffab13511ea8b54b9154cc5a4ae612beceb058.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80386.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/f6b37101190b7ee2dc0dadb3782e67c22b283c65969e1fa00173f1a5b0264123.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80395.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/ad3df56b9fed603bf1e41643bc0460901c2da42036fd995b1b832f242ba47cb3.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80397.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/caf7a7494751a3993fc5afc90b79ee7953f5a5ac53f15be27e35e351c69a2084.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80398.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/12129d99e74b91749cb31d2d29f64e5ddb88a80723fd4fa0892f736efd21f717.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80400.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/a9fa3b7dede3dfc0ee4b901fe6a4553e09dff1ee3adc9ba3af7595d98ed18df6.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80402.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/35248dfad065fd27b2eb98bbd09d9b9e969a5321cfd585ffc46eb5ac698e1f3f.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_62839.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/47bfee687a93e093833186a290040e5e1311d4cd8da16781f4e6e477593660ca.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80375.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/824b3c720a87e4553f9436efa2082719f52b4bff75b612016577f02740768edc.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82860.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/a9d8cfb1c0b0c6de819208ed198b37462916ae527083c3dd0351cc76232c36d6.bin
+  → Malware extraction progress: 60/120
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80439.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/56cc9e7e3767c0cffae8161bf0ad13457487c1b422e2879b897dbd4bab115776.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80435.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/92f6e97c9177361ee5425826585e6e4470052a36bb4e0d0e8667e83b41652c2f.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80453.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/c6b17d9ecf5eed6cfeaa1e2b72ad6ea11f76b777c44a8236125bd16a8d2c757d.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_80446.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/badcd74e618e23f7d9b997b4b93ecd631f28af36a82b730b6e61d4e59a72e24f.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_27331.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/6e28d25e4b520aab2f2fd0983f62bae3cd8730cc07e003c1efd5cf635df474b2.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_27406.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/a9b8f3753fb1adf3fdd9558cd49e0be28d0fd781eb192ff9e8b0cc736ee173eb.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88605.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/25e5a9926c679721833bd65a417f61c0a05c31952e8700d0524a31a0d3cf9a12.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88606.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/30230b003f7ae2b7447bb96636d8f342fbc622ae35f7b30e45f057ec9db9c7de.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88607.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/fa3bfb274915218f75e0c2cf30b409858427616a6a1def8f252154739d632f37.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88611.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/d3e271c430b44803e79295665c180946999cae2f3e30ff664aa4c6c9e045937e.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88609.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/2d503d6045814216be0b4509ca3207602d7594436fa91b2517aacdf01a59821a.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88408.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/5562cba5cd5b2b67b9e21fdd53e94471c6458221d4bb01ea5fc630a05ae772c7.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_33046.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/5562cba5cd5b2b67b9e21fdd53e94471c6458221d4bb01ea5fc630a05ae772c7.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88612.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/02280c19c34ffb13619534a1836fec9b5e00b5f19ef11cd84cee12ecffc61294.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88613.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/7222b0a0b48f8dc9f737006f24b29bb613c30b7a968e4b166eff2d81e914677f.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88615.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/757498756557050ee98ce104e8aa96201b4ee4d4beaab8d2a95134a052c10f87.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88616.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/ffbb8b09a91e850e0378b08e48d862dddcc54e499f14c2cc43574660e5cb0397.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88617.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/6e444d8c21d6998ca95f3438fff3fa3453e405c40c70423b7391c189cb59d270.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88618.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/77239463d7ba1f423b4d31f8877bfa2dfa3d6709ee2438b6341fc1376078ab8d.bin
+  → Malware extraction progress: 80/120
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88619.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/aa2ea5591f3b9b819fb3be595065b640e222e6d71bf37539de7f29430ff72674.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88621.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/7665dccb4fc686c7879cec6f5bb079d2cdc0d120473f460a33ba42f338495a32.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88632.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/2dad33fbd877bbfffbd98dd5e580c6d35235defb00d8784c599c832811eca8f6.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88635.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/d1520616bc4b4c27c96fbf9427f43bd46c217d5fde057b64d74e462a9cb8844f.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88634.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/87416decc55a9059739a66d96b76177398f725a2942b5fc3f124d5e50b15f0d0.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_88636.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/123691ecf4df668a45f8dcc5037ba556d5464bdf7d952bdd25bed472f4027c35.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_61586.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/55d27902ffebfc7e5ab55962c0c3e6f9c901729a40abe5e564ee8e436a07ba17.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_60029.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/63debb4675d2875d5787e7bae52e73bddc040939ea9235df897c3fd7818de9d3.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82867.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/ef0a338b114aa84bf717fe4702346a7abc6301831eac2c2b210a7012fa890bd6.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_84838.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/e0bc3d57ac12cd3fc4f2750bbd12a957767e28851936df0b0e1ef1927913f421.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_84852.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/24ba0ab6ce05469ab0dd497e7717a1ac178d0578c9ee4fa7379f48adb02cedae.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_84873.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/bae3a0a807279baf14fe40ba01839f2b85f92d6237fa3ca72022cdbcd5a3704b.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82870.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/4d49fd0156090a8aadc49891f177655a8f40949076ab9f26c68d8a8d7fc163a4.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82872.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/199ada142641cf2f83bd9a6525a6e9b161d9498c18da5ecec5eeb106418f5fb4.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82871.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/8ee86f5a92914270eac2f9f6a7c7d404d0c0f24cfc49065f3af8753b0002df4c.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82875.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/3ace40ee54d31f2b01953a50d19009ce6657c2de2d1aea17b3a2b89d417c33f0.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82876.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/27044430d8d9758309df9c32017ca854e51567ef66207a90bcba959023565835.bin
+  → Malware extraction progress: 100/120
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82873.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/6138b4ebb069346daf39ce9b442f3a0eeff107d32c0512a8aa4d3a800802374e.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82879.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/03046098fcc6379c70682c0efc9814e06c5dffd83be000e22d6e926108ad9192.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82878.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/98084d925b175176e6e0f8c05913663aa323fe95e9bf54bf1c86b109e920ffe7.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82877.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/dc27b6215a247dcf0927544179467e106afc26add9358b8cab28258e6f3bb5b6.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82880.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/a30ecde0d59dcf1892cdb51069862fc943bb10cfdf3fd978f28f5f39ca951d7f.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82881.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/a6bcefee566e55636d3355908f4b36681dd920697fdcc883812a415e341bdec2.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82882.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/2d413e51345d5b508d2c10fa9300db5d76d3414f220a4227e362d4fa9b81a5ac.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82883.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/2ef52e52905e9ca4937bb534e00ba1557400efef9b42c435575bc58e4e82a3d6.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82884.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/b1828fa80e12764589b70938efc5dbedc8be8c9b0aa6a6c54f797e6ab1cd7ba8.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82885.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/46fd539f7ebe7da8d6453cdee9a4f625067541b60e454408a1360aeda1aba576.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82886.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/2038313cd1bd193a0c2b72bb6b40cad3855f293637859dd17640bf7a47dc7f62.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82888.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/067f3488c02153492ba284e5fde4291845c7e21ab23174bedd25919e61f41c97.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82889.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/8312e712d82b971b1e1c5d59717ce12517932a9270a2afee0d35d692114a40c0.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82890.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/022fa738640fa3fdc02b0a9eb3be71e68e6047bd9d6cc338ea5a3a5a37bceeba.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82891.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/661d7d416c38146752c1a5fc041e2de17b6d0f72e923cd28b2fb7eca6d84dd6f.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82892.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/03f1442c10b626eb3c272c68220d4c1c268dd8e159627944655f63849941b4cd.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82893.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/de33e511086e5cfddc0d8f31784f051d857032adc45d68c7eb549b0dd593fb03.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82894.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/aa546cedc2d2d614932ab7c6a3f6953055db2fa2cd2c191fbd598711854c73ca.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82895.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/886300afdba2636a581a3e4882a76ec40827d35dede01cd02aa797781aecd45e.bin
+  → Malware cache move: /dev/shm/phantom_malware_scan_38825/extract/candidate_82896.bin -> /home/romil/phantom_final_logs/sysinternals/phantom_malware_cache/35f42ee1406f6de88a8f4bf95b88546a8693f60f643522ca8d5838fcac37f344.bin
+  → Malware extraction progress: 120/120
+  AV available     : yes (clamdscan)
+  YARA available   : yes
+  Mode             : balanced
+  Scan root        : /dev/shm/phantom_malware_scan_38825
+  Candidates       : 120
+  Extraction attempts : 120
+  Extraction successes: 119
+  Extraction failures : 1
+  Unique extracted : 107
+  Slow-path scanned: 8
+  Clean files      : 8
+  Cache hits       : 11
+  Duplicates       : 12
+  Malware findings : 0
+  AV detections    : 0
+  YARA hits        : 0
+  Offensive tools  : 0
+  Anti-forensic tools: 0
+  Legit applications: 0
+  Suspicious PE    : 7
+  Legit installers : 53
+  PE heuristics suppressed: 2
+  Timing           : extract/triage=9.2s, AV=0.1s, YARA=0.0s, total=9.4s
+
+  EXTRACTION FAILURE SAMPLES:
+     inode=0 skipped large file (130023424 bytes)
+
+  MALWARE DETECTIONS:
+     none
+
+  OFFENSIVE SECURITY TOOLS:
+     none
+
+  ANTI-FORENSIC TOOLS:
+     none
+
+  LEGITIMATE APPLICATIONS:
+     none
+
+  INSTALLER REPUTATION:
+     LEGITIMATE_INSTALLER
+     • VC_redist.x64.exe [microsoft]
+     • VC_redist.x86.exe [microsoft]
+     • chocolateyScriptRunner.ps1 [oracle]
+     • ChocolateyTabExpansion.ps1 [oracle]
+     • Format-FileSize.ps1 [oracle]
+     • Get-CheckSumValid.ps1 [oracle]
+     • Get-ChocolateyUnzip.ps1 [oracle]
+     • Get-ChocolateyWebFile.ps1 [oracle]
+     • Get-EnvironmentVariable.ps1 [oracle]
+     • Get-EnvironmentVariableNames.ps1 [oracle]
+     • Get-FtpFile.ps1 [oracle]
+     • Get-OSArchitectureWidth.ps1 [oracle]
+     • Get-PackageParameters.ps1 [oracle]
+     • Get-ToolsLocation.ps1 [oracle]
+     • Get-UACEnabled.ps1 [oracle]
+
+  YARA MATCHES:
+     none
+
+  PE HEURISTICS:
+     [LOW] suspicious PE imports/strings
+            source: r/r 82867-128-3:	Users/IEUser/AppData/Local/Microsoft/OneDrive/18.143.0717.0002/adal.dll
+     [LOW] suspicious PE imports/strings
+            source: r/r 82882-128-4:	Users/IEUser/AppData/Local/Microsoft/OneDrive/18.143.0717.0002/api-ms-win-core-memory-l1-1-0.
+     [LOW] suspicious PE imports/strings
+            source: r/r 82883-128-4:	Users/IEUser/AppData/Local/Microsoft/OneDrive/18.143.0717.0002/api-ms-win-core-namedpipe-l1-1
+     [LOW] suspicious PE imports/strings
+            source: r/r 82885-128-4:	Users/IEUser/AppData/Local/Microsoft/OneDrive/18.143.0717.0002/api-ms-win-core-processthreads
+     [LOW] suspicious PE imports/strings
+            source: r/r 84838-128-4:	Users/IEUser/AppData/Local/Microsoft/OneDrive/18.143.0717.0002/amd64/FileCoAuthLib64.dll
+     [LOW] suspicious PE imports/strings
+            source: r/r 84852-128-4:	Users/IEUser/AppData/Local/Microsoft/OneDrive/18.143.0717.0002/amd64/FileSyncApi64.dll
+     [LOW] suspicious PE imports/strings
+            source: r/r 84873-128-4:	Users/IEUser/AppData/Local/Microsoft/OneDrive/18.143.0717.0002/amd64/FileSyncShell64.dll
+
+  MALWARE ASSESSMENT
+  ──────────────────────────────────────────────────────────
+  Assessment        : No malware artifacts detected
+  Execution evidence: None
+  Confidence        : Medium
+
+════════════════════════════════════════════════════════════
+  DEEP FORENSIC SUMMARY
+════════════════════════════════════════════════════════════
+  🖥️  Computer Name    : MSEDGEWIN10
+  ⏹️  Last Shutdown    : 2022-11-15 21:21:12
+  👥 Total Accounts   : 6
+
+  📋 USER ACCOUNTS:
+     • Administrator [500] (last login: Never)
+     • Guest [501] (last login: Never)
+     • DefaultAccount [503] (last login: Never)
+     • WDAGUtilityAccount [504] (last login: Never)
+     • IEUser [1000] (last login: 2022-11-15 21:18:17Z)
+     • sshd [1002] (last login: Never)
+
+  🌐 BROWSER FORENSICS:
+     URLs       : 17
+     Searches   : 0
+     Downloads  : 0
+
+  📨 OUTLOOK FORENSICS:
+     Mailstores : 0
+     Mailboxes  : 0
+     Messages   : 0
+     Addresses  : 0
+     Subjects   : 0
+     Attachments: 0
+     Deleted    : 0
+
+  ☁️  GOOGLE DRIVE:
+     Accounts   : 0
+     Sync events: 0
+     DB entries : 0
+
+  🔌 USB FORENSICS:
+
+  🗂️  NETWORK DRIVE:
+     UNC paths  : 0
+     Mappings   : 0
+
+  💿 OPTICAL MEDIA:
+     Burn staging files: 1
+     Burn temp markers : 120
+     Opened CD traces  : 0
+
+  🧭 DATA LEAKAGE NARRATIVE:
+     No data exfiltration workflow was confirmed from the recovered artifacts. Analysis focused on available forensic evidence.
+     Timeline events: 18
+
+  📬 WEBMAIL ARTIFACTS (1):
+     • [TIMEOUT after 60s]
+
+  🧾 REGISTRY COVERAGE:
+     Discovered : 4
+     Extracted  : 4
+     Failed     : 0
+
+  🛡️  MALWARE ASSESSMENT:
+     Assessment        : No malware artifacts detected
+     Execution evidence: None
+     Confidence        : Medium
+     Scanned    : 8
+     Clean      : 8
+     Findings   : 0
+     AV hits    : 0
+     YARA hits  : 0
+     PE flags   : 7
+     [LOW] PE: suspicious PE imports/strings
+     [LOW] PE: suspicious PE imports/strings
+     [LOW] PE: suspicious PE imports/strings
+     [LOW] PE: suspicious PE imports/strings
+     [LOW] PE: suspicious PE imports/strings
+
+  → $UsnJrnl:$J inode verification: istat /home/romil/cases/susinternal/SysInternalsCase.E01 80499
+  → $UsnJrnl:$J extraction command: icat /home/romil/cases/susinternal/SysInternalsCase.E01 80499-128-3 > '/home/romil/phantom_final_logs/sysinternals/phantom_extracted/sysinternals_artifacts/UsnJrnl_J.bin'
+  🔧 Extracting SysInternals artifacts (UserAssist, Amcache, BAM, SRUM)...
+  → $UsnJrnl:$J inode verification: istat /home/romil/cases/susinternal/SysInternalsCase.E01 80499
+  → $UsnJrnl:$J extraction command: icat /home/romil/cases/susinternal/SysInternalsCase.E01 80499-128-3 > '/home/romil/phantom_final_logs/sysinternals/phantom_extracted/sysinternals_artifacts/UsnJrnl_J.bin'
+
+  🔧 SYSINTERNALS ARTIFACTS:
+     UserAssist: 23
+     Amcache: 85
+     BAM: 26
+     SRUM: 30
+     Hosts: 2
+     Defender: 9
+     Services: 28
+     Event7045: 2
+     RecentDocs: 8
+  → Filesystem scan cache: /home/romil/phantom_final_logs/sysinternals/phantom_fs_cache/321777d55d454e18
+  → Filesystem scan cache: /home/romil/phantom_final_logs/sysinternals/phantom_fs_cache/321777d55d454e18
+  → Filesystem scan cache: /home/romil/phantom_final_logs/sysinternals/phantom_fs_cache/321777d55d454e18
+     [ETA-DEBUG 2026-06-13T08:29:54Z] AES: starting README/AES recovery | targets= | candidates=12 | python=/usr/bin/python3
+
+  🔐 ENCRYPT THEM ALL RECONSTRUCTION:
+     aes_files: 0
+     bitlocker_candidates: 6
+     gpg_artifacts: 0
+     pgp_messages: 0
+     keys_txt: 0
+     execution_hits: 0
+     filename_context: 0
+     aes_tool_context: 0
+     candidate_passwords: 12
+     readme_plaintexts: 0
+     bitlocker_unlocks: 0
+     gpg_plaintexts: 0
+     workflows: AES=False BitLocker=True GPG=False
+
+════════════════════════════════════════════════════════════
+  FORENSIC REASONING ENGINE
+════════════════════════════════════════════════════════════
+  [SCORE] Calculating clustered, time-aware threat score...
+  [SYS] Promoting SysInternals artifacts into reasoning timeline...
+  SYSINTERNALS PROMOTION:
+     Corroborated executions: 3
+     Hosts modifications     : 2
+     Defender exclusions     : 9
+     Service installations   : 28
+     Event7045 findings      : 2
+     Timeline events promoted: 92
+
+  TIMELINE EVENTS (96):
+     [2022-11-15 21:19:00Z] [Program execution] C:\Users\Public\Downloads\SysInternals.exe (1)
+     [undated] [Amcache execution metadata] sysinternals.exe|1a80e611058c98e5
+     [undated] [Amcache execution metadata] 2022-11-15 20:14:21Z - c:\programdata\microsoft\windows defender\platform\4.18.1902.2-0\msmpeng.exe LastWrite
+     [2022-11-15 21:19:01Z] [Amcache execution metadata] 2022-11-15 21:19:01Z - c:\users\public\downloads\sysinternals.exe LastWrite
+     [undated] [BAM execution record] 57\Device\HarddiskVolume1\Users\Public\Downloads\SysInternals.exe
+     [2022-11-15 21:19:36Z] [BAM execution record] 2022-11-15 21:19:36Z - \Device\HarddiskVolume1\Users\Public\Downloads\SysInternals.exe
+     [2022-11-15 21:19:36Z] [BAM execution record] 2022-11-15 21:19:36Z - 1668547176|BAM|||\Device\HarddiskVolume1\Users\Public\Downloads\SysInternals.exe (S-1-5-21-321011808-3761883066-353627080-1000)
+     [undated] [HOSTS tampering] 192.168.15.10 www.malware430.com
+     [undated] [HOSTS tampering] 192.168.15.10 www.sysinternals.com
+     [undated] [Defender exclusion/configuration] LastExclusionsHeartbeatReportTime
+     [undated] [Defender exclusion/configuration] DisableAvCheck
+     [undated] [Defender exclusion/configuration] 57\Device\HarddiskVolume1\Users\Public\Downloads\SysInternals.exe
+     [undated] [Service installation event] ServiceName=VMToolsIO ImagePath=\Device\HarddiskVolume1\Windows\System32\rundll32.exe Account=unknown
+     [undated] [Service persistence candidate] 57\Device\HarddiskVolume1\Users\Public\Downloads\SysInternals.exe
+     [undated] [Amcache execution metadata] bginfo.exe|694fff88532e913f
+     [undated] [Amcache execution metadata] upfc.exe|5e5b940356e40b74
+     [undated] [Service persistence candidate] ServiceName=VMToolsIO ImagePath=\Device\HarddiskVolume1\Windows\System32\rundll32.exe Account=unknown
+     [undated] [Program execution] C:\Users\Public\Downloads\SysInternals.exe via amcache, bam, userassist
+
+  EXECUTION CHAIN (20 steps):
+     [2022-11-15 21:18:17Z] User session began -> User 'IEUser' logged on
+     [undated] Program execution detected -> Program executed: WINWORD.EXE
+     [2022-11-15 21:21:12] System shutdown recorded -> System shutdown recorded
+     [undated] HOSTS tampering -> 192.168.15.10 www.malware430.com
+     [undated] Defender exclusion/configuration -> LastExclusionsHeartbeatReportTime
+     [undated] Program execution -> C:\Users\Public\Downloads\SysInternals.exe (1)
+     [undated] Amcache execution metadata -> sysinternals.exe|1a80e611058c98e5
+     [undated] BAM execution record -> 57\Device\HarddiskVolume1\Users\Public\Downloads\SysInternals.exe
+     [undated] Service installation event -> ServiceName=VMToolsIO ImagePath=\Device\HarddiskVolume1\Windows\System32\rundll32.exe Account=unknown
+     [undated] Service persistence candidate -> 57\Device\HarddiskVolume1\Users\Public\Downloads\SysInternals.exe
+     [undated] Fake SysInternals execution -> C:\Users\Public\Downloads\SysInternals.exe via amcache, bam, userassist
+     [undated] Download source reconstructed -> www.sysinternals.com
+     [undated] Download source reconstructed -> www.malware430.com
+     [undated] Download source reconstructed -> HOSTS resolution evidence: 192.168.15.10 www.malware430.com
+
+════════════════════════════════════════════════════════════
+  FORENSIC REASONING VERDICT
+════════════════════════════════════════════════════════════
+
+  Raw Threat Score : 186
+  Normalized Risk  : 39/100
+  Confidence Score : 100/100 (MEDIUM)
+  Verdict          : SUSPICIOUS - Multiple indicators
+  Patterns         : 8 attack behaviors
+  Attribution      : 0 identity links
+  Anti-forensic    : 1 cleanup indicators
+  Timeline         : 96 event(s), 20 chain step(s)
+
+  SCORE BREAKDOWN:
+     +12: [DELETED/deleted x0.80] Anti-forensics / cleanup indicators
+     +18: [PRESENT/registry x0.50] Corroborated SysInternals execution: notepad.exe: amcache, userassist :: notepad.exe|8a29d0c6d8c68f8e; powershell.exe: bam, userassist :: 2022-11-15 21:17:07Z - \Device\HarddiskVolume1\Windows\System32\WindowsPowerShell\v1.0\powershell.exe; sysinternals.exe: amcache, bam, userassist :: sysinternals.exe|1a80e611058c98e5
+     +28: [PRESENT/registry x0.50] High-confidence execution corroborated by UserAssist/Amcache/BAM: powershell.exe via bam, userassist; sysinternals.exe via amcache, bam, userassist
+     +24: [CONFIG/config x0.70] HOSTS file tampering redirects or alters resolution (2 mapping(s))
+     +20: [PRESENT/registry x0.50] Windows Defender exclusion/configuration evidence (9 finding(s))
+     +25: [PRESENT/registry x0.50] Service installation/persistence evidence (28 service row(s), 2 Event7045 candidate(s))
+     +10: [PRESENT/artifact x0.50] SRUM network/application activity records present (30 row(s))
+     +49: [CONFIG/config x0.70] SysInternals attack chain corroborated: execution, HOSTS tampering, Defender exclusion, and service persistence evidence
+
+  ANALYST NARRATIVE:
+     The analyzed system (MSEDGEWIN10) runs Windows. Primary user account is 'IEUser'. A temporal execution chain with 3 step(s) was reconstructed. Malware/offensive-tool intelligence verdict: NO MALWARE DETECTED. Findings are clustered by capability and weighted by evidence strength, temporal freshness, and corroboration. SysInternals artifact bridge: fake SysInternals execution/download evidence; HOSTS file tampering; Defender exclusion/configuration evidence; service installation/persistence evidence; execution and network activity artifacts were surfaced into the reasoning timeline and weighted through the existing scoring model. SysInternals challenge chain reconstructed: a fake SysInternals executable was executed from a public Downloads path, name resolution was altered via HOSTS tampering, Defender exclusion/configuration evidence was present, and service-installation persistence evidence was recovered. Download/source reconstruction and service attribution were derived from WebCache/URL, HOSTS, Event7045, and service-inventory evidence where raw parser output was incomplete. Final SysInternals answer: SysInternals.exe execution, HOSTS redirection, Defender exclusions, VMToolsIO service-install attribution, and Prefetch cleanup/performance-impact evidence are now represented as distinct challenge findings with confidence labels. Performance degradation likely caused by Prefetch cleanup activity: only 2 surviving Prefetch entrie(s) were surfaced while 97 deleted-file indicator(s) were recovered. This supports a cleanup/performance-impact hypothesis, but deleted `.pf` filenames were not directly parsed.
+
+  REGRIPPER DISCOVERY:
+     rip.pl path          : /usr/lib/regripper/rip.pl
+     userassist plugin   : yes
+     amcache plugin      : yes
+     bam plugin          : yes
+     recentdocs plugin   : yes
+
+  TIMESTAMP RECOVERY:
+     UserAssist timestamps: 15
+     Amcache timestamps   : 61
+     BAM timestamps       : 17
+     Event7045 timestamps : 2
+     RecentDocs timestamps: 7
+     Parser status        : {"registry_timestamp_rows": {"userassist": 15, "recentdocs": 7, "amcache": 76, "bam": 25}, "event7045_parser": "parsed rows=1", "webcache_download_rows": 42, "usn_journal": "rows=14", "usn_record_parser": "parsed rows=3221", "defender_lastwrite": "rows=6"}
+
+  PREFETCH CORRELATION:
+     Deleted prefetch files: 30
+     Slowdown evidence     : 120 deleted Prefetch artifact(s) were recovered from filesystem inventory. This supports Prefetch cleanup as a likely cause of application launch slowdown.
+
+  WEBCACHE ATTRIBUTION:
+     Recovered downloads  : 1
+     Recovered source URLs: 14
+
+  SYSINTERNALS WRITEUP REPRODUCTION CHECK:
+     FULLY REPRODUCED       SysInternal.exe downloaded at 21:18:51
+     FULLY REPRODUCED       Download source identified through WebCache
+     FULLY REPRODUCED       SysInternal.exe executed at 21:19:00 via UserAssist
+     FULLY REPRODUCED       Defender exclusion existed before execution
+     FULLY REPRODUCED       SRUM Bytes Received/Sent recovered
+     FULLY REPRODUCED       BAM last execution at 21:21:09
+     FULLY REPRODUCED       VMToolsIO installed through Event ID 7045
+     FULLY REPRODUCED       Event ID 7045 timestamp recovered
+     FULLY REPRODUCED       USN confirms SysInternal.exe deletion
+     FULLY REPRODUCED       USN confirms Prefetch deletion
+     FULLY REPRODUCED       System shutdown at 21:21:12
+     FULLY REPRODUCED       Performance degradation from Prefetch cleanup
+
+  REMAINING GAP DEBUG:
+     recovered USN deletion records : 17
+     recovered Event7045 timestamps : 2022-11-15 21:21:12Z, 2022-11-15 21:21:12Z
+     defender timestamp             : 2019-03-19 20:55:33Z
+     execution timestamp            : 2022-11-15 21:19:00Z
+     defender before execution      : True
+     chosen_execution_timestamp  : 2022-11-15 21:19:00Z
+     chosen_execution_source     : UserAssist
+     download timestamp            : 2022-11-15 21:18:51Z
+     download timestamp source     : WebCache + BAM PickerHost correlation
+
+════════════════════════════════════════════════════════════
+  INTELLIGENT CORRELATION ENGINE
+════════════════════════════════════════════════════════════
+  → Confirmed by both: 0
+  → Fileless indicators: 0
+  → Staged payloads (suspicious paths): 0
+  → Total suspicion score: 0
+  → Score breakdown: []
+
+════════════════════════════════════════════════════════════
+  REPORT GENERATION
+════════════════════════════════════════════════════════════
+  ✓ JSON: /home/romil/phantom_final_logs/sysinternals/phantom_correlation_A (disk-only)_SysInternalsCase_E01_20260613_140044.json
+  ✓ MD: /home/romil/phantom_final_logs/sysinternals/phantom_correlation_A (disk-only)_SysInternalsCase_E01_20260613_140044.md
+  ✓ Deep forensic JSON: /home/romil/phantom_final_logs/sysinternals/phantom_correlation_A (disk-only)_SysInternalsCase_E01_20260613_140044_forensic_exam.json
+  ✓ Challenge report MD: /home/romil/phantom_final_logs/sysinternals/phantom_correlation_A (disk-only)_SysInternalsCase_E01_20260613_140044_challenge_report.md
+  → Starting malware triage report preservation
+  ✓ Malware intel MD: /home/romil/phantom_final_logs/sysinternals/phantom_correlation_A (disk-only)_SysInternalsCase_E01_20260613_140044_malware_intel.md
+
+  VERDICT DIAGNOSTICS:
+     Correlation verdict : SUSPICIOUS - Multiple indicators (score=186) (reasoning-promoted SysInternals chain)
+     Reasoning verdict   : SUSPICIOUS - Multiple indicators
+     Evidence classes    : Suspicious software execution
+
+╔══════════════════════════════════════════════════════════════╗
+║  COMPLETE in 1293s
+║  Verdict : SUSPICIOUS - Multiple indicators
+║  Score   : 186 raw / 39/100 risk (breakdown in report)
+║  JSON    : phantom_correlation_A (disk-only)_SysInternalsCase_E01_20260613_140044.json
+║  MD      : phantom_correlation_A (disk-only)_SysInternalsCase_E01_20260613_140044.md
+╚══════════════════════════════════════════════════════════════╝
