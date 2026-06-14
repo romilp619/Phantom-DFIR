@@ -55,33 +55,45 @@ PHANTOM DFIR supports both:
 
 PHANTOM includes an automated installer that:
 
-- Creates a Python virtual environment
-- Installs required dependencies
-- Installs Volatility 3
+- Creates a Python 3 virtual environment at `.venv`
+- Installs required PHANTOM dependencies
+- Clones and validates Volatility 3 at `~/volatility3`
+- Creates a Python 2.7 Volatility 2 environment at `~/vol2_env`
+- Clones and validates Volatility 2.6.1 at `~/volatility2`
+- Creates `vol` and `vol2` launchers in `~/.local/bin`
 - Installs MCP/FastAPI packages
 - Prepares Volatility symbol cache
-- Creates a `~/phantom` launcher
+- Creates `~/phantom` and `~/phantom-memory` launchers
 
 Run:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Phantom-DFIR.git
+git clone https://github.com/romilp619/Phantom-DFIR.git
 
 cd Phantom-DFIR
 
 bash install.sh
 ```
 
-After installation:
+For full native SIFT/Ubuntu dependencies:
 
 ```bash
-source .venv/bin/activate
+bash install.sh --with-system-deps
+```
+
+Validate installation:
+
+```bash
+bash install.sh --check
+vol -h
+vol2 --info
 ```
 
 Run PHANTOM:
 
 ```bash
-python3 main.py -f /path/to/memory.img
+~/phantom /path/to/evidence --deep --no-llm
+~/phantom-memory -f /path/to/memory.img --no-llm --self-correct
 ```
 
 # Option 1 - SANS SIFT Workstation
@@ -111,7 +123,7 @@ PHANTOM solves this by using a local Python virtual environment.
 ```bash
 cd ~
 
-git clone https://github.com/YOUR_USERNAME/Phantom-DFIR.git
+git clone https://github.com/romilp619/Phantom-DFIR.git
 
 cd Phantom-DFIR
 ```
@@ -125,8 +137,11 @@ bash install.sh
 ```
 
 Installer automatically:
-- creates venv
-- installs Volatility 3
+- creates `.venv`
+- installs PHANTOM Python dependencies
+- clones and validates Volatility 3
+- creates and validates a dedicated Volatility 2 Python 2 environment
+- creates `vol` and `vol2` launchers
 - installs MCP/FastAPI dependencies
 - configures local environment
 - prepares symbol cache
@@ -173,6 +188,37 @@ IMPORTANT:
 - First run may take 5-15 minutes
 - Do NOT interrupt symbol download
 - This caches Microsoft kernel symbols locally
+
+---
+
+## Volatility 2 Wrapper
+
+PHANTOM supports both Volatility 3 and Volatility 2 because some older Windows memory images still parse better with Volatility 2 profiles. Volatility 2 depends on Python 2.7-era packages, so the installer keeps it isolated from PHANTOM's Python 3 `.venv`.
+
+The installer creates:
+
+```text
+~/vol2_env          # Python 2.7 virtual environment
+~/volatility2       # Volatility 2.6.1 source checkout
+~/.local/bin/vol2   # convenience launcher
+```
+
+The `vol2` launcher is:
+
+```bash
+#!/bin/bash
+source ~/vol2_env/bin/activate
+python ~/volatility2/vol.py "$@"
+```
+
+Validate it:
+
+```bash
+bash install.sh --check
+python2 -c "import distorm3"
+vol2 --info
+vol2 -f memory.raw imageinfo
+```
 
 ---
 
@@ -256,7 +302,7 @@ Recommended for:
 ```bash
 cd ~
 
-git clone https://github.com/YOUR_USERNAME/Phantom-DFIR.git
+git clone https://github.com/romilp619/Phantom-DFIR.git
 
 cd Phantom-DFIR
 ```
