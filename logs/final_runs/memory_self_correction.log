@@ -1,0 +1,218 @@
+[*] --no-llm mode: using rule-based investigator and skeptic
+[*] Self-correction enabled: max 3 iterations, initial threshold=50
+
++==============================================================+
+|            P H A N T O M   D F I R                          |
+|  Parallel Hypothesis Analysis with Multi-agent Threat        |
+|  Hunting Overlay Network                                     |
+|                                                              |
+|  World's first adversarial self-verifying DFIR agent         |
+|  Find Evil! Hackathon 2026  |  LangGraph + Ollama            |
++==============================================================+
+
+  Engines found: ['vol3', 'vol2']
+
+==================================================
+  PHASE 1 - PARALLEL EVIDENCE COLLECTION
+==================================================
+  Target : /home/romil/cases/ali hadi/memdump.mem
+  Engines: ['vol3', 'vol2']
+
+  [OS Detection] Racing Vol3 vs Vol2 vs strings...
+  [Vol3] windows.info racing...
+  [Vol2] kdbgscan racing...
+  [Vol3] banners.Banners racing...
+  [OK] OS: windows | profile: Win2008SP1x86 | via: Vol2-kdbgscan
+
+  Running 45 plugins in parallel (16 workers)...
+    [ 1/45] [OK] memory:strings_ioc             (1.3s)
+    [ 2/45] [OK] memory:yara_scan               (2.6s)
+    [ 3/45] [OK] vol3:pebmasquerade             (4.2s)
+    [ 4/45] [OK] vol3:hollowprocesses           (4.2s)
+    [ 5/45] [OK] vol3:malfind                   (4.2s)
+    [ 6/45] [OK] vol3:cmdline                   (4.3s)
+    [ 7/45] [OK] vol3:netscan                   (4.3s)
+    [ 8/45] [OK] vol3:svcdiff                   (4.3s)
+    [ 9/45] [OK] vol3:suspicious_threads        (4.3s)
+    [10/45] [OK] vol3:pslist                    (4.3s)
+    [11/45] [OK] vol3:psscan                    (4.3s)
+    [12/45] [OK] vol3:pstree                    (4.3s)
+    [13/45] [OK] vol3:psxview                   (4.4s)
+    [14/45] [OK] vol3:envars                    (4.4s)
+    [15/45] [OK] vol3:netstat                   (4.5s)
+    [16/45] [OK] vol3:sessions                  (4.5s)
+    [17/45] [OK] vol3:processghosting           (5.9s)
+    [18/45] [OK] vol3:etwpatch                  (8.2s)
+    [19/45] [OK] vol3:ssdt                      (9.0s)
+    [20/45] [OK] vol3:ldrmodules                (9.1s)
+    [21/45] [OK] vol3:hivelist                  (9.2s)
+    [22/45] [OK] vol3:shimcachemem              (9.2s)
+    [23/45] [OK] vol3:consoles                  (9.2s)
+    [24/45] [OK] vol3:modules                   (9.3s)
+    [25/45] [OK] vol3:unhooked_syscalls         (9.3s)
+    [26/45] [OK] vol3:cmdscan                   (9.5s)
+    [27/45] [OK] vol3:drivermodule              (9.6s)
+    [28/45] [OK] vol3:callbacks                 (9.6s)
+    [29/45] [OK] vol3:modscan                   (9.7s)
+    [30/45] [OK] vol3:svclist                   (9.7s)
+    [31/45] [OK] vol3:svcscan                   (9.8s)
+    [32/45] [OK] vol3:mutantscan                (9.8s)
+    [33/45] [OK] vol3:userassist                (10.3s)
+    [34/45] [OK] vol3:scheduled_tasks           (11.5s)
+    [35/45] [OK] vol3:amcache                   (12.1s)
+    [36/45] [OK] vol3:privileges                (12.3s)
+    [37/45] [OK] vol3:getsids                   (12.4s)
+    [38/45] [OK] vol2:netscan                   (41.9s)
+    [39/45] [OK] vol2:shimcache                 (42.2s)
+    [40/45] [OK] vol2:cmdscan                   (43.0s)
+    [41/45] [OK] vol2:svcscan                   (43.6s)
+    [42/45] [OK] vol2:consoles                  (44.2s)
+    [43/45] [OK] vol2:lsadump                   (44.8s)
+    [44/45] [OK] vol2:hashdump                  (45.0s)
+    [45/45] [OK] vol2:cachedump                 (45.2s)
+
+  -- 45/45 plugins succeeded in 45.4s (0 failed) --
+
+  Collection complete: 47 plugins in 45.4s
+
+==================================================
+  PHASE 2 - INVESTIGATOR AGENT
+==================================================
+  Static analysis: 4 baseline hypotheses
+  Skills loaded: 417 chars of expert context
+  -> H001: Credential-theft indicator found in raw memory triage: wdigest
+  -> H002: Embedded PHANTOM YARA memory rule matched: PHANTOM_Memory_C2_Framework
+  -> H003: Embedded PHANTOM YARA memory rule matched: PHANTOM_Memory_PowerShell_Stager
+  -> H004: TrustedInstaller.exe service path verified benign
+
+  4 total hypotheses (before legitimacy filtering).
+
+  Running legitimacy engine (threshold=50)...
+    [KEEP]  wdigest -> score=67 -> keeping for investigation
+    [KEEP]  c2_framework -> score=67 -> keeping for investigation
+    [KEEP]  powershell_stager -> score=67 -> keeping for investigation
+    [KEEP]  TrustedInstaller.exe -> score=67 -> keeping for investigation
+  4 hypotheses remain for investigation.
+
+==================================================
+  PHASE 3 - TARGETED EVIDENCE AGENT
+==================================================
+
+  Evidence for H001: wdigest
+    Confirmed by 1 sources: ['memory:triage']
+
+  Evidence for H002: c2_framework
+    Confirmed by 1 sources: ['memory:triage']
+
+  Evidence for H003: powershell_stager
+    Confirmed by 1 sources: ['memory:triage']
+
+  Evidence for H004: TrustedInstaller.exe
+    Confirmed by 2 sources: ['vol2:shimcache', 'vol2:svcscan']
+
+==================================================
+  PHASE 4 - SKEPTIC AGENT (Round 1/3)
+==================================================
+  -> Rule-based skeptic active (--no-llm)
+  [LOW] H001: LOW (1 sources) - Only 1 source(s) - need 3+ to be CRITICAL
+  [LOW] H002: LOW (1 sources) - Only 1 source(s) - need 3+ to be CRITICAL
+  [LOW] H003: LOW (1 sources) - Only 1 source(s) - need 3+ to be CRITICAL
+  [CLEARED] H004: CLEARED (2 sources) - Only 2 source(s) - need 3+ to be CRITICAL
+
+  -> 3 hypotheses still need more evidence. Running evidence agent again (round 2)...
+
+==================================================
+  PHASE 3 - TARGETED EVIDENCE AGENT
+==================================================
+
+  Evidence for H001: wdigest
+    Confirmed by 1 sources: ['memory:triage']
+
+  Evidence for H002: c2_framework
+    Confirmed by 1 sources: ['memory:triage']
+
+  Evidence for H003: powershell_stager
+    Confirmed by 1 sources: ['memory:triage']
+
+  Evidence for H004: TrustedInstaller.exe
+    Confirmed by 2 sources: ['vol2:shimcache', 'vol2:svcscan']
+
+==================================================
+  PHASE 4 - SKEPTIC AGENT (Round 2/3)
+==================================================
+  -> Rule-based skeptic active (--no-llm)
+  [LOW] H001: LOW (1 sources) - Only 1 source(s) - need 3+ to be CRITICAL
+  [LOW] H002: LOW (1 sources) - Only 1 source(s) - need 3+ to be CRITICAL
+  [LOW] H003: LOW (1 sources) - Only 1 source(s) - need 3+ to be CRITICAL
+  [CLEARED] H004: CLEARED (2 sources) - Only 2 source(s) - need 3+ to be CRITICAL
+
+  -> 3 hypotheses still need more evidence. Running evidence agent again (round 3)...
+
+==================================================
+  PHASE 3 - TARGETED EVIDENCE AGENT
+==================================================
+
+  Evidence for H001: wdigest
+    Confirmed by 1 sources: ['memory:triage']
+
+  Evidence for H002: c2_framework
+    Confirmed by 1 sources: ['memory:triage']
+
+  Evidence for H003: powershell_stager
+    Confirmed by 1 sources: ['memory:triage']
+
+  Evidence for H004: TrustedInstaller.exe
+    Confirmed by 2 sources: ['vol2:shimcache', 'vol2:svcscan']
+
+==================================================
+  PHASE 4 - SKEPTIC AGENT (Round 3/3)
+==================================================
+  -> Rule-based skeptic active (--no-llm)
+  [LOW] H001: LOW (1 sources) - Only 1 source(s) - need 3+ to be CRITICAL
+  [LOW] H002: LOW (1 sources) - Only 1 source(s) - need 3+ to be CRITICAL
+  [LOW] H003: LOW (1 sources) - Only 1 source(s) - need 3+ to be CRITICAL
+  [CLEARED] H004: CLEARED (2 sources) - Only 2 source(s) - need 3+ to be CRITICAL
+
+  -> Debate complete after 3 round(s). Generating report.
+
+============================================================
+  PHASE 5 - REPORT GENERATION
+============================================================
+  [OK] JSON: logs/final_runs/memory_self_correction_output/phantom_memdump.mem_20260614_231701.json
+  [OK] MD:   logs/final_runs/memory_self_correction_output/phantom_memdump.mem_20260614_231701.md
+  [OK] Exec: logs/final_runs/memory_self_correction_output/phantom_memdump.mem_20260614_231701_execution_log.json
+
+============================================================
+  PHANTOM DFIR - Investigation Complete
+  Duration: 75.8s | Skeptic rounds: 3
+============================================================
+
+  [CLEARED] CLEARED: TrustedInstaller.exe service path verified benign
+
+  [GAPS] Memory gap controller: accept_after_false_positive_clearance | gaps=2
+
+  [TRACE] Reasoning trace: 30 steps logged
+  [LOG] Execution log: logs/final_runs/memory_self_correction_output/phantom_memdump.mem_20260614_231701_execution_log.json
+
+============================================================
+
+
+  SELF-CORRECTION DECISION
+    gaps   : false_positive_resolved_to_cleared, under_corroborated_findings_remain
+    action : accept_resolved_first_pass
+    reason : Skeptic/legitimacy checks resolved weak findings without another expensive collection pass.
+
+  [CLEARED] Self-correction resolved 1 finding(s) in this pass; no remaining false positives require a rerun.
+
+============================================================
+  SELF-CORRECTION SUMMARY
+============================================================
+  Iteration 1: threshold=50, critical=0, cleared=1
+    gaps   : false_positive_resolved_to_cleared, under_corroborated_findings_remain
+    action : accept_resolved_first_pass
+
+  -> Resolved 1 finding(s) in the first pass; no rerun was needed.
+
+[OK] Reports saved to: logs/final_runs/memory_self_correction_output
+    JSON: logs/final_runs/memory_self_correction_output/phantom_memdump.mem_20260614_231701.json
+    MD:   logs/final_runs/memory_self_correction_output/phantom_memdump.mem_20260614_231701.md

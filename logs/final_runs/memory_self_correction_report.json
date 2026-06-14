@@ -1,0 +1,243 @@
+{
+  "metadata": {
+    "tool": "PHANTOM DFIR",
+    "version": "4.0.0",
+    "subtitle": "Parallel Hypothesis Analysis with Multi-agent Threat Hunting Overlay Network",
+    "timestamp": "2026-06-14T23:17:01.807619",
+    "target": "/home/romil/cases/ali hadi/memdump.mem",
+    "os_type": "windows",
+    "vol2_profile": "Win2008SP1x86",
+    "engines": {
+      "vol3": "/home/romil/.local/bin/vol",
+      "vol2": "/home/romil/.local/bin/vol2"
+    },
+    "duration_seconds": 75.8,
+    "skeptic_rounds": 3
+  },
+  "summary": {
+    "total_hypotheses": 4,
+    "critical_count": 0,
+    "medium_count": 0,
+    "low_count": 3,
+    "cleared_count": 1,
+    "refuted_count": 0,
+    "hallucinations_caught": 0
+  },
+  "attack_narrative": "The investigation did **not confirm malicious compromise** in this memory image. Any investigated benign or refuted artifacts are documented below for auditability.\n\n**Cleared Processes**: The following were investigated and determined to be legitimate software: `TrustedInstaller.exe`. These were flagged during initial triage but confirmed benign through path analysis and binary verification.",
+  "self_correction_history": [
+    {
+      "iteration": 0,
+      "threshold": 50,
+      "critical_count": 0,
+      "medium_count": 0,
+      "low_count": 3,
+      "cleared_count": 1,
+      "refuted_count": 0,
+      "total_hypotheses": 4,
+      "false_positives_auto_cleared": 0,
+      "decision": {
+        "iteration": 0,
+        "action": "accept_resolved_first_pass",
+        "reason": "Skeptic/legitimacy checks resolved weak findings without another expensive collection pass.",
+        "gaps": [
+          "false_positive_resolved_to_cleared",
+          "under_corroborated_findings_remain"
+        ],
+        "critical_count": 0,
+        "medium_count": 0,
+        "low_count": 3,
+        "cleared_count": 1,
+        "refuted_count": 0,
+        "likely_false_positive_count": 0
+      }
+    }
+  ],
+  "memory_gap_controller": {
+    "controller": "memory_evidence_gap_controller",
+    "plugins_with_data": 47,
+    "collection_errors": 0,
+    "families": {
+      "process_inventory": true,
+      "process_tree": true,
+      "network_sockets": true,
+      "command_history": true,
+      "service_persistence": true,
+      "injection_checks": true,
+      "credential_artifacts": true,
+      "registry_memory": true,
+      "yara_or_string_triage": true,
+      "timeline_hints": true
+    },
+    "gaps": [
+      "under_corroborated_findings_remain",
+      "false_positive_resolved_to_cleared"
+    ],
+    "under_corroborated_count": 3,
+    "critical_count": 0,
+    "medium_count": 0,
+    "low_count": 3,
+    "cleared_count": 1,
+    "refuted_count": 0,
+    "action": "accept_after_false_positive_clearance",
+    "confidence": "medium"
+  },
+  "critical_findings": [],
+  "medium_findings": [],
+  "low_findings": [
+    {
+      "id": "H001",
+      "claim": "Credential-theft indicator found in raw memory triage: wdigest",
+      "ioc": "wdigest",
+      "attack_phase": "CredentialAccess",
+      "raw_evidence_quote": "[credential_theft] WDigest",
+      "requires_verification": [
+        "vol2:hashdump",
+        "vol2:lsadump",
+        "vol3:malfind"
+      ],
+      "verified_sources": [
+        "memory:triage"
+      ],
+      "skeptic_challenges": [
+        "Round 1: NEEDS_MORE - Only 1 source(s) - need 3+ to be CRITICAL",
+        "Round 2: NEEDS_MORE - Only 1 source(s) - need 3+ to be CRITICAL",
+        "Round 3: NEEDS_MORE - Only 1 source(s) - need 3+ to be CRITICAL"
+      ],
+      "confidence": "LOW",
+      "mitre_ids": [],
+      "legitimacy_score": 67
+    },
+    {
+      "id": "H002",
+      "claim": "Embedded PHANTOM YARA memory rule matched: PHANTOM_Memory_C2_Framework",
+      "ioc": "c2_framework",
+      "attack_phase": "C2",
+      "raw_evidence_quote": "PHANTOM_Memory_C2_Framework /home/romil/cases/ali hadi/memdump.mem",
+      "requires_verification": [
+        "vol3:malfind",
+        "vol3:pslist",
+        "vol3:netscan"
+      ],
+      "verified_sources": [
+        "memory:triage"
+      ],
+      "skeptic_challenges": [
+        "Round 1: NEEDS_MORE - Only 1 source(s) - need 3+ to be CRITICAL",
+        "Round 2: NEEDS_MORE - Only 1 source(s) - need 3+ to be CRITICAL",
+        "Round 3: NEEDS_MORE - Only 1 source(s) - need 3+ to be CRITICAL"
+      ],
+      "confidence": "LOW",
+      "mitre_ids": [],
+      "legitimacy_score": 67
+    },
+    {
+      "id": "H003",
+      "claim": "Embedded PHANTOM YARA memory rule matched: PHANTOM_Memory_PowerShell_Stager",
+      "ioc": "powershell_stager",
+      "attack_phase": "Execution",
+      "raw_evidence_quote": "PHANTOM_Memory_PowerShell_Stager /home/romil/cases/ali hadi/memdump.mem",
+      "requires_verification": [
+        "vol3:malfind",
+        "vol3:pslist",
+        "vol3:netscan"
+      ],
+      "verified_sources": [
+        "memory:triage"
+      ],
+      "skeptic_challenges": [
+        "Round 1: NEEDS_MORE - Only 1 source(s) - need 3+ to be CRITICAL",
+        "Round 2: NEEDS_MORE - Only 1 source(s) - need 3+ to be CRITICAL",
+        "Round 3: NEEDS_MORE - Only 1 source(s) - need 3+ to be CRITICAL"
+      ],
+      "confidence": "LOW",
+      "mitre_ids": [
+        "T1059.001"
+      ],
+      "legitimacy_score": 67
+    }
+  ],
+  "cleared_findings": [
+    {
+      "id": "H004",
+      "claim": "TrustedInstaller.exe service path verified benign",
+      "ioc": "TrustedInstaller.exe",
+      "attack_phase": "Persistence",
+      "raw_evidence_quote": "Binary Path: C:\\Windows\\servicing\\TrustedInstaller.exe",
+      "requires_verification": [
+        "vol3:svcscan",
+        "vol3:pslist",
+        "vol3:malfind TrustedInstaller.exe pid"
+      ],
+      "verified_sources": [
+        "vol2:shimcache",
+        "vol2:svcscan"
+      ],
+      "skeptic_challenges": [
+        "Round 1: NEEDS_MORE - Only 2 source(s) - need 3+ to be CRITICAL",
+        "Round 2: NEEDS_MORE - Only 2 source(s) - need 3+ to be CRITICAL",
+        "Round 3: NEEDS_MORE - Only 2 source(s) - need 3+ to be CRITICAL"
+      ],
+      "confidence": "CLEARED",
+      "mitre_ids": [],
+      "legitimacy_score": 67
+    }
+  ],
+  "refuted_hypotheses": [],
+  "mitre_attack": {
+    "techniques": [],
+    "supported_techniques": [],
+    "lead_techniques": [
+      {
+        "technique_id": "T1095",
+        "technique_name": "Non-Application Layer Protocol",
+        "tactic": "Command and Control",
+        "tier": "lead",
+        "confidence": "LOW",
+        "matched_required": [
+          "metasploit",
+          "meterpreter"
+        ],
+        "matched_suspicious": [
+          "established",
+          "tcp"
+        ],
+        "source_plugins": [
+          "memory:strings_ioc",
+          "memory:yara_scan",
+          "vol2:netscan",
+          "vol3:netscan",
+          "vol3:netstat"
+        ],
+        "rationale": "C2 protocol mapping requires C2 framework or unusual-port evidence with network/process context."
+      }
+    ],
+    "kill_chain": []
+  },
+  "attack_timeline": [
+    {
+      "timestamp": "2008-01-19T07:33:28",
+      "event": "Shimcache entry: C:\\Windows\\system32\\services.exe",
+      "event_raw": "2008-01-19 07:33:28 UTC+0000   \\??\\C:\\Windows\\system32\\services.exe",
+      "source": "vol2:shimcache",
+      "interesting": true
+    }
+  ],
+  "collection_errors": [],
+  "self_correction_decisions": [
+    {
+      "iteration": 0,
+      "action": "accept_resolved_first_pass",
+      "reason": "Skeptic/legitimacy checks resolved weak findings without another expensive collection pass.",
+      "gaps": [
+        "false_positive_resolved_to_cleared",
+        "under_corroborated_findings_remain"
+      ],
+      "critical_count": 0,
+      "medium_count": 0,
+      "low_count": 3,
+      "cleared_count": 1,
+      "refuted_count": 0,
+      "likely_false_positive_count": 0
+    }
+  ]
+}

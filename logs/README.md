@@ -1,4 +1,4 @@
-# PHANTOM DFIR Final Execution Logs
+﻿# PHANTOM DFIR Final Execution Logs
 
 This directory contains selected final run logs used for Stage One verification.
 
@@ -24,6 +24,15 @@ This directory contains selected final run logs used for Stage One verification.
   - SysInternals disk challenge run.
   - Supports benchmark case: `sysinternals_case`.
 
+- `final_runs/memory_self_correction.log`
+  - Memory-only autonomous self-correction run against the Ali Hadi memory image.
+  - Demonstrates Volatility 2/3 collection, rule-based no-LLM mode, weak-finding downgrade, benign TrustedInstaller clearance, and gap-controller traceability.
+
+- `final_runs/memory_self_correction_report.md`
+  - Stable Markdown report from the memory self-correction run.
+
+- `final_runs/memory_self_correction_execution_log.json`
+  - Structured execution log with reasoning trace, evidence integrity hashes, self-correction history, and `memory_gap_controller` output.
 ## Benchmark Traceability
 
 Machine-readable benchmark scorecards are stored in:

@@ -1,0 +1,488 @@
+{
+  "phantom_version": "4.0.0",
+  "target": "/home/romil/cases/ali hadi/memdump.mem",
+  "target_sha256": "ce6af78989ff959b0e25fec79f20942b036c82d7ba929aa36d528567e155b8fc",
+  "os_type": "windows",
+  "duration_seconds": 75.8,
+  "total_steps": 30,
+  "skeptic_rounds": 3,
+  "hypotheses_generated": 4,
+  "critical_count": 0,
+  "cleared_count": 1,
+  "refuted_count": 0,
+  "hallucinations_caught": 0,
+  "self_correction_history": [
+    {
+      "iteration": 0,
+      "threshold": 50,
+      "critical_count": 0,
+      "medium_count": 0,
+      "low_count": 3,
+      "cleared_count": 1,
+      "refuted_count": 0,
+      "total_hypotheses": 4,
+      "false_positives_auto_cleared": 0,
+      "decision": {
+        "iteration": 0,
+        "action": "accept_resolved_first_pass",
+        "reason": "Skeptic/legitimacy checks resolved weak findings without another expensive collection pass.",
+        "gaps": [
+          "false_positive_resolved_to_cleared",
+          "under_corroborated_findings_remain"
+        ],
+        "critical_count": 0,
+        "medium_count": 0,
+        "low_count": 3,
+        "cleared_count": 1,
+        "refuted_count": 0,
+        "likely_false_positive_count": 0
+      }
+    }
+  ],
+  "memory_gap_controller": {
+    "controller": "memory_evidence_gap_controller",
+    "plugins_with_data": 47,
+    "collection_errors": 0,
+    "families": {
+      "process_inventory": true,
+      "process_tree": true,
+      "network_sockets": true,
+      "command_history": true,
+      "service_persistence": true,
+      "injection_checks": true,
+      "credential_artifacts": true,
+      "registry_memory": true,
+      "yara_or_string_triage": true,
+      "timeline_hints": true
+    },
+    "gaps": [
+      "under_corroborated_findings_remain",
+      "false_positive_resolved_to_cleared"
+    ],
+    "under_corroborated_count": 3,
+    "critical_count": 0,
+    "medium_count": 0,
+    "low_count": 3,
+    "cleared_count": 1,
+    "refuted_count": 0,
+    "action": "accept_after_false_positive_clearance",
+    "confidence": "medium"
+  },
+  "evidence_integrity": {
+    "memory:strings_ioc": {
+      "sha256": "7126a926c858b939814f00f489db3af79ab00782853fd2d11adf19b276684512",
+      "size_bytes": 42789
+    },
+    "memory:yara_scan": {
+      "sha256": "57a34d1e6ca20096133e05ffa1b4f083940357158d94d820912a2df2fc2029af",
+      "size_bytes": 138
+    },
+    "vol3:pebmasquerade": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:hollowprocesses": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:malfind": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:cmdline": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:netscan": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:svcdiff": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:suspicious_threads": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:pslist": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:psscan": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:pstree": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:psxview": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:envars": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:netstat": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:sessions": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:processghosting": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:etwpatch": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:ssdt": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:ldrmodules": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:hivelist": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:shimcachemem": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:consoles": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:modules": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:unhooked_syscalls": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:cmdscan": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:drivermodule": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:callbacks": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:modscan": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:svclist": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:svcscan": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:mutantscan": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:userassist": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:scheduled_tasks": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:amcache": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:privileges": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol3:getsids": {
+      "sha256": "ff6c7cb93fb8f385d8ef15073b4280601afaf1c4535c407509084de1eff37846",
+      "size_bytes": 518
+    },
+    "vol2:netscan": {
+      "sha256": "b2f8cb41a2a03371b2a6c814d1a147aa9b3d8871796c29b9c99df2daf6c5a74a",
+      "size_bytes": 10576
+    },
+    "vol2:shimcache": {
+      "sha256": "f6397b367a4622937676dc5ff6c68af881966e018fe9960dea495c448a3678ba",
+      "size_bytes": 4274
+    },
+    "vol2:cmdscan": {
+      "sha256": "198f10ba4ccda26da077c357618e3e720ff66c4f4b5c6502371bea1548eefdbc",
+      "size_bytes": 1919
+    },
+    "vol2:svcscan": {
+      "sha256": "5ddf1b39a3783d0ecb3e73b0ebb642a5d4fd95c984797cc5fdc8ab946c93e2dc",
+      "size_bytes": 73687
+    },
+    "vol2:consoles": {
+      "sha256": "aeace53127f2996d43b567f6f06b4fe0de9f575308f164a1769e2a5881fde184",
+      "size_bytes": 18873
+    },
+    "vol2:lsadump": {
+      "sha256": "4c7aec930ad398e44422ee2222b8bef1c9247c3046e5da197ef719d7a381380c",
+      "size_bytes": 1112
+    },
+    "vol2:hashdump": {
+      "sha256": "6be3aaa0ebdd23b080bbb6833d4e8ef2367c3033c5d04fa2c79ef3098c478e90",
+      "size_bytes": 375
+    },
+    "vol2:cachedump": {
+      "sha256": "e93d10603e06281cadf70df3d991380e3781f7bc3dd233d721b2cc4569594b71",
+      "size_bytes": 116
+    },
+    "memory:timeline_hints": {
+      "sha256": "0d72d20db8fcd981af1bdad055141034baef2b5a643b8d2ef53d6c66bb1cab32",
+      "size_bytes": 6987
+    },
+    "memory:triage_summary": {
+      "sha256": "be7a68a1b117ca5c1450c2789b983c00d2890649fc2b0183cb723b99063acc9c",
+      "size_bytes": 301
+    }
+  },
+  "reasoning_trace": [
+    {
+      "agent": "Collector",
+      "action": "OS Detection",
+      "rationale": "Raced Vol3 windows.info vs Vol2 kdbgscan vs strings in parallel - first responder wins to minimize detection time",
+      "result": "OS=windows, profile=Win2008SP1x86, detected via parallel race",
+      "timestamp": 1781459205.6035888
+    },
+    {
+      "agent": "Collector",
+      "action": "Plugin Selection (windows)",
+      "rationale": "Selected 47 windows-specific plugins covering processes, network, persistence, malware detection, and credentials. Ran all in parallel with 16 workers to minimize wall time.",
+      "result": "47 plugins completed in 45.4s, 0 errors",
+      "timestamp": 1781459205.6039248
+    },
+    {
+      "agent": "Collector",
+      "action": "Memory triage enrichment",
+      "rationale": "Ran bounded strings/YARA triage and condensed timeline hints after Volatility collection. These are lead-generation artifacts used by Investigator and self-correction, not standalone proof.",
+      "result": "Memory triage summary:\n- strings_ioc_categories: {'network_indicator': 196, 'credential_theft': 2}\n- yara_hits: 2\n- malfind_output_present: True\n- yara_examples: PHANTOM_Memory_C2_Framework /home/romil/cases/ali hadi/memdump.mem; PHANTOM_Memory_PowerShell_Stager /home/romil/cases/ali hadi/memdump.mem",
+      "timestamp": 1781459205.6040854
+    },
+    {
+      "agent": "Investigator",
+      "action": "Static rule-based analysis",
+      "rationale": "Scanned 47 plugin outputs with windows-specific rules (process legitimacy, C2 ports, SSH targets, benign Ruby detection). Static rules are deterministic and hallucination-free.",
+      "result": "4 baseline hypotheses from static rules",
+      "timestamp": 1781459205.8157194
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H001 (wdigest)",
+      "rationale": "Phase=CredentialAccess - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "1 independent sources confirmed: memory:triage",
+      "timestamp": 1781459209.1998568
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H002 (c2_framework)",
+      "rationale": "Phase=C2 - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "1 independent sources confirmed: memory:triage",
+      "timestamp": 1781459211.532298
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H003 (powershell_stager)",
+      "rationale": "Phase=Execution - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "1 independent sources confirmed: memory:triage",
+      "timestamp": 1781459211.5325522
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H004 (TrustedInstaller.exe)",
+      "rationale": "Phase=Persistence - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "2 independent sources confirmed: vol2:shimcache, vol2:svcscan",
+      "timestamp": 1781459211.5333624
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H001 (wdigest)",
+      "rationale": "Demanded 1 independent evidence sources. Verdict=NEEDS_MORE: Only 1 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=LOW - 1 sources confirmed",
+      "timestamp": 1781459211.5465949
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H002 (c2_framework)",
+      "rationale": "Demanded 1 independent evidence sources. Verdict=NEEDS_MORE: Only 1 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=LOW - 1 sources confirmed",
+      "timestamp": 1781459211.5466065
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H003 (powershell_stager)",
+      "rationale": "Demanded 1 independent evidence sources. Verdict=NEEDS_MORE: Only 1 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=LOW - 1 sources confirmed",
+      "timestamp": 1781459211.5466142
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H004 (TrustedInstaller.exe)",
+      "rationale": "Demanded 2 independent evidence sources. Verdict=NEEDS_MORE: Only 2 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=CLEARED - benign (CLEARED)",
+      "timestamp": 1781459211.5468545
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H001 (wdigest)",
+      "rationale": "Phase=CredentialAccess - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "1 independent sources confirmed: memory:triage",
+      "timestamp": 1781459215.0215669
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H002 (c2_framework)",
+      "rationale": "Phase=C2 - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "1 independent sources confirmed: memory:triage",
+      "timestamp": 1781459216.8564777
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H003 (powershell_stager)",
+      "rationale": "Phase=Execution - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "1 independent sources confirmed: memory:triage",
+      "timestamp": 1781459216.856753
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H004 (TrustedInstaller.exe)",
+      "rationale": "Phase=Persistence - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "2 independent sources confirmed: vol2:shimcache, vol2:svcscan",
+      "timestamp": 1781459216.8569286
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H001 (wdigest)",
+      "rationale": "Demanded 1 independent evidence sources. Verdict=NEEDS_MORE: Only 1 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=LOW - 1 sources confirmed",
+      "timestamp": 1781459216.8762338
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H002 (c2_framework)",
+      "rationale": "Demanded 1 independent evidence sources. Verdict=NEEDS_MORE: Only 1 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=LOW - 1 sources confirmed",
+      "timestamp": 1781459216.87624
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H003 (powershell_stager)",
+      "rationale": "Demanded 1 independent evidence sources. Verdict=NEEDS_MORE: Only 1 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=LOW - 1 sources confirmed",
+      "timestamp": 1781459216.8762448
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H004 (TrustedInstaller.exe)",
+      "rationale": "Demanded 2 independent evidence sources. Verdict=NEEDS_MORE: Only 2 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=CLEARED - benign (CLEARED)",
+      "timestamp": 1781459216.8762512
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H001 (wdigest)",
+      "rationale": "Phase=CredentialAccess - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "1 independent sources confirmed: memory:triage",
+      "timestamp": 1781459219.5263212
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H002 (c2_framework)",
+      "rationale": "Phase=C2 - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "1 independent sources confirmed: memory:triage",
+      "timestamp": 1781459221.679101
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H003 (powershell_stager)",
+      "rationale": "Phase=Execution - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "1 independent sources confirmed: memory:triage",
+      "timestamp": 1781459221.6793907
+    },
+    {
+      "agent": "Evidence",
+      "action": "Targeted re-query for H004 (TrustedInstaller.exe)",
+      "rationale": "Phase=Persistence - ran PID-specific malfind/dlllist/cmdline + IP-filtered netscan/netstat to independently verify this IOC without relying on initial bulk collection alone",
+      "result": "2 independent sources confirmed: vol2:shimcache, vol2:svcscan",
+      "timestamp": 1781459221.6796222
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H001 (wdigest)",
+      "rationale": "Demanded 1 independent evidence sources. Verdict=NEEDS_MORE: Only 1 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=LOW - 1 sources confirmed",
+      "timestamp": 1781459221.6962388
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H002 (c2_framework)",
+      "rationale": "Demanded 1 independent evidence sources. Verdict=NEEDS_MORE: Only 1 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=LOW - 1 sources confirmed",
+      "timestamp": 1781459221.696247
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H003 (powershell_stager)",
+      "rationale": "Demanded 1 independent evidence sources. Verdict=NEEDS_MORE: Only 1 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=LOW - 1 sources confirmed",
+      "timestamp": 1781459221.6962523
+    },
+    {
+      "agent": "Skeptic",
+      "action": "Challenge H004 (TrustedInstaller.exe)",
+      "rationale": "Demanded 2 independent evidence sources. Verdict=NEEDS_MORE: Only 2 source(s) - need 3+ to be CRITICAL",
+      "result": "Confidence=CLEARED - benign (CLEARED)",
+      "timestamp": 1781459221.6962593
+    },
+    {
+      "agent": "reporter",
+      "action": "evidence_coverage_audit",
+      "rationale": "Quality gate: 47 plugins had data, 7 were cited in findings",
+      "result": "Coverage: 13% | Uncited: vol2:cachedump, vol2:cmdscan, vol2:consoles, vol2:hashdump, vol2:lsadump"
+    },
+    {
+      "agent": "EvidenceGapController",
+      "action": "memory_gap_review",
+      "rationale": "Checked core memory evidence families and unresolved weak findings.",
+      "result": "action=accept_after_false_positive_clearance gaps=under_corroborated_findings_remain, false_positive_resolved_to_cleared"
+    }
+  ],
+  "self_correction_decisions": [
+    {
+      "iteration": 0,
+      "action": "accept_resolved_first_pass",
+      "reason": "Skeptic/legitimacy checks resolved weak findings without another expensive collection pass.",
+      "gaps": [
+        "false_positive_resolved_to_cleared",
+        "under_corroborated_findings_remain"
+      ],
+      "critical_count": 0,
+      "medium_count": 0,
+      "low_count": 3,
+      "cleared_count": 1,
+      "refuted_count": 0,
+      "likely_false_positive_count": 0
+    }
+  ]
+}
