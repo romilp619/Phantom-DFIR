@@ -1,12 +1,12 @@
 """
-PHANTOM DFIR — Skeptic Agent
+PHANTOM DFIR - Skeptic Agent
 Challenges every hypothesis the Investigator makes.
 A finding ONLY becomes CRITICAL if it survives the Skeptic's challenge
-using raw evidence — not just LLM reasoning.
+using raw evidence - not just LLM reasoning.
 
 This is the core anti-hallucination mechanism.
 
-v1.1 — Fixed NEEDS_MORE override bug: if 3+ sources confirm, always CRITICAL
+v1.1 - Fixed NEEDS_MORE override bug: if 3+ sources confirm, always CRITICAL
        Fixed skeptic prompt to respect evidence count rule
        Added JSON control char stripping (same as investigator)
 """
@@ -28,18 +28,18 @@ Your job: challenge each hypothesis ONLY if the evidence does NOT support it.
 {skill_context}
 
 === ABSOLUTE RULES (never break these) ===
-1. If verified_sources_count >= 3: verdict MUST be "CONFIRMED" — no exceptions
+1. If verified_sources_count >= 3: verdict MUST be "CONFIRMED" - no exceptions
 2. If verified_sources_count == 0: verdict MUST be "REFUTED"
 3. If verified_sources_count is 1 or 2: verdict is "NEEDS_MORE"
 4. You CANNOT say NEEDS_MORE or REFUTED when there are 3+ sources
-5. The source count is objective fact — do not second-guess it
+5. The source count is objective fact - do not second-guess it
 
 === HYPOTHESES WITH EVIDENCE ===
 {hypotheses_json}
 ================================
 
 For each hypothesis, apply the rules above strictly.
-Return a JSON array — one entry per hypothesis:
+Return a JSON array - one entry per hypothesis:
 {{
   "id": "H001",
   "verdict": "CONFIRMED | NEEDS_MORE | REFUTED",
@@ -80,8 +80,8 @@ def _format_hypotheses_for_skeptic(hypotheses: list) -> str:
 
 def _rule_based_skeptic(hypotheses: list) -> list:
     """
-    Pure rule-based skeptic (no LLM) — fallback if Ollama is unavailable.
-    Always correct — never hallucinates.
+    Pure rule-based skeptic (no LLM) - fallback if Ollama is unavailable.
+    Always correct - never hallucinates.
     """
     verdicts = []
     for h in hypotheses:
@@ -97,7 +97,7 @@ def _rule_based_skeptic(hypotheses: list) -> list:
             verdicts.append({
                 "id":      h["id"],
                 "verdict": "NEEDS_MORE",
-                "reason":  f"Only {n} source(s) — need 3+ to be CRITICAL",
+                "reason":  f"Only {n} source(s) - need 3+ to be CRITICAL",
                 "additional_checks": ["Run targeted PID/IP re-query"],
             })
         else:
@@ -115,8 +115,8 @@ def _enforce_evidence_rules(verdict: str, reason: str, n: int) -> tuple:
     Hard override: evidence count always wins over LLM opinion.
     This is the core fix for the NEEDS_MORE bug.
 
-    If the LLM says NEEDS_MORE but there are 3+ sources → override to CONFIRMED.
-    If the LLM says CONFIRMED but there are 0 sources → override to REFUTED.
+    If the LLM says NEEDS_MORE but there are 3+ sources -> override to CONFIRMED.
+    If the LLM says CONFIRMED but there are 0 sources -> override to REFUTED.
     """
     if n >= 3 and verdict != "CONFIRMED":
         return (
@@ -136,32 +136,35 @@ def run_skeptic(state: InvestigationState) -> InvestigationState:
     hypotheses = state.get("hypotheses", [])
     round_num  = state.get("skeptic_round", 0) + 1
 
-    print("\n══════════════════════════════════════════════════", flush=True)
-    print(f"  PHASE 4 — SKEPTIC AGENT (Round {round_num}/{MAX_SKEPTIC_ROUNDS})", flush=True)
-    print("══════════════════════════════════════════════════", flush=True)
+    print("\n==================================================", flush=True)
+    print(f"  PHASE 4 - SKEPTIC AGENT (Round {round_num}/{MAX_SKEPTIC_ROUNDS})", flush=True)
+    print("==================================================", flush=True)
 
     import time as _time
     reasoning = state.get("reasoning_log", [])
 
     hyp_json = _format_hypotheses_for_skeptic(hypotheses)
 
-    # Try LLM skeptic first
+    # Try LLM skeptic first unless --no-llm disabled it in main.py.
     skill_context = load_skills_for_phase("skeptic")
     verdicts = None
-    try:
-        chain  = SKEPTIC_PROMPT | llm
-        output = chain.invoke({
-            "hypotheses_json": hyp_json,
-            "skill_context": skill_context,
-        })
-        start  = output.find("[")
-        end    = output.rfind("]") + 1
-        if start == -1:
-            raise ValueError("No JSON array in Skeptic response")
-        clean = _strip_control_chars(output[start:end])
-        verdicts = json.loads(clean)
-    except Exception as e:
-        print(f"  [!] Skeptic LLM error: {e} — using rule-based skeptic", flush=True)
+    if llm is None:
+        print("  -> Rule-based skeptic active (--no-llm)", flush=True)
+    else:
+        try:
+            chain  = SKEPTIC_PROMPT | llm
+            output = chain.invoke({
+                "hypotheses_json": hyp_json,
+                "skill_context": skill_context,
+            })
+            start  = output.find("[")
+            end    = output.rfind("]") + 1
+            if start == -1:
+                raise ValueError("No JSON array in Skeptic response")
+            clean = _strip_control_chars(output[start:end])
+            verdicts = json.loads(clean)
+        except Exception as e:
+            print(f"  [!] Skeptic LLM error: {e} - using rule-based skeptic", flush=True)
 
     # Always fall back to rule-based if LLM failed
     if not verdicts:
@@ -178,11 +181,11 @@ def run_skeptic(state: InvestigationState) -> InvestigationState:
         sources = h.get("verified_sources", [])
         n       = len(sources)
 
-        # ── CORE FIX: hard-enforce evidence count rules ────────────────────
+        # -- CORE FIX: hard-enforce evidence count rules --------------------
         verdict, reason = _enforce_evidence_rules(verdict, reason, n)
 
         # Record the challenge
-        h["skeptic_challenges"].append(f"Round {round_num}: {verdict} — {reason}")
+        h["skeptic_challenges"].append(f"Round {round_num}: {verdict} - {reason}")
 
         # Assign confidence
         if verdict == "REFUTED" and n == 0:
@@ -191,15 +194,15 @@ def run_skeptic(state: InvestigationState) -> InvestigationState:
             h["confidence"] = score(sources, h)
 
         emoji = {
-            "CRITICAL":   "🔴",
-            "MEDIUM":     "🟡",
-            "LOW":        "🟢",
-            "CLEARED":    "✅",
-            "REFUTED":    "⚫",
-            "UNVERIFIED": "⬜",
-        }.get(h["confidence"], "❓")
+            "CRITICAL":   "[CRITICAL]",
+            "MEDIUM":     "[MEDIUM]",
+            "LOW":        "[LOW]",
+            "CLEARED":    "[CLEARED]",
+            "REFUTED":    "[REFUTED]",
+            "UNVERIFIED": "[UNVERIFIED]",
+        }.get(h["confidence"], "[UNKNOWN]")
 
-        print(f"  {emoji} {h['id']}: {h['confidence']} ({n} sources) — {reason[:80]}", flush=True)
+        print(f"  {emoji} {h['id']}: {h['confidence']} ({n} sources) - {reason[:80]}", flush=True)
 
         # Reasoning trace
         reasoning.append({
@@ -207,7 +210,7 @@ def run_skeptic(state: InvestigationState) -> InvestigationState:
             "action": f"Challenge {h['id']} ({h['ioc']})",
             "rationale": f"Demanded {n} independent evidence sources. "
                          f"Verdict={verdict}: {reason[:100]}",
-            "result": f"Confidence={h['confidence']} — "
+            "result": f"Confidence={h['confidence']} - "
                       f"{'benign (CLEARED)' if h['confidence'] == 'CLEARED' else f'{n} sources confirmed'}",
             "timestamp": _time.time(),
         })
@@ -217,9 +220,18 @@ def run_skeptic(state: InvestigationState) -> InvestigationState:
     # Bucket findings by confidence
     buckets = bucket_findings(updated)
 
-    # Merge any findings already cleared by the legitimacy engine
+    # Merge any findings already cleared by the legitimacy engine.
+    # Skeptic can run multiple rounds; keep one canonical CLEARED record per IOC
+    # so reports do not repeat the same benign process.
     existing_cleared = state.get("cleared_findings", [])
-    all_cleared = existing_cleared + buckets["cleared"]
+    all_cleared = []
+    seen_cleared = set()
+    for item in existing_cleared + buckets["cleared"]:
+        key = (item.get("ioc") or item.get("claim") or "").lower().strip()
+        if not key or key in seen_cleared:
+            continue
+        seen_cleared.add(key)
+        all_cleared.append(item)
 
     return {
         **state,
@@ -252,19 +264,19 @@ def should_continue_debate(state: InvestigationState) -> str:
 
     if round_num < MAX_SKEPTIC_ROUNDS and unverified:
         print(
-            f"\n  → {len(unverified)} hypotheses still need more evidence. "
+            f"\n  -> {len(unverified)} hypotheses still need more evidence. "
             f"Running evidence agent again (round {round_num + 1})...",
             flush=True
         )
         return "evidence"
     else:
         print(
-            f"\n  → Debate complete after {round_num} round(s). Generating report.",
+            f"\n  -> Debate complete after {round_num} round(s). Generating report.",
             flush=True
         )
         decision = "reporter"
 
-    # ── Persistent Learning Loop: write progress file ────────────────────
+    # -- Persistent Learning Loop: write progress file --------------------
     _write_progress_file(state, round_num, decision)
     return decision
 
@@ -272,7 +284,7 @@ def should_continue_debate(state: InvestigationState) -> str:
 def _write_progress_file(state: dict, round_num: int, decision: str):
     """
     Write a progress file after each skeptic round.
-    Tracks improvement between iterations — demonstrates self-correction.
+    Tracks improvement between iterations - demonstrates self-correction.
     """
     import json, os, time as _time
     from config import REPORT_DIR
@@ -333,4 +345,3 @@ def _write_progress_file(state: dict, round_num: int, decision: str):
             json.dump(progress, f, indent=2, default=str)
     except Exception:
         pass
-

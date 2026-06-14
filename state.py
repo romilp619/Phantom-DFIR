@@ -1,4 +1,4 @@
-"""
+﻿"""
 PHANTOM DFIR — Investigation State
 Shared LangGraph TypedDict state passed between all agents.
 """
@@ -68,6 +68,7 @@ class InvestigationState(TypedDict):
     legitimacy_threshold:    int            # current legitimacy score threshold (starts 50)
     false_positives_detected: List[Dict]    # processes auto-cleared by legitimacy engine
     self_correction_history: List[Dict]     # [{iteration, threshold, findings_before, findings_after}]
+    self_correction_decisions: List[Dict]   # structured gap/action/outcome records
 
     # ── Analyst Reasoning Trace ──────────────────────────────────────────────
     reasoning_log:    List[Dict]    # [{agent, action, rationale, result, timestamp}]

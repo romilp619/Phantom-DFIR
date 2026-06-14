@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHANTOM DFIR — Main Entry Point
+PHANTOM DFIR - Main Entry Point
 Usage: python3 main.py -f /path/to/memory.img [--no-llm] [--model MODEL]
        python3 main.py -f /path/to/memory.img --provider claude --api-key sk-...
        python3 main.py -f /path/to/memory.img --self-correct
@@ -10,15 +10,15 @@ import argparse
 import os
 import sys
 
-# ── Ensure phantom-dfir dir is in path ───────────────────────────────────────
+# -- Ensure phantom-dfir dir is in path ---------------------------------------
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-import config  # noqa: F401 — must import before agents
+import config  # noqa: F401 - must import before agents
 
 
 def parse_args():
     p = argparse.ArgumentParser(
-        description="PHANTOM DFIR — Adversarial Self-Verifying DFIR Agent",
+        description="PHANTOM DFIR - Adversarial Self-Verifying DFIR Agent",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -45,7 +45,7 @@ Examples:
     p.add_argument("--ollama-url",    default=config.OLLAMA_BASE_URL,
                    help="Ollama base URL (default: http://localhost:11434)")
     p.add_argument("--no-llm",        action="store_true",
-                   help="Skip LLM — use rule-based investigator and skeptic only")
+                   help="Skip LLM - use rule-based investigator and skeptic only")
 
     # LLM provider flags
     p.add_argument("--provider",      default=config.LLM_PROVIDER,
@@ -63,7 +63,7 @@ Examples:
 
     # Self-correction flags
     p.add_argument("--self-correct",  action="store_true",
-                   help="Enable self-correction loop — retries with stricter "
+                   help="Enable self-correction loop - retries with stricter "
                         "thresholds when false positives detected")
     p.add_argument("--max-iterations", type=int, default=3,
                    help="Max self-correction iterations (default: 3)")
@@ -79,6 +79,12 @@ def main():
     # Validate target file
     if not os.path.exists(args.file):
         print(f"[ERROR] File not found: {args.file}")
+        sys.exit(1)
+
+    try:
+        os.makedirs(args.output_dir, exist_ok=True)
+    except OSError as e:
+        print(f"[ERROR] Could not create output directory {args.output_dir}: {e}")
         sys.exit(1)
 
     # Apply CLI overrides to config
@@ -124,18 +130,30 @@ def main():
 
     # Print self-correction summary if applicable
     history = final_state.get("self_correction_history", [])
-    if len(history) > 1:
+    if args.self_correct and history:
         print(f"\n{'='*60}")
         print(f"  SELF-CORRECTION SUMMARY")
         print(f"{'='*60}")
         for h in history:
+            decision = h.get("decision", {})
+            gaps = ", ".join(decision.get("gaps", [])) or "none"
             print(f"  Iteration {h['iteration']+1}: threshold={h['threshold']}, "
                   f"critical={h['critical_count']}, cleared={h['cleared_count']}", flush=True)
+            print(f"    gaps   : {gaps}", flush=True)
+            print(f"    action : {decision.get('action', 'unknown')}", flush=True)
         first = history[0]
         last = history[-1]
         reduced = first["critical_count"] - last["critical_count"]
-        if reduced > 0:
-            print(f"\n  → Reduced {reduced} false positive(s) through self-correction", flush=True)
+        if len(history) == 1 and last.get("cleared_count", 0) > 0:
+            print(
+                f"\n  -> Resolved {last['cleared_count']} finding(s) in the first pass; "
+                "no rerun was needed.",
+                flush=True,
+            )
+        elif reduced > 0:
+            print(f"\n  -> Reduced {reduced} false positive(s) through self-correction", flush=True)
+        else:
+            print("\n  -> No additional correction pass was required.", flush=True)
 
     # Print false positives cleared
     fps = final_state.get("false_positives_detected", [])
@@ -143,9 +161,9 @@ def main():
         print(f"\n  Legitimacy engine auto-cleared {len(fps)} process(es):")
         for fp in fps:
             score = fp.get("legitimacy_score", "?")
-            print(f"    ✅ {fp.get('ioc', '?')} (score: {score}/100)")
+            print(f"    [CLEARED] {fp.get('ioc', '?')} (score: {score}/100)")
 
-    print(f"\n[✓] Reports saved to: {args.output_dir}")
+    print(f"\n[OK] Reports saved to: {args.output_dir}")
     print(f"    JSON: {final_state.get('report_json_path','')}")
     print(f"    MD:   {final_state.get('report_md_path','')}")
     return 0

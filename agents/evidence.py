@@ -1,10 +1,10 @@
 """
-PHANTOM DFIR — Evidence Agent v2.0
+PHANTOM DFIR - Evidence Agent v2.0
 Targeted re-queries for specific PIDs, IPs, or filenames.
 Called by the Skeptic agent to verify or refute each challenge.
 
-v2.0 — Linux PID extraction support
-     — Smarter source deduplication
+v2.0 - Linux PID extraction support
+     - Smarter source deduplication
 """
 import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -149,14 +149,53 @@ def check_evidence_confirms(targeted: dict, ioc: str) -> list:
     return confirmed_by
 
 
+DERIVED_EVIDENCE_SOURCES = {
+    "memory:timeline_hints",
+    "memory:triage_summary",
+}
+
+COMMON_LOLBINS = {
+    "rundll32.exe",
+    "mshta.exe",
+    "regsvr32.exe",
+    "wscript.exe",
+    "cscript.exe",
+    "powershell.exe",
+    "cmd.exe",
+}
+
+
+def _canonical_source(source: str) -> str:
+    if source in ("memory:strings_ioc", "memory:yara_scan"):
+        return "memory:triage"
+    return source
+
+
+def _has_suspicious_lolbin_context(ioc: str, raw_evidence: dict) -> bool:
+    ioc_l = ioc.lower()
+    if ioc_l not in COMMON_LOLBINS:
+        return True
+    corpus = "\n".join(
+        raw_evidence.get(k, "")
+        for k in ("vol3:cmdline", "vol2:cmdscan", "vol2:consoles", "memory:strings_ioc")
+        if raw_evidence.get(k)
+    ).lower()
+    suspicious_markers = (
+        "-enc", "-encodedcommand", "frombase64string", "downloadstring",
+        "javascript:", "vbscript:", "mshtml", "scrobj.dll", "/i:http",
+        ".sct", ".hta", ".dll,", ",#", "\\appdata\\", "\\temp\\", "http://", "https://",
+    )
+    return ioc_l in corpus and any(marker in corpus for marker in suspicious_markers)
+
+
 def run_evidence_agent(state: InvestigationState) -> InvestigationState:
     """
     LangGraph node: for each hypothesis, gather targeted evidence
     and update verified_sources list.
     """
-    print("\n══════════════════════════════════════════════════", flush=True)
-    print("  PHASE 3 — TARGETED EVIDENCE AGENT", flush=True)
-    print("══════════════════════════════════════════════════", flush=True)
+    print("\n==================================================", flush=True)
+    print("  PHASE 3 - TARGETED EVIDENCE AGENT", flush=True)
+    print("==================================================", flush=True)
 
     filepath     = state["filepath"]
     raw_evidence = state.get("raw_evidence", {})
@@ -174,9 +213,16 @@ def run_evidence_agent(state: InvestigationState) -> InvestigationState:
 
         # Also check existing raw evidence
         for plugin, text in raw_evidence.items():
+            if plugin in DERIVED_EVIDENCE_SOURCES:
+                continue
+            if plugin in ("vol2:shimcache", "vol3:shimcachemem") and not _has_suspicious_lolbin_context(h["ioc"], raw_evidence):
+                continue
             if text and h["ioc"].lower().replace(".exe", "") in text.lower():
-                if plugin not in confirmed_by:
-                    confirmed_by.append(plugin)
+                source = _canonical_source(plugin)
+                if source not in confirmed_by:
+                    confirmed_by.append(source)
+
+        confirmed_by = sorted({_canonical_source(source) for source in confirmed_by})
 
         h["verified_sources"] = list(set(confirmed_by))
         print(f"    Confirmed by {len(confirmed_by)} sources: {confirmed_by[:5]}", flush=True)
@@ -185,7 +231,7 @@ def run_evidence_agent(state: InvestigationState) -> InvestigationState:
         reasoning.append({
             "agent": "Evidence",
             "action": f"Targeted re-query for {h['id']} ({h['ioc']})",
-            "rationale": f"Phase={h.get('attack_phase','?')} — ran PID-specific malfind/dlllist/cmdline "
+            "rationale": f"Phase={h.get('attack_phase','?')} - ran PID-specific malfind/dlllist/cmdline "
                          f"+ IP-filtered netscan/netstat to independently verify this IOC "
                          f"without relying on initial bulk collection alone",
             "result": f"{len(confirmed_by)} independent sources confirmed: "

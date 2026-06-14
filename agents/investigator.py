@@ -1,15 +1,15 @@
-"""
-PHANTOM DFIR — Investigator Agent v3.0
+﻿"""
+PHANTOM DFIR - Investigator Agent v3.0
 Analyzes raw evidence and proposes forensic hypotheses.
 Each hypothesis has a specific, falsifiable claim + supporting raw evidence.
 
-v3.0 — Dynamic Legitimacy Engine integration
-     — Behavioral false positive filtering (path, parent, network, memory)
-     — No hardcoded process name allowlists
-v2.0 — Dynamic IOC extraction (no hardcoded IPs/ports)
-     — SSH target extraction from PuTTY/ssh cmdlines
-     — Better Linux static rules
-     — Robust JSON control char stripping
+v3.0 - Dynamic Legitimacy Engine integration
+     - Behavioral false positive filtering (path, parent, network, memory)
+     - No hardcoded process name allowlists
+v2.0 - Dynamic IOC extraction (no hardcoded IPs/ports)
+     - SSH target extraction from PuTTY/ssh cmdlines
+     - Better Linux static rules
+     - Robust JSON control char stripping
 """
 import json
 import re
@@ -34,7 +34,7 @@ CRITICAL RULES FOR THE 'ioc' FIELD:
 - ioc MUST be a SHORT specific value: a filename, an IP address, or a PID number
 - GOOD ioc examples: "ruby.exe", "172.16.4.10", "subject_srv.exe", "putty.exe", "3204"
 - BAD ioc examples: "PID: 3204, Parent: services.exe", "File path: C:\\\\windows\\\\", "Multiple instances"
-- If the ioc is longer than 30 characters or contains spaces, it is WRONG — shorten it to the key artifact
+- If the ioc is longer than 30 characters or contains spaces, it is WRONG - shorten it to the key artifact
 
 === RAW EVIDENCE (first 4000 chars) ===
 {evidence_summary}
@@ -44,29 +44,47 @@ Return a JSON array. Each entry:
 {{
   "id": "H001",
   "claim": "Specific falsifiable claim with concrete details from the evidence",
-  "ioc": "SHORT specific value — filename/IP/PID only, NO descriptions",
+  "ioc": "SHORT specific value - filename/IP/PID only, NO descriptions",
   "attack_phase": "Persistence|Execution|C2|LateralMovement|CredentialAccess|PrivEsc|DefenseEvasion",
   "raw_evidence_quote": "Exact line from the evidence above",
   "requires_verification": ["specific plugin re-runs needed"]
 }}
 
 Key things to look for:
-- ruby.exe or rubyw.exe spawned by services.exe → Metasploit, ioc="ruby.exe"
-- Suspicious executables NOT in System32 → malware service, ioc="<filename>.exe"
-- connections to unusual ports (8080, 4444, 1337) → C2, ioc="<actual_IP>"
-- putty.exe / plink.exe multiple times → lateral movement, ioc="putty.exe"
-- bash reverse shells (/dev/tcp, mkfifo | nc) → C2, ioc="/dev/tcp"
-- wget with --proxy or --header Cookie → stealth download, ioc="wget"
-- LD_PRELOAD in environment → userland rootkit, ioc="LD_PRELOAD"
-- syscall table hooks → kernel rootkit, ioc="sys_call_table"
+- ruby.exe or rubyw.exe spawned by services.exe -> Metasploit, ioc="ruby.exe"
+- Suspicious executables NOT in System32 -> malware service, ioc="<filename>.exe"
+- connections to unusual ports (8080, 4444, 1337) -> C2, ioc="<actual_IP>"
+- putty.exe / plink.exe multiple times -> lateral movement, ioc="putty.exe"
+- bash reverse shells (/dev/tcp, mkfifo | nc) -> C2, ioc="/dev/tcp"
+- wget with --proxy or --header Cookie -> stealth download, ioc="wget"
+- LD_PRELOAD in environment -> userland rootkit, ioc="LD_PRELOAD"
+- syscall table hooks -> kernel rootkit, ioc="sys_call_table"
 
 Return ONLY valid JSON array, no other text.
 """)
 
 
+
+def _display_claim_for_console(h: dict) -> str:
+    """Keep console wording neutral for uncorroborated LLM/string leads."""
+    claim = (h.get("claim") or "").strip()
+    ioc = (h.get("ioc") or "unknown").strip()
+    lower = claim.lower()
+    if (
+        "potentially compromised" in lower
+        or "being targeted" in lower
+        or "suggesting" in lower
+        or "attacks" in lower
+        or "detected" in lower
+    ):
+        return f"Uncorroborated lead requiring analyst review: {ioc}"
+    return claim
+
 def _truncate_evidence(raw_evidence: dict, max_chars: int = 12000) -> str:
     """Build a focused evidence summary, prioritising high-value plugins."""
     priority = [
+        "memory:triage_summary", "memory:strings_ioc", "memory:yara_scan",
+        "memory:timeline_hints",
         "vol3:pslist", "vol3:pstree", "vol3:netscan", "vol3:shimcachemem",
         "vol3:svcscan", "vol3:cmdline", "vol3:malfind", "vol3:svcdiff",
         "vol3:psxview", "vol2:svcscan", "vol2:netscan",
@@ -100,7 +118,7 @@ def _truncate_evidence(raw_evidence: dict, max_chars: int = 12000) -> str:
 def _is_valid_ioc(ioc: str) -> bool:
     if not ioc or len(ioc) > 40:
         return False
-    # Reject common system process names — they match everywhere and produce noise
+    # Reject common system process names - they match everywhere and produce noise
     SYSTEM_PROCESS_EXCLUSIONS = {
         "svchost.exe", "csrss.exe", "smss.exe", "wininit.exe", "winlogon.exe",
         "services.exe", "lsass.exe", "dwm.exe", "explorer.exe", "conhost.exe",
@@ -133,9 +151,9 @@ def _strip_control_chars(text: str) -> str:
     return text
 
 
-# ── Benign Binary Path Detection ──────────────────────────────────────────────
+# -- Benign Binary Path Detection ----------------------------------------------
 
-# Known-legitimate paths for ruby.exe — these are NOT Metasploit
+# Known-legitimate paths for ruby.exe - these are NOT Metasploit
 BENIGN_RUBY_PATHS = [
     "puppet labs",
     "chef",
@@ -161,15 +179,15 @@ def _is_benign_ruby(raw_evidence: dict) -> bool:
                 ruby_lines.append(line)
 
     if not ruby_lines:
-        return False  # Can't determine — treat as suspicious
+        return False  # Can't determine - treat as suspicious
 
     for line in ruby_lines:
         ll = line.lower()
         if any(benign in ll for benign in BENIGN_RUBY_PATHS):
             continue  # This line is from a benign path
-        # Check if line contains a path at all — if it does and isn't benign, suspicious
+        # Check if line contains a path at all - if it does and isn't benign, suspicious
         if "\\" in line or "/" in line:
-            # Has a path but not in benign list — suspicious ruby
+            # Has a path but not in benign list - suspicious ruby
             return False
     return True  # All ruby instances are from benign paths
 
@@ -240,12 +258,12 @@ def _extract_raw_evidence_line(raw_evidence: dict, ioc: str,
     return best_line or ioc  # Final fallback: just the IOC name
 
 
-# ── Dynamic IOC Extraction Helpers ────────────────────────────────────────────
+# -- Dynamic IOC Extraction Helpers --------------------------------------------
 
 def _extract_c2_connections(raw_evidence: dict) -> list:
     """
     Dynamically extract suspicious C2 connections from netscan/netstat.
-    Finds non-standard ports with external connections — no hardcoded IPs.
+    Finds non-standard ports with external connections - no hardcoded IPs.
     """
     c2_candidates = []
     SUSPICIOUS_PORTS = {"8080", "4444", "1337", "9090", "8443", "1234", "5555",
@@ -266,7 +284,7 @@ def _extract_c2_connections(raw_evidence: dict) -> list:
                 if ip in ("0.0.0.0", "127.0.0.1", "*"):
                     continue
                 if port in SUSPICIOUS_PORTS or (port not in BENIGN_PORTS and int(port) > 1024):
-                    # Check it's not local (source) address — look for it as remote
+                    # Check it's not local (source) address - look for it as remote
                     if port in SUSPICIOUS_PORTS:
                         c2_candidates.append({
                             "ip": ip, "port": port,
@@ -327,6 +345,15 @@ def _extract_suspicious_services(raw_evidence: dict) -> list:
     """
     suspicious = []
     seen_exes = set()
+
+    # Windows has a small number of legitimate service binaries outside
+    # System32. Treat these as explainable findings, not compromise.
+    known_legitimate_service_paths = {
+        "trustedinstaller.exe": [
+            r"c:\windows\servicing\trustedinstaller.exe",
+        ],
+    }
+
     for plugin in ["vol3:svcscan", "vol3:svclist", "vol2:svcscan"]:
         text = raw_evidence.get(plugin, "")
         if not text:
@@ -342,28 +369,138 @@ def _extract_suspicious_services(raw_evidence: dict) -> list:
                     exe_name = m.group(1)
                     if exe_name.lower() not in seen_exes:
                         seen_exes.add(exe_name.lower())
+                        exe_key = exe_name.lower()
+                        is_known_legit = any(
+                            legit_path in ll
+                            for legit_path in known_legitimate_service_paths.get(exe_key, [])
+                        )
                         suspicious.append({
                             "exe": exe_name,
                             "line": line.strip()[:200],
                             "plugin": plugin,
+                            "known_legitimate": is_known_legit,
                         })
     return suspicious
 
 
+def _choose_triage_ioc(category: str, line: str) -> str:
+    """Return a short, stable IOC from a memory-triage line."""
+    lower = line.lower()
+    if category == "network_indicator":
+        m = re.search(r"https?://[^\s\"'<>]{4,}|(?:\d{1,3}\.){3}\d{1,3}:\d{2,5}", line, re.I)
+        if m:
+            return m.group(0).rstrip(".,);]")[:40]
+    keyword_map = {
+        "credential_theft": ["mimikatz", "sekurlsa", "lsass.dmp", "procdump", "comsvcs.dll", "wdigest"],
+        "c2_framework": ["meterpreter", "metasploit", "cobalt strike", "beacon", "sliver", "havoc"],
+        "powershell_stager": ["powershell", "pwsh", "-encodedcommand", "frombase64string"],
+        "suspicious_shell": ["cmd.exe", "rundll32.exe", "regsvr32.exe", "mshta.exe", "wscript.exe", "cscript.exe"],
+        "linux_reverse_shell": ["/dev/tcp", "/dev/udp", "mkfifo", "nc -e", "bash -i"],
+    }
+    for keyword in keyword_map.get(category, []):
+        if keyword in lower:
+            return keyword
+    m = re.search(r"([A-Za-z0-9_.:/-]{3,40})", line)
+    return m.group(1) if m else category
+
+
+def _extract_memory_triage_hypotheses(raw_evidence: dict) -> list:
+    """Convert bounded memory-triage hits into falsifiable baseline hypotheses."""
+    hypotheses = []
+    seen = set()
+    category_map = {
+        "credential_theft": (
+            "CredentialAccess",
+            "Credential-theft indicator found in raw memory triage",
+            ["vol2:hashdump", "vol2:lsadump", "vol3:malfind"],
+        ),
+        "c2_framework": (
+            "C2",
+            "Known C2 framework indicator found in raw memory triage",
+            ["vol3:netscan", "vol2:netscan", "vol3:malfind"],
+        ),
+        "powershell_stager": (
+            "Execution",
+            "PowerShell encoded-command or stager pattern found in raw memory triage",
+            ["vol3:cmdline", "vol2:cmdscan", "vol2:consoles"],
+        ),
+        "suspicious_shell": (
+            "Execution",
+            "Suspicious Windows script or shell execution pattern found in raw memory triage",
+            ["vol3:cmdline", "vol3:pstree", "vol2:cmdscan"],
+        ),
+        "linux_reverse_shell": (
+            "C2",
+            "Linux reverse-shell indicator found in raw memory triage",
+            ["vol3:linux_bash", "vol3:linux_sockstat", "vol3:linux_psaux"],
+        ),
+    }
+
+    for line in raw_evidence.get("memory:strings_ioc", "").splitlines():
+        m = re.match(r"\[([a-z_]+)\]\s+(.*)", line)
+        if not m:
+            continue
+        category, body = m.group(1), m.group(2)
+        if category not in category_map:
+            continue
+        phase, claim, verify = category_map[category]
+        ioc = _choose_triage_ioc(category, body)
+        key = (category, ioc.lower())
+        if key in seen or not _is_valid_ioc(ioc):
+            continue
+        seen.add(key)
+        hypotheses.append({
+            "id": "H-MEM",
+            "claim": f"{claim}: {ioc}",
+            "ioc": ioc,
+            "attack_phase": phase,
+            "raw_evidence_quote": line[:180],
+            "requires_verification": verify,
+        })
+        if len(hypotheses) >= 8:
+            break
+
+    for line in raw_evidence.get("memory:yara_scan", "").splitlines():
+        if not line or line.startswith("["):
+            continue
+        rule = line.split()[0]
+        if not rule.startswith("PHANTOM_Memory_"):
+            continue
+        ioc = rule.replace("PHANTOM_Memory_", "").lower()[:40]
+        key = ("yara", ioc)
+        if key in seen or not _is_valid_ioc(ioc):
+            continue
+        seen.add(key)
+        phase = "C2" if "c2" in ioc or "reverse" in ioc else "Execution"
+        if "mimikatz" in ioc:
+            phase = "CredentialAccess"
+        hypotheses.append({
+            "id": "H-YARA",
+            "claim": f"Embedded PHANTOM YARA memory rule matched: {rule}",
+            "ioc": ioc,
+            "attack_phase": phase,
+            "raw_evidence_quote": line[:180],
+            "requires_verification": ["vol3:malfind", "vol3:pslist", "vol3:netscan"],
+        })
+        if len(hypotheses) >= 10:
+            break
+    return hypotheses
+
+
 def run_investigator(state: InvestigationState) -> InvestigationState:
-    print("\n══════════════════════════════════════════════════", flush=True)
-    print("  PHASE 2 — INVESTIGATOR AGENT", flush=True)
-    print("══════════════════════════════════════════════════", flush=True)
+    print("\n==================================================", flush=True)
+    print("  PHASE 2 - INVESTIGATOR AGENT", flush=True)
+    print("==================================================", flush=True)
 
     raw_evidence     = state.get("raw_evidence", {})
     os_type          = state.get("os_type", "unknown")
     evidence_summary = _truncate_evidence(raw_evidence, max_chars=4000)
 
-    # ── Always run static fallback first (guaranteed baseline) ────────────────
+    # -- Always run static fallback first (guaranteed baseline) ----------------
     static_hyps = _static_fallback(raw_evidence, os_type)
     print(f"  Static analysis: {len(static_hyps)} baseline hypotheses", flush=True)
 
-    # ── Try LLM for additional hypotheses ─────────────────────────────────────
+    # -- Try LLM for additional hypotheses -------------------------------------
     llm_hyps = []
     skill_context = load_skills_for_phase("investigator")
     if skill_context:
@@ -398,7 +535,7 @@ def run_investigator(state: InvestigationState) -> InvestigationState:
         except Exception as e:
             print(f"  [!] LLM error: {e}", flush=True)
 
-    # ── Merge: static is baseline, LLM adds NEW IOCs only ────────────────────
+    # -- Merge: static is baseline, LLM adds NEW IOCs only --------------------
     # Deduplicate static hypotheses by IOC first
     seen_static_iocs = set()
     deduped_static = []
@@ -416,7 +553,7 @@ def run_investigator(state: InvestigationState) -> InvestigationState:
         if h.get("ioc", "").lower() not in static_iocs:
             merged.append(h)
 
-    # ── Normalise all hypotheses ──────────────────────────────────────────────
+    # -- Normalise all hypotheses ----------------------------------------------
     hypotheses = []
     for i, h in enumerate(merged):
         h["id"]                = f"H{i+1:03d}"
@@ -425,11 +562,11 @@ def run_investigator(state: InvestigationState) -> InvestigationState:
         h["confidence"]        = "UNVERIFIED"
         h["mitre_ids"]         = map_hypothesis_to_mitre(h)
         hypotheses.append(h)
-        print(f"  → {h['id']}: {h['claim'][:80]}", flush=True)
+        print(f"  -> {h['id']}: {_display_claim_for_console(h)[:80]}", flush=True)
 
     print(f"\n  {len(hypotheses)} total hypotheses (before legitimacy filtering).", flush=True)
 
-    # ── Legitimacy Engine: filter out behaviorally-legitimate processes ────
+    # -- Legitimacy Engine: filter out behaviorally-legitimate processes ----
     threshold = state.get("legitimacy_threshold", 70)
     print(f"\n  Running legitimacy engine (threshold={threshold})...", flush=True)
     kept, filtered = filter_legitimate_hypotheses(
@@ -440,7 +577,7 @@ def run_investigator(state: InvestigationState) -> InvestigationState:
         print(f"  Legitimacy engine cleared {len(filtered)} legitimate process(es).", flush=True)
     print(f"  {len(kept)} hypotheses remain for investigation.", flush=True)
 
-    # ── Reasoning Trace ───────────────────────────────────────────────────
+    # -- Reasoning Trace ---------------------------------------------------
     import time as _time
     reasoning = state.get("reasoning_log", [])
     reasoning.append({
@@ -474,14 +611,22 @@ def run_investigator(state: InvestigationState) -> InvestigationState:
             "timestamp": _time.time(),
         })
 
-    # Track cleared processes from legitimacy engine
+    # Track cleared processes from legitimacy engine without duplicating them
+    # across skeptic/self-correction rounds.
     existing_fp = state.get("false_positives_detected", [])
-    existing_fp.extend(filtered)
+    merged_fp = []
+    seen_fp = set()
+    for item in existing_fp + filtered:
+        key = (item.get("ioc") or item.get("claim") or "").lower().strip()
+        if not key or key in seen_fp:
+            continue
+        seen_fp.add(key)
+        merged_fp.append(item)
 
     return {
         **state,
         "hypotheses": kept,
-        "false_positives_detected": existing_fp,
+        "false_positives_detected": merged_fp,
         "cleared_findings": filtered,
         "reasoning_log": reasoning,
     }
@@ -489,37 +634,47 @@ def run_investigator(state: InvestigationState) -> InvestigationState:
 
 def _static_fallback(raw_evidence: dict, os_type: str) -> list:
     """
-    Rule-based fallback — never returns empty.
-    v2.0: Dynamic IOC extraction — no hardcoded IPs/ports.
+    Rule-based fallback - never returns empty.
+    v2.0: Dynamic IOC extraction - no hardcoded IPs/ports.
     """
-    hypotheses = []
+    hypotheses = _extract_memory_triage_hypotheses(raw_evidence)
     combined = "\n".join(v for v in raw_evidence.values() if v)
 
-    # ═══════════════════════════════════════════════════════════════
+    # ===============================================================
     # WINDOWS STATIC RULES
-    # ═══════════════════════════════════════════════════════════════
+    # ===============================================================
     if os_type == "windows":
 
-        # ── Dynamic: Suspicious services NOT in System32 ──────────
+        # -- Dynamic: Suspicious services NOT in System32 ----------
         for svc in _extract_suspicious_services(raw_evidence):
             exe = svc["exe"]
-            hypotheses.append({
-                "id":    f"S-SVC",
-                "claim": f"{exe} running as a Windows service from non-System32 path — suspicious",
-                "ioc":   exe,
-                "attack_phase": "Persistence",
-                "raw_evidence_quote": svc["line"][:100],
-                "requires_verification": ["vol3:svcscan", "vol3:pslist", f"vol3:malfind {exe} pid"],
-            })
+            if svc.get("known_legitimate"):
+                hypotheses.append({
+                    "id":    f"S-SVC",
+                    "claim": f"{exe} service path verified benign",
+                    "ioc":   exe,
+                    "attack_phase": "Persistence",
+                    "raw_evidence_quote": svc["line"][:100],
+                    "requires_verification": ["vol3:svcscan", "vol3:pslist", f"vol3:malfind {exe} pid"],
+                })
+            else:
+                hypotheses.append({
+                    "id":    f"S-SVC",
+                    "claim": f"{exe} running as a Windows service from non-System32 path - suspicious",
+                    "ioc":   exe,
+                    "attack_phase": "Persistence",
+                    "raw_evidence_quote": svc["line"][:100],
+                    "requires_verification": ["vol3:svcscan", "vol3:pslist", f"vol3:malfind {exe} pid"],
+                })
 
-        # ── Metasploit indicators ─────────────────────────────────
+        # -- Metasploit indicators ---------------------------------
         if "ruby.exe" in combined or "rubyw.exe" in combined:
             if _is_benign_ruby(raw_evidence):
-                # Known-benign Ruby (Puppet, Chef, etc.) — downgrade to LOW
+                # Known-benign Ruby (Puppet, Chef, etc.) - downgrade to LOW
                 ruby_quote = _extract_raw_evidence_line(raw_evidence, "ruby.exe")
                 hypotheses.append({
                     "id":    "H-RUBY",
-                    "claim": "ruby.exe from legitimate software (Puppet/Chef) running as service — likely benign",
+                    "claim": "ruby.exe from legitimate software (Puppet/Chef) running as service - likely benign",
                     "ioc":   "ruby.exe",
                     "attack_phase": "Execution",
                     "raw_evidence_quote": ruby_quote,
@@ -529,38 +684,38 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
                 ruby_quote = _extract_raw_evidence_line(raw_evidence, "ruby.exe")
                 hypotheses.append({
                     "id":    "H-RUBY",
-                    "claim": "ruby.exe / rubyw.exe spawned by services.exe — Metasploit Framework C2 agent",
+                    "claim": "ruby.exe / rubyw.exe spawned by services.exe - Metasploit Framework C2 agent",
                     "ioc":   "ruby.exe",
                     "attack_phase": "C2",
                     "raw_evidence_quote": ruby_quote,
                     "requires_verification": ["vol3:pslist", "vol3:netscan", "vol3:malfind ruby pid"],
                 })
 
-        # ── Dynamic: C2 connections (no hardcoded IPs) ────────────
+        # -- Dynamic: C2 connections (no hardcoded IPs) ------------
         for c2 in _extract_c2_connections(raw_evidence):
             ioc_str = f"{c2['ip']}:{c2['port']}"
             hypotheses.append({
                 "id":    f"H-C2",
-                "claim": f"Network connection to {ioc_str} — potential C2 channel (port {c2['port']})",
+                "claim": f"Network connection to {ioc_str} - potential C2 channel (port {c2['port']})",
                 "ioc":   ioc_str,
                 "attack_phase": "C2",
                 "raw_evidence_quote": c2["line"][:100],
                 "requires_verification": ["vol3:netscan", "vol2:netscan"],
             })
 
-        # ── PuTTY / SSH lateral movement ──────────────────────────
+        # -- PuTTY / SSH lateral movement --------------------------
         if "putty" in combined.lower():
             putty_quote = _extract_raw_evidence_line(raw_evidence, "putty.exe")
             hypotheses.append({
                 "id":    "H-PUTTY",
-                "claim": "Multiple putty.exe instances — lateral SSH movement from compromised host",
+                "claim": "Multiple putty.exe instances - lateral SSH movement from compromised host",
                 "ioc":   "putty.exe",
                 "attack_phase": "LateralMovement",
                 "raw_evidence_quote": putty_quote,
                 "requires_verification": ["vol3:pslist", "vol3:netscan"],
             })
 
-        # ── Dynamic: SSH targets from PuTTY/plink cmdlines ────────
+        # -- Dynamic: SSH targets from PuTTY/plink cmdlines --------
         ssh_targets = _extract_ssh_targets(raw_evidence)
         if ssh_targets:
             target_list = ", ".join(t["target"] for t in ssh_targets[:5])
@@ -573,22 +728,22 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
                 "requires_verification": ["vol3:netscan", "vol3:cmdline"],
             })
 
-        # ── Credential tools ──────────────────────────────────────
+        # -- Credential tools --------------------------------------
         if "mimikatz" in combined.lower() or "writeprocessmemory" in combined.lower():
             cred_ioc = "mimikatz" if "mimikatz" in combined.lower() else "writeprocessmemory"
             cred_quote = _extract_raw_evidence_line(raw_evidence, cred_ioc)
             hypotheses.append({
                 "id":    "H-CRED",
-                "claim": "Mimikatz strings / process injection APIs found in memory — credential theft possible",
+                "claim": "Mimikatz strings / process injection APIs found in memory - credential theft possible",
                 "ioc":   "mimikatz",
                 "attack_phase": "CredentialAccess",
                 "raw_evidence_quote": cred_quote,
                 "requires_verification": ["vol2:hashdump", "vol2:lsadump"],
             })
 
-    # ═══════════════════════════════════════════════════════════════
+    # ===============================================================
     # LINUX STATIC RULES
-    # ═══════════════════════════════════════════════════════════════
+    # ===============================================================
     elif os_type == "linux":
         # Bash reverse shells
         if "/dev/tcp" in combined or "mkfifo" in combined:
@@ -596,7 +751,7 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
             revshell_quote = _extract_raw_evidence_line(raw_evidence, revshell_ioc)
             hypotheses.append({
                 "id":    "L001",
-                "claim": "Bash reverse shell via /dev/tcp or mkfifo+nc — C2 connection established",
+                "claim": "Bash reverse shell via /dev/tcp or mkfifo+nc - C2 connection established",
                 "ioc":   "/dev/tcp",
                 "attack_phase": "C2",
                 "raw_evidence_quote": revshell_quote,
@@ -608,7 +763,7 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
             wget_quote = _extract_raw_evidence_line(raw_evidence, "wget")
             hypotheses.append({
                 "id":    "L002",
-                "claim": "wget with --proxy/--header/Cookie — stealth download with anti-forensics",
+                "claim": "wget with --proxy/--header/Cookie - stealth download with anti-forensics",
                 "ioc":   "wget",
                 "attack_phase": "Execution",
                 "raw_evidence_quote": wget_quote,
@@ -620,7 +775,7 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
             ldpreload_quote = _extract_raw_evidence_line(raw_evidence, "LD_PRELOAD")
             hypotheses.append({
                 "id":    "L003",
-                "claim": "LD_PRELOAD in environment — userland rootkit library injection",
+                "claim": "LD_PRELOAD in environment - userland rootkit library injection",
                 "ioc":   "LD_PRELOAD",
                 "attack_phase": "DefenseEvasion",
                 "raw_evidence_quote": ldpreload_quote,
@@ -633,7 +788,7 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
             syscall_quote = _extract_raw_evidence_line(raw_evidence, syscall_ioc)
             hypotheses.append({
                 "id":    "L004",
-                "claim": "Syscall table hooks detected — kernel-level rootkit compromise",
+                "claim": "Syscall table hooks detected - kernel-level rootkit compromise",
                 "ioc":   "sys_call_table",
                 "attack_phase": "DefenseEvasion",
                 "raw_evidence_quote": syscall_quote,
@@ -645,7 +800,7 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
             hidden_quote = _extract_raw_evidence_line(raw_evidence, "hidden")
             hypotheses.append({
                 "id":    "L005",
-                "claim": "Hidden kernel modules (not in lsmod) — LKM rootkit detected",
+                "claim": "Hidden kernel modules (not in lsmod) - LKM rootkit detected",
                 "ioc":   "hidden_module",
                 "attack_phase": "DefenseEvasion",
                 "raw_evidence_quote": hidden_quote,
@@ -656,7 +811,7 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
         if "comm" in combined and "cmdline" in combined and "mismatch" in combined.lower():
             hypotheses.append({
                 "id":    "L006",
-                "claim": "Process name spoofing detected — comm/cmdline/exe mismatch",
+                "claim": "Process name spoofing detected - comm/cmdline/exe mismatch",
                 "ioc":   "process_spoof",
                 "attack_phase": "DefenseEvasion",
                 "raw_evidence_quote": "comm cmdline mismatch",
@@ -667,7 +822,7 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
         if "ebpf" in combined.lower() or "bpf" in combined.lower():
             hypotheses.append({
                 "id":    "L007",
-                "claim": "eBPF programs found in memory — modern fileless rootkit or monitoring tool",
+                "claim": "eBPF programs found in memory - modern fileless rootkit or monitoring tool",
                 "ioc":   "ebpf",
                 "attack_phase": "DefenseEvasion",
                 "raw_evidence_quote": "ebpf",
@@ -678,7 +833,7 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
         if "HISTFILE=/dev/null" in combined or "history -c" in combined or "unset HISTFILE" in combined:
             hypotheses.append({
                 "id":    "L008",
-                "claim": "Bash history clearing detected — anti-forensics in bash commands",
+                "claim": "Bash history clearing detected - anti-forensics in bash commands",
                 "ioc":   "HISTFILE=/dev/null",
                 "attack_phase": "DefenseEvasion",
                 "raw_evidence_quote": "HISTFILE=/dev/null",
@@ -690,7 +845,7 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
             ssh_quote = _extract_raw_evidence_line(raw_evidence, "ssh")
             hypotheses.append({
                 "id":    "L009",
-                "claim": "SSH connections to internal network — lateral movement or C2 tunneling",
+                "claim": "SSH connections to internal network - lateral movement or C2 tunneling",
                 "ioc":   "ssh",
                 "attack_phase": "LateralMovement",
                 "raw_evidence_quote": ssh_quote,
@@ -701,7 +856,7 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
         if ("/tmp/" in combined or "/dev/shm" in combined) and ("exec" in combined.lower() or "chmod +x" in combined):
             hypotheses.append({
                 "id":    "L010",
-                "claim": "Execution from /tmp or /dev/shm — fileless malware staging area",
+                "claim": "Execution from /tmp or /dev/shm - fileless malware staging area",
                 "ioc":   "/tmp",
                 "attack_phase": "Execution",
                 "raw_evidence_quote": "/tmp/",
