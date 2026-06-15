@@ -633,34 +633,77 @@ After each run, PHANTOM generates:
 
 ```mermaid
 flowchart TB
-    subgraph INPUT["[INPUT] Evidence Input"]
-        MEM["[REASONING] Memory Image (.img)"]
-        DISK["[DISK] Disk Image (.E01)"]
+    subgraph INPUT["[INPUT] Evidence Sources"]
+        MEM["Memory image (.img/.mem/.raw)"]
+        DISK["Disk image (.E01/.raw)"]
+        PCAP["Network capture (.pcap/.pcapng)"]
     end
 
-    subgraph PIPELINE["[FAST] LangGraph Multi-Agent Pipeline"]
+    ROUTER["phantom_router.py<br/>Evidence type detection + dispatch"]
+
+    subgraph MEMORY["[MEMORY] LangGraph Multi-Agent Pipeline"]
         direction TB
-        COL["[SEARCH] COLLECTOR\n35+ plugins | 16 workers"]
-        INV["[TEST] INVESTIGATOR\nStatic rules + LLM"]
-        EVD["[EVIDENCE] EVIDENCE\nPID-targeted re-queries"]
-        SKP["[AGENT] SKEPTIC\nAdversarial debate"]
-        RPT["[REPORT] REPORTER\nJSON + MD + Trace"]
-
-        COL --> INV --> EVD --> SKP
-        SKP -->|"[LOOP] self-correction (max 3)"| EVD
-        SKP -->|"[OK] final"| RPT
+        COL["COLLECTOR<br/>Vol3 + Vol2 | OS/profile race | parallel plugins"]
+        INV["INVESTIGATOR<br/>Static rules + optional LLM + IOC validation"]
+        EVD["EVIDENCE AGENT<br/>PID/IP/service targeted re-queries"]
+        SKP["SKEPTIC<br/>Adversarial verification + false-positive clearing"]
+        MGC["Memory Gap Controller<br/>rerun/accept decision | max iterations"]
+        MRPT["REPORTER<br/>JSON + Markdown + execution log + reasoning trace"]
+        COL --> INV --> EVD --> SKP --> MGC
+        MGC -->|needs more evidence| EVD
+        MGC -->|final| MRPT
     end
 
-    subgraph MCP["[MCP] MCP Server - 20 Read-Only Tools"]
-        TOOLS["SHA256 integrity | stdio + HTTP | [BLOCKED] No destructive commands"]
+    subgraph DISKNET["[DISK + NETWORK] Correlation Engines"]
+        direction TB
+        DC["disk_correlator.py<br/>Filesystem, registry, browser, email, malware, crypto"]
+        NC["Network/PCAP route<br/>tshark, HTTP objects, webmail attribution, identity graph"]
+        EGC["Evidence Gap Controller<br/>missing timeline/user/sender/victim/persistence checks"]
+        DC --> EGC
+        NC --> EGC
     end
 
-    MEM --> COL
-    DISK --> COL
-    MCP -.->|tool calls| COL
-    MCP -.->|tool calls| EVD
-    RPT --> O1["findings.json"] & O2["report.md"] & O3["execution_log.json"] & O4["progress.json"]
+    subgraph SIFT["[SIFT / DFIR Tool Layer]"]
+        VOL["Volatility 3 + Volatility 2 wrapper"]
+        TSK["Sleuth Kit: mmls, fls, icat"]
+        NET["tshark / protocol extraction"]
+        AUX["Plaso, ClamAV, GPG, libbde/dislocker"]
+    end
+
+    subgraph MCP["[MCP Server] Read-Only Typed Tools"]
+        MCPTOOLS["SHA256 integrity | stdio + HTTP | no destructive shell tools"]
+    end
+
+    subgraph OUTPUT["[OUTPUT + VALIDATION]"]
+        JSON["forensic JSON"]
+        MD["analyst Markdown report"]
+        XLOG["execution/reasoning logs"]
+        BENCH["benchmark_reports.py<br/>benchmarks/ground_truth_cases.json"]
+    end
+
+    MEM --> ROUTER
+    DISK --> ROUTER
+    PCAP --> ROUTER
+    ROUTER --> MEMORY
+    ROUTER --> DISKNET
+
+    SIFT -.-> COL
+    SIFT -.-> DC
+    SIFT -.-> NC
+    MCP -.-> MEMORY
+    MCP -.-> DISKNET
+
+    MRPT --> JSON
+    MRPT --> MD
+    MRPT --> XLOG
+    EGC --> JSON
+    EGC --> MD
+    EGC --> XLOG
+    JSON --> BENCH
+    MD --> BENCH
 ```
+
+
 
 > **Security**: Architectural guardrails (no shell access, SHA256 verify, read-only subprocess, max iteration cap) vs prompt guardrails (IOC validation, JSON schema, static fallback). See [ARCHITECTURE.md](ARCHITECTURE.md) for full trust boundary documentation.
 

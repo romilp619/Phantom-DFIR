@@ -14,15 +14,15 @@ judge pack and quick-reference PDFs.
 | Architecture diagram | Ready | `architecture.png`, `ARCHITECTURE.md` | Confirm Devpost gallery includes it |
 | Text project description | Ready | `PROJECT_DESCRIPTION.md` | Copy polished summary into Devpost |
 | Evidence dataset documentation | Ready | `DATASET.md`, `benchmarks/ground_truth_cases.json`, `BENCHMARK_MATRIX.md` | None |
-| Accuracy report | Ready, can be stronger | `ACCURACY_REPORT.md`, `benchmark.py`, `benchmark_reports.py` | Add final benchmark output JSONs after final runs |
+| Accuracy report | Ready | `ACCURACY_REPORT.md`, `benchmark.py`, `benchmark_reports.py`, `benchmark_results/*.json` | None |
 | Try-it-out instructions | Ready | `README.md`, `install.sh`, `test_mcp.py` | None |
-| Agent execution logs | Partial | `memory_debug/*.json`, PHANTOM generated reports, router unified JSONs | Add final `logs/` directory with selected run logs and trace JSONs |
+| Agent execution logs | Ready | `logs/final_runs/*`, `logs/final_runs/memory_self_correction_execution_log.json`, `benchmark_results/*.json` | None |
 
 ## Three Required Capabilities
 
 | Capability | Status | Evidence |
 |---|---:|---|
-| Self-correction without human intervention | Partial to Ready | Memory self-correction in `main.py` / agents, router evidence gap controller in `phantom_router.py` |
+| Self-correction without human intervention | Ready | Memory self-correction in `main.py` / agents, router evidence gap controller in `phantom_router.py`, final trace in `logs/final_runs/memory_self_correction_execution_log.json` |
 | Accuracy validation traceable to artifacts/files/log entries | Ready | `benchmark_reports.py`, `benchmarks/ground_truth_cases.json`, `BENCHMARK_MATRIX.md` |
 | Structured investigative narrative, not raw execution log | Ready | JSON/Markdown reports from `disk_correlator.py` and unified reports from `phantom_router.py` |
 
@@ -30,7 +30,7 @@ judge pack and quick-reference PDFs.
 
 ### 1. Autonomous Execution Quality
 
-Status: Strong, but final logs must prove it.
+Status: Strong; final logs are committed under `logs/final_runs/`.
 
 Evidence:
 
@@ -39,13 +39,10 @@ Evidence:
 - `phantom_router.py`
 - router `evidence_gap_controller` output in unified JSON
 
-Need for submission:
+Submission evidence:
 
-- Include one or two final router logs showing:
-  - initial confidence
-  - detected gaps
-  - action/rerun decision
-  - final confidence
+- Final run logs are committed under `logs/final_runs/`.
+- Memory self-correction trace includes gap-controller decision and final reasoning in `memory_self_correction_execution_log.json`.
 
 ### 2. IR Accuracy
 
@@ -103,7 +100,7 @@ Key story:
 
 ### 5. Audit Trail Quality
 
-Status: Partial until final logs are checked in.
+Status: Ready; selected final logs are checked in.
 
 Current evidence:
 
@@ -112,12 +109,11 @@ Current evidence:
 - unified router JSONs contain `source_reports`, `llm_status`, `unified_analysis`,
   and `evidence_gap_controller`
 
-Need for submission:
+Submission evidence:
 
-- Add final logs for at least three traceable claims:
-  - one memory claim
-  - one disk claim
-  - one PCAP claim
+- Memory trace: `logs/final_runs/memory_self_correction_execution_log.json`
+- Disk traces: `logs/final_runs/sysinternals_case.log`, `logs/final_runs/m57_jean_phishing.log`, `logs/final_runs/ali_hadi_encrypt_them_all.log`
+- PCAP trace: `logs/final_runs/nitroba_harassment_pcap.log`
 
 Suggested final directory:
 
@@ -187,9 +183,6 @@ python3 benchmark_reports.py --all --reports-dir /home/romil --latest \
 ## Highest-Priority Remaining Work
 
 1. Record the final demo video.
-2. Add final execution logs / trace JSONs to a `logs/` or `benchmark_results/`
-   folder.
-3. Run the benchmark framework against final report paths.
-4. Confirm GitHub repo is public and license is detected in the GitHub About
+2. Confirm GitHub repo is public and license is detected in the GitHub About
    sidebar.
-5. Confirm the Devpost page includes the architecture diagram and demo video.
+3. Confirm the Devpost page includes the architecture diagram and demo video.

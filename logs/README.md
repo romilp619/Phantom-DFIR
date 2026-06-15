@@ -1,4 +1,4 @@
-﻿# PHANTOM DFIR Final Execution Logs
+# PHANTOM DFIR Final Execution Logs
 
 This directory contains selected final run logs used for Stage One verification.
 

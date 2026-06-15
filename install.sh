@@ -25,7 +25,7 @@ for arg in "$@"; do
         --check) CHECK_ONLY=1 ;;
         --help|-h)
             cat <<'HELP'
-PHANTOM DFIR installe
+PHANTOM DFIR installer
 
 Usage:
   bash install.sh
