@@ -636,7 +636,7 @@ flowchart TB
     classDef input fill:#0f172a,stroke:#38bdf8,color:#ffffff,stroke-width:1px;
     classDef route fill:#111827,stroke:#f97316,color:#ffffff,stroke-width:1px;
     classDef engine fill:#1f2937,stroke:#a78bfa,color:#ffffff,stroke-width:1px;
-    classDef tool fill:#172554,stroke:#60a5fa,color:#ffffff,stroke-width:1px;
+    classDef support fill:#172554,stroke:#60a5fa,color:#ffffff,stroke-width:1px;
     classDef guard fill:#064e3b,stroke:#34d399,color:#ffffff,stroke-width:1px;
     classDef output fill:#111827,stroke:#facc15,color:#ffffff,stroke-width:1px;
 
@@ -649,35 +649,39 @@ flowchart TB
 
     ROUTER["phantom_router.py<br/>detect evidence type<br/>dispatch correct engine"]
 
-    subgraph SUPPORT["SIFT / Tooling + Trust Boundary"]
-        direction LR
-        TOOLS["SIFT / DFIR tools<br/>Vol3 + Vol2 wrapper<br/>Sleuth Kit, tshark, Plaso<br/>ClamAV, GPG, libbde/dislocker"]
-        MCP["MCP server<br/>20 read-only typed tools<br/>SHA256 integrity<br/>no destructive shell actions"]
-    end
+    subgraph RUNTIME["Autonomous Runtime"]
+        direction TB
 
-    subgraph ENGINES["Autonomous Analysis Engines"]
-        direction LR
-
-        subgraph MEMORY["Memory Agent Pipeline"]
-            direction TB
-            MCOL["Collector<br/>parallel Vol2/Vol3 plugins"]
-            MINV["Investigator<br/>rules + optional LLM"]
-            MEVD["Evidence Agent<br/>targeted re-query"]
-            MSKP["Skeptic<br/>verify or clear"]
-            MMGC["Memory Gap Controller<br/>rerun or accept"]
-            MRPT["Memory Reporter<br/>JSON + MD + trace"]
-            MCOL --> MINV --> MEVD --> MSKP --> MMGC
-            MMGC -->|more evidence| MEVD
-            MMGC -->|final| MRPT
+        subgraph SUPPORT["Shared SIFT Tooling + MCP Trust Boundary<br/>used by both engines"]
+            direction LR
+            TOOLS["SIFT / DFIR tools<br/>Vol3 + Vol2 wrapper<br/>Sleuth Kit, tshark, Plaso<br/>ClamAV, GPG, libbde/dislocker"]
+            MCP["MCP server<br/>20 read-only typed tools<br/>SHA256 integrity<br/>no destructive shell actions"]
         end
 
-        subgraph CORR["Disk + Network Correlation"]
-            direction TB
-            DENG["disk_correlator.py<br/>filesystem, registry, browser<br/>email, malware, crypto"]
-            NENG["PCAP route<br/>HTTP objects, webmail attribution<br/>identity graph"]
-            GAPS["Evidence Gap Controller<br/>timeline, user, sender, victim<br/>persistence, confidence"]
-            DENG --> GAPS
-            NENG --> GAPS
+        subgraph ENGINES["Analysis Engines"]
+            direction LR
+
+            subgraph MEMORY["Memory Agent Pipeline"]
+                direction TB
+                MCOL["Collector<br/>parallel Vol2/Vol3 plugins"]
+                MINV["Investigator<br/>rules + optional LLM"]
+                MEVD["Evidence Agent<br/>targeted re-query"]
+                MSKP["Skeptic<br/>verify or clear"]
+                MMGC["Memory Gap Controller<br/>rerun or accept"]
+                MRPT["Memory Reporter<br/>JSON + MD + trace"]
+                MCOL --> MINV --> MEVD --> MSKP --> MMGC
+                MMGC -->|more evidence| MEVD
+                MMGC -->|final| MRPT
+            end
+
+            subgraph CORR["Disk + Network Correlation"]
+                direction TB
+                DENG["disk_correlator.py<br/>filesystem, registry, browser<br/>email, malware, crypto"]
+                NENG["PCAP route<br/>HTTP objects, webmail attribution<br/>identity graph"]
+                GAPS["Evidence Gap Controller<br/>timeline, user, sender, victim<br/>persistence, confidence"]
+                DENG --> GAPS
+                NENG --> GAPS
+            end
         end
     end
 
@@ -694,15 +698,9 @@ flowchart TB
     MEM --> ROUTER
     DISK --> ROUTER
     PCAP --> ROUTER
+
     ROUTER --> MEMORY
     ROUTER --> CORR
-
-    TOOLS -.-> MCOL
-    TOOLS -.-> DENG
-    TOOLS -.-> NENG
-    MCP -.-> MCOL
-    MCP -.-> DENG
-    MCP -.-> NENG
 
     MRPT --> ARTIFACTS
     GAPS --> ARTIFACTS
@@ -715,10 +713,11 @@ flowchart TB
     class MEM,DISK,PCAP input;
     class ROUTER route;
     class MEMORY,CORR,MCOL,MINV,MEVD,MSKP,MMGC,MRPT,DENG,NENG,GAPS,ARTIFACTS engine;
-    class TOOLS tool;
+    class TOOLS support;
     class MCP guard;
     class JSON,MD,LOGS,BENCH output;
 ```
+
 
 
 
