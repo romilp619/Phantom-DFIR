@@ -665,7 +665,7 @@ flowchart TB
             MEVD["Evidence Agent<br/>targeted re-query"]
             MSKP["Skeptic<br/>verify or clear"]
             MMGC["Memory Gap Controller<br/>rerun or accept"]
-            MRPT["Reporter<br/>JSON + MD + trace"]
+            MRPT["Memory Reporter<br/>JSON + MD + trace"]
             MCOL --> MINV --> MEVD --> MSKP --> MMGC
             MMGC -->|more evidence| MEVD
             MMGC -->|final| MRPT
@@ -680,6 +680,8 @@ flowchart TB
             NENG --> GAPS
         end
     end
+
+    ARTIFACTS["Report Artifacts<br/>normalized findings + confidence"]
 
     subgraph OUTPUT["Output + Validation"]
         direction LR
@@ -697,22 +699,22 @@ flowchart TB
 
     SUPPORT -.-> ENGINES
 
-    MRPT --> JSON
-    MRPT --> MD
-    MRPT --> LOGS
-    GAPS --> JSON
-    GAPS --> MD
-    GAPS --> LOGS
+    MRPT --> ARTIFACTS
+    GAPS --> ARTIFACTS
+    ARTIFACTS --> JSON
+    ARTIFACTS --> MD
+    ARTIFACTS --> LOGS
     JSON --> BENCH
     MD --> BENCH
 
     class MEM,DISK,PCAP input;
     class ROUTER route;
-    class MEMORY,CORR,MCOL,MINV,MEVD,MSKP,MMGC,MRPT,DENG,NENG,GAPS engine;
+    class MEMORY,CORR,MCOL,MINV,MEVD,MSKP,MMGC,MRPT,DENG,NENG,GAPS,ARTIFACTS engine;
     class TOOLS tool;
     class MCP guard;
     class JSON,MD,LOGS,BENCH output;
 ```
+
 
 
 
