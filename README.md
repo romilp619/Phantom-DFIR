@@ -634,83 +634,55 @@ After each run, PHANTOM generates:
 ```mermaid
 flowchart TB
     classDef input fill:#0f172a,stroke:#38bdf8,color:#ffffff,stroke-width:1px;
-    classDef route fill:#111827,stroke:#f97316,color:#ffffff,stroke-width:1px;
+    classDef router fill:#111827,stroke:#f97316,color:#ffffff,stroke-width:1px;
+    classDef tools fill:#172554,stroke:#60a5fa,color:#ffffff,stroke-width:1px;
     classDef engine fill:#1f2937,stroke:#a78bfa,color:#ffffff,stroke-width:1px;
-    classDef support fill:#172554,stroke:#60a5fa,color:#ffffff,stroke-width:1px;
     classDef output fill:#111827,stroke:#facc15,color:#ffffff,stroke-width:1px;
 
-    subgraph INPUT["Evidence Sources"]
-        direction LR
-        MEM["Memory<br/>.img .mem .raw"]
-        DISK["Disk<br/>.E01 .raw"]
-        PCAP["Network<br/>.pcap .pcapng"]
-    end
+    INPUT["Evidence Sources<br/>Memory images | Disk/E01 images | PCAP/PCAPNG"]
+    ROUTER["phantom_router.py<br/>detect evidence type and route to the right engine"]
 
-    ROUTER["phantom_router.py<br/>detect evidence type<br/>dispatch correct engine"]
-
-    SUPPORT["Shared SIFT + MCP Support<br/>Vol3, Vol2 wrapper, Sleuth Kit, tshark, Plaso, ClamAV, YARA, RegRipper<br/>MCP: 20 read-only typed tools, SHA256 integrity, no destructive shell actions"]
+    TOOLS["Read-Only DFIR Tool Layer<br/>Volatility 3 + Volatility 2 wrapper | Sleuth Kit | tshark | Plaso | ClamAV | GPG | libbde/dislocker"]
+    MCP["MCP Trust Boundary<br/>20 typed read-only tools | SHA256 integrity | no destructive shell actions"]
 
     subgraph ENGINES["Autonomous Analysis Engines"]
         direction LR
-
-        subgraph MEMORY["Memory Agent Pipeline<br/>LangGraph StateGraph"]
-            direction TB
-            MCOL["Collector<br/>parallel Vol2/Vol3 plugins"]
-            MINV["Investigator<br/>rules + optional LLM"]
-            MEVD["Evidence Agent<br/>targeted re-query"]
-            MSKP["Skeptic<br/>verify or clear"]
-            MRPT["Memory Reporter<br/>JSON + MD + trace"]
-            MCOL --> MINV --> MEVD --> MSKP
-            MSKP -->|self-correction loop| MEVD
-            MSKP -->|final| MRPT
-        end
-
-        subgraph CORR["Disk + Network Correlation"]
-            direction TB
-            DENG["disk_correlator.py<br/>filesystem, registry, browser<br/>email, malware, prefetch<br/>UserAssist, Shimcache"]
-            NENG["PCAP route<br/>HTTP objects, webmail attribution<br/>identity graph"]
-            DRPT["Forensic Reasoning Engine<br/>threat score, timeline<br/>challenge analysis"]
-            DENG --> DRPT
-            NENG --> DRPT
-        end
+        MEM["Memory Agent<br/>Collector -> Investigator -> Evidence Agent -> Skeptic -> Reporter"]
+        DISK["Disk Correlator<br/>filesystem, registry, browser, email, malware, crypto"]
+        NET["Network Correlator<br/>HTTP objects, webmail attribution, identity graph"]
     end
 
-    ARTIFACTS["Report Artifacts<br/>normalized findings + confidence"]
+    GAP["Evidence Gap Controller<br/>detect gaps, rerun/accept, update confidence"]
+    REPORTS["Report Artifacts<br/>normalized findings, timeline, confidence, narrative"]
 
     subgraph OUTPUT["Output + Validation"]
         direction LR
         JSON["forensic JSON"]
         MD["analyst Markdown"]
-        LOGS["execution logs<br/>reasoning trace"]
+        LOGS["execution logs + reasoning trace"]
         BENCH["benchmark_reports.py<br/>ground truth validation"]
     end
 
-    MEM --> ROUTER
-    DISK --> ROUTER
-    PCAP --> ROUTER
-
-    ROUTER --> MCOL
-    ROUTER --> DENG
-    ROUTER --> NENG
-
-    SUPPORT -.-> MCOL
-    SUPPORT -.-> DENG
-    SUPPORT -.-> NENG
-
-    MRPT --> ARTIFACTS
-    DRPT --> ARTIFACTS
-    ARTIFACTS --> JSON
-    ARTIFACTS --> MD
-    ARTIFACTS --> LOGS
+    INPUT --> ROUTER
+    ROUTER --> TOOLS
+    ROUTER --> MCP
+    TOOLS --> ENGINES
+    MCP --> ENGINES
+    ENGINES --> GAP
+    GAP --> REPORTS
+    REPORTS --> JSON
+    REPORTS --> MD
+    REPORTS --> LOGS
     JSON --> BENCH
     MD --> BENCH
 
-    class MEM,DISK,PCAP input;
-    class ROUTER route;
-    class MEMORY,CORR,MCOL,MINV,MEVD,MSKP,MRPT,DENG,NENG,DRPT,ARTIFACTS engine;
-    class SUPPORT support;
+    class INPUT input;
+    class ROUTER router;
+    class TOOLS,MCP tools;
+    class MEM,DISK,NET,GAP,REPORTS engine;
     class JSON,MD,LOGS,BENCH output;
 ```
+
 
 
 
