@@ -637,7 +637,6 @@ flowchart TB
     classDef route fill:#111827,stroke:#f97316,color:#ffffff,stroke-width:1px;
     classDef engine fill:#1f2937,stroke:#a78bfa,color:#ffffff,stroke-width:1px;
     classDef support fill:#172554,stroke:#60a5fa,color:#ffffff,stroke-width:1px;
-    classDef guard fill:#064e3b,stroke:#34d399,color:#ffffff,stroke-width:1px;
     classDef output fill:#111827,stroke:#facc15,color:#ffffff,stroke-width:1px;
 
     subgraph INPUT["Evidence Sources"]
@@ -649,38 +648,30 @@ flowchart TB
 
     ROUTER["phantom_router.py<br/>detect evidence type<br/>dispatch correct engine"]
 
-    subgraph RUNTIME["Autonomous Runtime"]
-        direction TB
+    SUPPORT["Shared SIFT + MCP Support<br/>Vol3, Vol2 wrapper, Sleuth Kit, tshark, Plaso, ClamAV, YARA, RegRipper<br/>MCP: 20 read-only typed tools, SHA256 integrity, no destructive shell actions"]
 
-        subgraph SUPPORT["Shared SIFT Tooling + MCP Trust Boundary<br/>used by both engines"]
-            direction LR
-            TOOLS["SIFT / DFIR tools<br/>Vol3 + Vol2 wrapper<br/>Sleuth Kit, tshark, Plaso<br/>ClamAV, YARA, RegRipper"]
-            MCP["MCP server<br/>20 read-only typed tools<br/>SHA256 integrity<br/>no destructive shell actions"]
+    subgraph ENGINES["Autonomous Analysis Engines"]
+        direction LR
+
+        subgraph MEMORY["Memory Agent Pipeline<br/>LangGraph StateGraph"]
+            direction TB
+            MCOL["Collector<br/>parallel Vol2/Vol3 plugins"]
+            MINV["Investigator<br/>rules + optional LLM"]
+            MEVD["Evidence Agent<br/>targeted re-query"]
+            MSKP["Skeptic<br/>verify or clear"]
+            MRPT["Memory Reporter<br/>JSON + MD + trace"]
+            MCOL --> MINV --> MEVD --> MSKP
+            MSKP -->|self-correction loop| MEVD
+            MSKP -->|final| MRPT
         end
 
-        subgraph ENGINES["Analysis Engines"]
-            direction LR
-
-            subgraph MEMORY["Memory Agent Pipeline<br/>LangGraph StateGraph"]
-                direction TB
-                MCOL["Collector<br/>parallel Vol2/Vol3 plugins"]
-                MINV["Investigator<br/>rules + optional LLM"]
-                MEVD["Evidence Agent<br/>targeted re-query"]
-                MSKP["Skeptic<br/>verify or clear"]
-                MRPT["Memory Reporter<br/>JSON + MD + trace"]
-                MCOL --> MINV --> MEVD --> MSKP
-                MSKP -->|"self-correction loop"| MEVD
-                MSKP -->|"final"| MRPT
-            end
-
-            subgraph CORR["Disk + Network Correlation"]
-                direction TB
-                DENG["disk_correlator.py<br/>filesystem, registry, browser<br/>email, malware, prefetch<br/>UserAssist, Shimcache"]
-                NENG["PCAP route<br/>HTTP objects, webmail attribution<br/>identity graph"]
-                DRPT["Forensic Reasoning Engine<br/>threat score, timeline<br/>challenge analysis"]
-                DENG --> DRPT
-                NENG --> DRPT
-            end
+        subgraph CORR["Disk + Network Correlation"]
+            direction TB
+            DENG["disk_correlator.py<br/>filesystem, registry, browser<br/>email, malware, prefetch<br/>UserAssist, Shimcache"]
+            NENG["PCAP route<br/>HTTP objects, webmail attribution<br/>identity graph"]
+            DRPT["Forensic Reasoning Engine<br/>threat score, timeline<br/>challenge analysis"]
+            DENG --> DRPT
+            NENG --> DRPT
         end
     end
 
@@ -698,8 +689,13 @@ flowchart TB
     DISK --> ROUTER
     PCAP --> ROUTER
 
-    ROUTER --> MEMORY
-    ROUTER --> CORR
+    ROUTER --> MCOL
+    ROUTER --> DENG
+    ROUTER --> NENG
+
+    SUPPORT -.-> MCOL
+    SUPPORT -.-> DENG
+    SUPPORT -.-> NENG
 
     MRPT --> ARTIFACTS
     DRPT --> ARTIFACTS
@@ -712,10 +708,11 @@ flowchart TB
     class MEM,DISK,PCAP input;
     class ROUTER route;
     class MEMORY,CORR,MCOL,MINV,MEVD,MSKP,MRPT,DENG,NENG,DRPT,ARTIFACTS engine;
-    class TOOLS support;
-    class MCP guard;
+    class SUPPORT support;
     class JSON,MD,LOGS,BENCH output;
 ```
+
+
 
 
 
