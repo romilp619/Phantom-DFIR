@@ -654,33 +654,32 @@ flowchart TB
 
         subgraph SUPPORT["Shared SIFT Tooling + MCP Trust Boundary<br/>used by both engines"]
             direction LR
-            TOOLS["SIFT / DFIR tools<br/>Vol3 + Vol2 wrapper<br/>Sleuth Kit, tshark, Plaso<br/>ClamAV, GPG, libbde/dislocker"]
+            TOOLS["SIFT / DFIR tools<br/>Vol3 + Vol2 wrapper<br/>Sleuth Kit, tshark, Plaso<br/>ClamAV, YARA, RegRipper"]
             MCP["MCP server<br/>20 read-only typed tools<br/>SHA256 integrity<br/>no destructive shell actions"]
         end
 
         subgraph ENGINES["Analysis Engines"]
             direction LR
 
-            subgraph MEMORY["Memory Agent Pipeline"]
+            subgraph MEMORY["Memory Agent Pipeline<br/>LangGraph StateGraph"]
                 direction TB
                 MCOL["Collector<br/>parallel Vol2/Vol3 plugins"]
                 MINV["Investigator<br/>rules + optional LLM"]
                 MEVD["Evidence Agent<br/>targeted re-query"]
                 MSKP["Skeptic<br/>verify or clear"]
-                MMGC["Memory Gap Controller<br/>rerun or accept"]
                 MRPT["Memory Reporter<br/>JSON + MD + trace"]
-                MCOL --> MINV --> MEVD --> MSKP --> MMGC
-                MMGC -->|more evidence| MEVD
-                MMGC -->|final| MRPT
+                MCOL --> MINV --> MEVD --> MSKP
+                MSKP -->|"self-correction loop"| MEVD
+                MSKP -->|"final"| MRPT
             end
 
             subgraph CORR["Disk + Network Correlation"]
                 direction TB
-                DENG["disk_correlator.py<br/>filesystem, registry, browser<br/>email, malware, crypto"]
+                DENG["disk_correlator.py<br/>filesystem, registry, browser<br/>email, malware, prefetch<br/>UserAssist, Shimcache"]
                 NENG["PCAP route<br/>HTTP objects, webmail attribution<br/>identity graph"]
-                GAPS["Evidence Gap Controller<br/>timeline, user, sender, victim<br/>persistence, confidence"]
-                DENG --> GAPS
-                NENG --> GAPS
+                DRPT["Forensic Reasoning Engine<br/>threat score, timeline<br/>challenge analysis"]
+                DENG --> DRPT
+                NENG --> DRPT
             end
         end
     end
@@ -703,7 +702,7 @@ flowchart TB
     ROUTER --> CORR
 
     MRPT --> ARTIFACTS
-    GAPS --> ARTIFACTS
+    DRPT --> ARTIFACTS
     ARTIFACTS --> JSON
     ARTIFACTS --> MD
     ARTIFACTS --> LOGS
@@ -712,7 +711,7 @@ flowchart TB
 
     class MEM,DISK,PCAP input;
     class ROUTER route;
-    class MEMORY,CORR,MCOL,MINV,MEVD,MSKP,MMGC,MRPT,DENG,NENG,GAPS,ARTIFACTS engine;
+    class MEMORY,CORR,MCOL,MINV,MEVD,MSKP,MRPT,DENG,NENG,DRPT,ARTIFACTS engine;
     class TOOLS support;
     class MCP guard;
     class JSON,MD,LOGS,BENCH output;
