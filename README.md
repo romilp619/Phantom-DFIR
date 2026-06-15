@@ -632,80 +632,70 @@ After each run, PHANTOM generates:
 ## Architecture
 
 ```mermaid
-flowchart LR
+flowchart TB
     classDef input fill:#0f172a,stroke:#38bdf8,color:#ffffff,stroke-width:1px;
+    classDef route fill:#111827,stroke:#f97316,color:#ffffff,stroke-width:1px;
     classDef engine fill:#1f2937,stroke:#a78bfa,color:#ffffff,stroke-width:1px;
     classDef tool fill:#172554,stroke:#60a5fa,color:#ffffff,stroke-width:1px;
     classDef guard fill:#064e3b,stroke:#34d399,color:#ffffff,stroke-width:1px;
     classDef output fill:#111827,stroke:#facc15,color:#ffffff,stroke-width:1px;
 
     subgraph INPUT["Evidence Sources"]
-        direction TB
-        MEM["Memory image<br/>.img .mem .raw"]
-        DISK["Disk image<br/>.E01 .raw"]
-        PCAP["Network capture<br/>.pcap .pcapng"]
+        direction LR
+        MEM["Memory<br/>.img .mem .raw"]
+        DISK["Disk<br/>.E01 .raw"]
+        PCAP["Network<br/>.pcap .pcapng"]
     end
 
     ROUTER["phantom_router.py<br/>detect evidence type<br/>dispatch correct engine"]
 
-    subgraph MEMORY["Memory Agent Pipeline"]
-        direction TB
-        MCOL["Collector<br/>Vol3 + Vol2<br/>OS/profile race<br/>parallel plugins"]
-        MINV["Investigator<br/>static rules + optional LLM<br/>IOC validation"]
-        MEVD["Evidence Agent<br/>PID/IP/service<br/>targeted re-query"]
-        MSKP["Skeptic<br/>adversarial verification<br/>false-positive clearing"]
-        MMGC["Memory Gap Controller<br/>rerun or accept<br/>max iterations"]
-        MRPT["Reporter<br/>JSON + Markdown<br/>execution log + reasoning trace"]
-        MCOL --> MINV --> MEVD --> MSKP --> MMGC
-        MMGC -->|more evidence needed| MEVD
-        MMGC -->|final| MRPT
+    subgraph SUPPORT["SIFT / Tooling + Trust Boundary"]
+        direction LR
+        TOOLS["SIFT / DFIR tools<br/>Vol3 + Vol2 wrapper<br/>Sleuth Kit, tshark, Plaso<br/>ClamAV, GPG, libbde/dislocker"]
+        MCP["MCP server<br/>20 read-only typed tools<br/>SHA256 integrity<br/>no destructive shell actions"]
     end
 
-    subgraph CORR["Disk + Network Correlation"]
-        direction TB
-        DENG["disk_correlator.py<br/>filesystem, registry, browser<br/>email, malware, crypto"]
-        NENG["PCAP / network route<br/>tshark, HTTP objects<br/>webmail attribution, identity graph"]
-        GAPS["Evidence Gap Controller<br/>timeline, user, sender, victim<br/>persistence and confidence checks"]
-        DENG --> GAPS
-        NENG --> GAPS
-    end
+    subgraph ENGINES["Autonomous Analysis Engines"]
+        direction LR
 
-    subgraph TOOLS["SIFT / DFIR Tool Layer"]
-        direction TB
-        VOL["Volatility 3<br/>Volatility 2 wrapper"]
-        TSK["Sleuth Kit<br/>mmls, fls, icat"]
-        TSHARK["tshark<br/>protocol extraction"]
-        AUX["Plaso, ClamAV, GPG<br/>libbde / dislocker"]
-    end
+        subgraph MEMORY["Memory Agent Pipeline"]
+            direction TB
+            MCOL["Collector<br/>parallel Vol2/Vol3 plugins"]
+            MINV["Investigator<br/>rules + optional LLM"]
+            MEVD["Evidence Agent<br/>targeted re-query"]
+            MSKP["Skeptic<br/>verify or clear"]
+            MMGC["Memory Gap Controller<br/>rerun or accept"]
+            MRPT["Reporter<br/>JSON + MD + trace"]
+            MCOL --> MINV --> MEVD --> MSKP --> MMGC
+            MMGC -->|more evidence| MEVD
+            MMGC -->|final| MRPT
+        end
 
-    subgraph MCP["MCP Server Trust Boundary"]
-        direction TB
-        MT["20 read-only typed tools<br/>SHA256 integrity<br/>stdio + HTTP"]
-        NO["No destructive shell tools<br/>no write/delete evidence actions"]
+        subgraph CORR["Disk + Network Correlation"]
+            direction TB
+            DENG["disk_correlator.py<br/>filesystem, registry, browser<br/>email, malware, crypto"]
+            NENG["PCAP route<br/>HTTP objects, webmail attribution<br/>identity graph"]
+            GAPS["Evidence Gap Controller<br/>timeline, user, sender, victim<br/>persistence, confidence"]
+            DENG --> GAPS
+            NENG --> GAPS
+        end
     end
 
     subgraph OUTPUT["Output + Validation"]
-        direction TB
+        direction LR
         JSON["forensic JSON"]
-        MD["analyst Markdown report"]
-        LOGS["execution and reasoning logs"]
-        BENCH["benchmark_reports.py<br/>ground_truth_cases.json"]
-        JSON --> BENCH
-        MD --> BENCH
+        MD["analyst Markdown"]
+        LOGS["execution logs<br/>reasoning trace"]
+        BENCH["benchmark_reports.py<br/>ground truth validation"]
     end
 
     MEM --> ROUTER
     DISK --> ROUTER
     PCAP --> ROUTER
-
     ROUTER --> MEMORY
     ROUTER --> CORR
 
-    TOOLS -.->|memory tools| MCOL
-    TOOLS -.->|disk tools| DENG
-    TOOLS -.->|network tools| NENG
-    MCP -.->|controlled calls| MCOL
-    MCP -.->|controlled calls| GAPS
+    SUPPORT -.-> ENGINES
 
     MRPT --> JSON
     MRPT --> MD
@@ -713,13 +703,17 @@ flowchart LR
     GAPS --> JSON
     GAPS --> MD
     GAPS --> LOGS
+    JSON --> BENCH
+    MD --> BENCH
 
     class MEM,DISK,PCAP input;
-    class ROUTER,MCOL,MINV,MEVD,MSKP,MMGC,MRPT,DENG,NENG,GAPS engine;
-    class VOL,TSK,TSHARK,AUX tool;
-    class MT,NO guard;
+    class ROUTER route;
+    class MEMORY,CORR,MCOL,MINV,MEVD,MSKP,MMGC,MRPT,DENG,NENG,GAPS engine;
+    class TOOLS tool;
+    class MCP guard;
     class JSON,MD,LOGS,BENCH output;
 ```
+
 
 
 
