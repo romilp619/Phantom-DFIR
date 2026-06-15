@@ -697,7 +697,12 @@ flowchart TB
     ROUTER --> MEMORY
     ROUTER --> CORR
 
-    SUPPORT -.-> ENGINES
+    TOOLS -.-> MCOL
+    TOOLS -.-> DENG
+    TOOLS -.-> NENG
+    MCP -.-> MCOL
+    MCP -.-> DENG
+    MCP -.-> NENG
 
     MRPT --> ARTIFACTS
     GAPS --> ARTIFACTS
