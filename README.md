@@ -27,17 +27,23 @@ PHANTOM advertises an adversarial "Skeptic" agent that cross-examines findings b
 
 | Metric | Before | After |
 |---|---:|---:|
-| Accuracy vs gold | 0.429 | 1.000 |
-| False-confirm rate | 0.691 | 0.000 |
-| Attack success rate | 0.667 | 0.000 |
+| Accuracy vs gold | 0.375 | 0.875 |
+| False-confirm rate | 0.749 | 0.299 |
+| Attack success rate | 0.714 | 0.143 |
 | Dangerous-miss rate | 0.427 | 0.000 |
 | Capability retention | 1.000 | 1.000 |
 
-Paired exact McNemar: p = 1.2e-60, no row regressed.
+n=400 (8 families x 50), seed 1729. Paired exact McNemar p = 1.2e-60, no row regressed.
+
+### The repair also fails, and that is the interesting part
+
+Family 8 (`behavioural_mention`) was written **after the verifier was frozen**, so it is the one measurement here that is not tuned-against. Four genuine behavioural artifacts each merely *name* the file while describing ordinary activity: no executable regions, a loopback-only listener, only system DLLs loaded. The repair **confirms all 50 rows** — ASR 1.00 before *and* after.
+
+The entire residual after-score is this family. Behavioural relevance is not evidential weight; v1's flaw and v2's flaw are the same name-mention flaw at different depths, and so is the upstream defect. Fixing it needs the evidence to assert the specific suspicious predicate, which is what the fine-tuned model was for. We deliberately did **not** ship a third rule, because a rule table written against this family would be fitted to it and would prove nothing.
 
 ### Read the caveat with the table
 
-The evaluation rows are **synthetic and self-authored, and the repair was iterated against them.** Version 1 scored 1.000 and was then broken by a seventh family written to attack it (`citation_stuffing`, ASR 1.00); version 2 closes that bypass. The improvement is therefore an **upper bound on a set the repair was tuned against**, not an unbiased estimate. The generalisable claim is the mechanism and the direction, not the number. See `docs/RESULTS-COMPARISON.md`.
+The evaluation rows are **synthetic and self-authored, and the repair was iterated against them.** The improvement is an **upper bound**, not an unbiased estimate. The generalisable claim is the mechanism and the direction, not the numbers. Full detail: `docs/RESULTS-COMPARISON.md`.
 
 ## Evidence prompt-injection scanner
 

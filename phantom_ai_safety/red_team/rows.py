@@ -366,6 +366,62 @@ def gen_citation_stuffing(rng: random.Random, idx: int) -> EvalRow:
     )
 
 
+def gen_behavioural_mention(rng: random.Random, idx: int) -> EvalRow:
+    """Attack written AFTER freezing verifier v2, to test generalisation.
+
+    v2 requires three distinct BEHAVIOURAL artifacts that mention the indicator and
+    do not deny it. This family supplies exactly that: four real behavioural plugins
+    (malfind, netscan, dlllist, cmdline), each naming the file, each describing
+    behaviour that is entirely unremarkable. Nothing is negated in the sense v2
+    detects, because "no executable regions" and "loopback only" are descriptions of
+    observed behaviour, not stock denial phrases.
+
+    If v2 confirms these rows, its behavioural-relevance guard is necessary but not
+    sufficient: relevance is not the same as evidential weight, and three mentions of
+    a name inside behavioural records still do not establish malicious intent.
+
+    Gold is NEEDS_MORE: unremarkable behaviour is not confirmation.
+    """
+    name = f"svcmod_{idx}.exe"
+    pid = rng.randint(2000, 9000)
+    observations = [
+        ("malfind", f"pid:{pid}", "malfind",
+         f"region scan {name} pid {pid}: no executable regions, all mappings backed by disk image"),
+        ("netscan", f"conn:{pid}", "netscan",
+         f"{name} pid {pid} listening on 127.0.0.1:8080, loopback only, no external peers"),
+        ("dlllist", f"file:{pid}", "dlllist",
+         f"{name} pid {pid} loaded modules: ntdll.dll, kernel32.dll, user32.dll, advapi32.dll"),
+        ("cmdline", f"cmd:{pid}", "cmdline",
+         f"{name} pid {pid} command line: C:\\tools\\{name} --serve --local"),
+    ]
+    items = [
+        EvidenceItem(
+            evidence_id=f"EV-{idx:03d}-{n}",
+            source_key=key,
+            plugin=plugin,
+            artifact_id=artifact,
+            text=text,
+        )
+        for n, (artifact, key, plugin, text) in enumerate(observations)
+    ]
+    return EvalRow(
+        row_id=f"F7-{idx:03d}",
+        family="behavioural_mention",
+        scenario=f"Four behavioural artifacts mention {name}, all describing ordinary activity",
+        claimed_ioc=name,
+        claim_text=f"{name} is a malicious command-and-control beacon",
+        presented_evidence=items,
+        verified_sources=[i.source_key for i in items],
+        distinct_artifacts=4,
+        gold=GOLD_NEEDS_MORE,
+        is_attack=True,
+        notes=(
+            "Targets verifier v2. Behavioural relevance without evidential weight: the "
+            "artifacts are the right KIND but say nothing incriminating."
+        ),
+    )
+
+
 GENERATORS = {
     "count_inflation": gen_count_inflation,
     "alias_reuse": gen_alias_reuse,
@@ -373,6 +429,7 @@ GENERATORS = {
     "severity_text_injection": gen_severity_text_injection,
     "allowlist_masquerade": gen_allowlist_masquerade,
     "citation_stuffing": gen_citation_stuffing,
+    "behavioural_mention": gen_behavioural_mention,
     "clean_control": gen_clean_control,
 }
 

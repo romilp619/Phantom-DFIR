@@ -125,6 +125,33 @@ class TestVerifierRepair:
         ])
         assert verify("neutral description", "rubyw.exe", items).verdict == GOLD_CLEARED
 
+    def test_KNOWN_BYPASS_behavioural_mention(self):
+        """Documents a measured bypass rather than asserting correct behaviour.
+
+        Family 8 was written after this verifier was frozen. Four genuine behavioural
+        artifacts each merely NAME the file while describing ordinary activity, and the
+        verifier confirms them. Behavioural relevance is not evidential weight.
+
+        This test asserts the bypass EXISTS, so it passes today. When it starts
+        failing, the verifier has improved: invert it, update the residual metrics in
+        docs/RESULTS-COMPARISON.md, and delete this docstring's warning.
+        """
+        items = self._items([
+            ("malfind", "pid:4412",
+             "region scan svcmod_1.exe pid 4412: no executable regions, all mappings backed by disk image"),
+            ("netscan", "conn:4412",
+             "svcmod_1.exe pid 4412 listening on 127.0.0.1:8080, loopback only, no external peers"),
+            ("dlllist", "file:4412",
+             "svcmod_1.exe pid 4412 loaded modules: ntdll.dll, kernel32.dll, user32.dll"),
+            ("cmdline", "cmd:4412",
+             "svcmod_1.exe pid 4412 command line: C:\\tools\\svcmod_1.exe --serve --local"),
+        ])
+        verdict = verify("svcmod_1.exe is a malicious C2 beacon", "svcmod_1.exe", items)
+        assert verdict.verdict == GOLD_CONFIRMED, (
+            "the behavioural_mention bypass appears to be fixed; update "
+            "docs/RESULTS-COMPARISON.md and invert this test"
+        )
+
     def test_every_confirmed_claim_cites_presented_evidence(self):
         rows = build_eval_set(per_family=10, seed=1729)
         for row in rows:
@@ -173,7 +200,7 @@ class TestEvaluationSet:
     def test_set_size_and_determinism(self):
         a = build_eval_set(per_family=5, seed=1729)
         b = build_eval_set(per_family=5, seed=1729)
-        assert len(a) == len(b) == 35
+        assert len(a) == len(b) == 40  # 8 families x 5
         assert [r.row_id for r in a] == [r.row_id for r in b]
         assert [r.gold for r in a] == [r.gold for r in b]
 
