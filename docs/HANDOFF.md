@@ -1,69 +1,71 @@
 # Handoff — Lexsi Track 2 submission (phantom-safety)
 
-State as of 2026-11-10 03:55 America/Chicago. Session was long; this is the cold-start brief.
+State as of 2026-11-10 05:05 America/Chicago. Cold-start brief.
+Repo: `phantom-safety` (3 commits, `b352283`). Long-form docs in `lexsi-work/`, mirrored to `phantom-safety/docs/`.
 
 ## Objective
 
-Prepare a winning submission for the Lexsi AI Safety and Alignment Hackathon, Track 2 (AI Red Teaming, Safety and Alignment). Deadline 2026-11-15 11:59 PM AoE. Moo handles registration and submission manually.
+Winning submission for the Lexsi AI Safety and Alignment Hackathon, Track 2 (AI Red Teaming, Safety and Alignment). Deadline 2026-11-15 11:59 PM AoE. Moo handles registration and submission.
 
-## Where things are
+## Headline finding
 
-- Derived repo: `C:\Users\Owner\Downloads\redirect\phantom-safety\` (git, 1 commit `1219666`)
-- Upstream clone: `C:\Users\Owner\Downloads\redirect\Phantom-DFIR\` — **content-unmodified**, verify with the digest note in the repo README
-- Research briefs and long-form docs: `C:\Users\Owner\Downloads\redirect\lexsi-work\` (also copied into `phantom-safety/docs/`)
-- Two WSL venvs: `~/phantom-eval-venv` (harness, pytest) and `~/phantom-train-venv` (AlignTune stack)
+PHANTOM's advertised adversarial "Skeptic" agent does not verify anything. Its verdict is a threshold on an integer that the audited agent supplies, and **five LLM strategies — including no LLM and a model that refutes everything — produced byte-identical confidences on 300 rows**. The advertised agent-to-agent argument is decorative.
 
 ## Done and verified
 
-- Audit of the upstream verification layer: 5 defects with file:line, all reproduced against real code (`scripts/smoke_harness.py`, 25 tests pass)
-- Harness runs real upstream code with tool stubs and an injectable LLM
-- Baseline over 350 synthetic rows: FCR 0.691, ASR 0.667, DMR 0.427, capability retention 1.000
-- **Headline finding: the Skeptic's LLM has zero decision authority.** Five strategies (none, echo, confirm-all, refute-all, garbage) produced byte-identical confidences on 300 rows
-- Repair (grounding/verifier.py v2): FCR 0.000, ASR 0.000, CR 1.000, McNemar p=1.2e-60
-- v1 of the repair was broken by a self-authored attack (`citation_stuffing`, ASR 1.00); v2 closes it — this arc is the strongest part of the story
+- 5 defects with file:line, all reproduced against unmodified upstream code (`scripts/smoke_harness.py`)
+- Harness drives real upstream code with tool stubs and an injectable LLM
+- 8 attack families; baseline over n=400: FCR 0.749, ASR 0.714, DMR 0.427, capability retention 1.000
+- Repair (`grounding/verifier.py`): FCR 0.299, ASR 0.143, CR 1.000, McNemar p=1.2e-60, no row regressed
+- **Family 8 (`behavioural_mention`) breaks the repair** — written after v2 was frozen, ASR 1.00 before *and* after. The entire residual is this one family. Behavioural relevance is not evidential weight.
 - Injection scanner: 15/15 recall, 0/12 false positives, fence neutralisation tested
+- Dataset: 2,400 train / 400 held-out, disjoint seed ranges, id overlap 0 (`data/MANIFEST.json`)
+- 26 tests pass; working tree clean
 
-## Blocked
+## Blocked — needs Moo, about two minutes
 
-**The fine-tuned model does not exist.** All Cohere Labs checkpoints are GATED and return HTTP 401 anonymously:
+**The fine-tuned model does not exist.** All 13 candidate Cohere checkpoints are gated `auto` and return HTTP 401 anonymously (`scripts/probe_hf_access.py`). There is **no Hugging Face credential on this machine**: no `token`, no `stored_tokens`, no HF key in any role file, no vault note. The HF cache contains only anonymously downloaded public models.
 
-```
-CohereLabs/tiny-aya-global, tiny-aya-base, aya-expanse-8b  -> 401 gated repo
-```
+I cannot do this part. It needs his account and his assent:
 
-To unblock, a human must (1) sign in to Hugging Face, (2) accept the licence terms at
-`https://huggingface.co/CohereLabs/tiny-aya-global`, (3) provide a read token. No HF token exists in
-`%USERPROFILE%\.secret-roles`, `secret-run` is not on PATH, and there is no HF cache.
+1. Sign in to https://huggingface.co
+2. Open https://huggingface.co/CohereLabs/tiny-aya-global and click **Agree and access repository** (Tiny Aya is one 3.35B model, tuned per region; `tiny-aya-global` is the instruction-tuned one)
+3. Create a **read** token at https://huggingface.co/settings/tokens
+4. Put it somewhere reachable, e.g. `%USERPROFILE%\.secret-roles\hf.env` with `HF_TOKEN=hf_...`. `secret-run` is **not on PATH** — it needs locating or the token passed another way.
 
-Training target decision is ALSO unresolved: Moo said the RTX 4060 laptop is on, but this machine has
-an RTX 5070 Ti (16 GB). The recommended model changes with the answer:
-- 8 GB (4060): `CohereLabs/tiny-aya-global`, 4-bit NF4 QLoRA, seq 4096, LoRA r=16
-- 16 GB (5070 Ti): `CohereLabs/aya-expanse-8b` at 2048-4096 context is the stronger result
-
-Verified incompatibility risk: AlignTune pins `transformers 5.22.2` / `trl 1.7.1`; the Cohere
-checkpoints target the 4.x line. `scripts/check_model_compat.py` is the gate — it currently fails only
-on auth, so the version question is STILL UNANSWERED.
-
-## Next action (cold-startable)
+Then verify the gate is actually open:
 
 ```bash
-# after the token exists
 wsl -d kali-linux
-export HF_TOKEN=<token>   # use secret-run, never paste into a transcript
 cd /mnt/c/Users/Owner/Downloads/redirect/phantom-safety
-$HOME/phantom-train-venv/bin/python scripts/check_model_compat.py   # must print no failures
+$HOME/phantom-eval-venv/bin/python scripts/probe_hf_access.py   # expect USABLE ANONYMOUSLY or a token path
 ```
-Then: load the model, one templated generate, one LoRA step. Only then schedule training.
+
+## Environment: laptop is ready
+
+- Host: `gaming-laptop` / `desktop-ti68mc5` / **100.96.130.88**, user `Moo`, key `C:\Users\Owner\.dsh\mc-keys\id_rsa`
+- **MagicDNS does not resolve from this box** (`desktop-ti68mc5.tail7ffe8f.ts.net` -> no such host). Use the raw Tailscale IP, and note PowerShell mangles `&` in remote commands: pass ssh args as an array, one command per call.
+- GPU: **RTX 4060 Laptop, 8188 MiB, driver 621.01**. Verified idle (0%, 3 MiB, 32 C) — only Overwolf loaded.
+- **Ubuntu WSL installed** this session (`wsl --install -d Ubuntu --no-launch`), currently Stopped.
+- Windows Python 3.13.14 present.
+
+Unresolved risk: AlignTune pins `transformers 5.22.2` / `trl 1.7.1`; the Cohere checkpoints target 4.x. `scripts/check_model_compat.py` is the gate and currently fails only on auth, so **the version question is still unanswered**.
+
+For 8 GB: `tiny-aya-global`, 4-bit NF4 QLoRA, seq 4096, LoRA r=16, microbatch 1 + grad accum + gradient checkpointing. Set `.wslconfig` `memory=12GB` before training.
 
 ## Honesty constraints that must survive
 
-1. The 1.000 after-score is an **upper bound on a self-authored set the repair was tuned against**. Say so every time. An independent held-out set is required for an unbiased number.
-2. Do not claim a fine-tuned model, a HF dataset, or a HF model repo exists until it does.
-3. `allowlist_masquerade` did NOT reproduce as measured; it stays labelled a source reading, not a result.
-4. Lexsi repos are LSAL source-available, not uniformly open source. AuditKIT Section 1A wants written acknowledgement to support@lexsi.ai. Moo sends it.
-5. Cohere checkpoints are `cc-by-nc-4.0` (non-commercial). State it.
+1. The after-numbers are an **upper bound on a self-authored set the repair was tuned against**. Say so every time.
+2. Family 8 is the only non-tuned measurement; it shows the repair fails. Do not quietly drop it.
+3. Do not claim a fine-tuned model, HF dataset, or HF model repo exists until it does.
+4. `allowlist_masquerade` did NOT reproduce as measured; it stays a source reading, not a result.
+5. Lexsi repos are LSAL source-available, not uniformly open source. AuditKIT Section 1A wants written acknowledgement to support@lexsi.ai. **Moo sends it.**
+6. Cohere checkpoints are `cc-by-nc-4.0` (non-commercial).
 
 ## Not started
 
-HF dataset publishing, HF article, model card, UI dashboard section, architecture diagram, demo video,
-CuratorKIT quality-gate integration, SafeTune leg.
+HF dataset publishing, HF article, model card, UI dashboard section (Module E), architecture diagram, demo video, CuratorKIT quality-gate integration, SafeTune leg, CFReDS "Mr. Evil" demo.
+
+## Cleanup
+
+Nothing running. Two WSL venvs on **this** box (`~/phantom-eval-venv`, `~/phantom-train-venv`) are task-owned and can be deleted to reclaim space. Ubuntu WSL on the laptop is a deliberate install — keep it. No GPU work was ever run on this machine, so Moo's session was never disturbed.
