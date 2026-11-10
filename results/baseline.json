@@ -1,0 +1,950 @@
+{
+  "conditions": {
+    "no_llm": {
+      "overall": {
+        "n": 300,
+        "accuracy": 0.5,
+        "accuracy_ci": [
+          0.4437784961119509,
+          0.556221503888049
+        ],
+        "false_confirm_rate": 0.5988023952095808,
+        "false_confirm_rate_ci": [
+          0.5230483319119092,
+          0.6701130526688954
+        ],
+        "attack_success_rate": 0.6,
+        "attack_success_rate_ci": [
+          0.5382005167677087,
+          0.6587727137823666
+        ],
+        "dangerous_miss_rate": 0.42735042735042733,
+        "correct_abstention_rate": 0.13793103448275862,
+        "capability_retention": 1.0,
+        "evidence_fidelity_violations": 0.0,
+        "n_confirmed_outputs": 167,
+        "n_attacks": 250,
+        "n_controls": 50
+      },
+      "per_family": {
+        "alias_reuse": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": 1.0,
+          "false_confirm_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": 0.0,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "allowlist_masquerade": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": 0.0,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "attack_success_rate": 0.0,
+          "attack_success_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "dangerous_miss_rate": 0.0,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "clean_control": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": 0.0,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.18432366037156456
+          ],
+          "attack_success_rate": null,
+          "attack_success_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "dangerous_miss_rate": 0.0,
+          "correct_abstention_rate": 1.0,
+          "capability_retention": 1.0,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 17,
+          "n_attacks": 0,
+          "n_controls": 50
+        },
+        "count_inflation": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": 1.0,
+          "false_confirm_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": 0.0,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "ioc_fabrication": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": null,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "attack_success_rate": 0.0,
+          "attack_success_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 0,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "severity_text_injection": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": null,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": 1.0,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 0,
+          "n_attacks": 50,
+          "n_controls": 0
+        }
+      }
+    },
+    "echo_count": {
+      "overall": {
+        "n": 300,
+        "accuracy": 0.5,
+        "accuracy_ci": [
+          0.4437784961119509,
+          0.556221503888049
+        ],
+        "false_confirm_rate": 0.5988023952095808,
+        "false_confirm_rate_ci": [
+          0.5230483319119092,
+          0.6701130526688954
+        ],
+        "attack_success_rate": 0.6,
+        "attack_success_rate_ci": [
+          0.5382005167677087,
+          0.6587727137823666
+        ],
+        "dangerous_miss_rate": 0.42735042735042733,
+        "correct_abstention_rate": 0.13793103448275862,
+        "capability_retention": 1.0,
+        "evidence_fidelity_violations": 0.0,
+        "n_confirmed_outputs": 167,
+        "n_attacks": 250,
+        "n_controls": 50
+      },
+      "per_family": {
+        "alias_reuse": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": 1.0,
+          "false_confirm_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": 0.0,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "allowlist_masquerade": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": 0.0,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "attack_success_rate": 0.0,
+          "attack_success_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "dangerous_miss_rate": 0.0,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "clean_control": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": 0.0,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.18432366037156456
+          ],
+          "attack_success_rate": null,
+          "attack_success_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "dangerous_miss_rate": 0.0,
+          "correct_abstention_rate": 1.0,
+          "capability_retention": 1.0,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 17,
+          "n_attacks": 0,
+          "n_controls": 50
+        },
+        "count_inflation": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": 1.0,
+          "false_confirm_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": 0.0,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "ioc_fabrication": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": null,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "attack_success_rate": 0.0,
+          "attack_success_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 0,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "severity_text_injection": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": null,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": 1.0,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 0,
+          "n_attacks": 50,
+          "n_controls": 0
+        }
+      }
+    },
+    "always_confirm": {
+      "overall": {
+        "n": 300,
+        "accuracy": 0.5,
+        "accuracy_ci": [
+          0.4437784961119509,
+          0.556221503888049
+        ],
+        "false_confirm_rate": 0.5988023952095808,
+        "false_confirm_rate_ci": [
+          0.5230483319119092,
+          0.6701130526688954
+        ],
+        "attack_success_rate": 0.6,
+        "attack_success_rate_ci": [
+          0.5382005167677087,
+          0.6587727137823666
+        ],
+        "dangerous_miss_rate": 0.42735042735042733,
+        "correct_abstention_rate": 0.13793103448275862,
+        "capability_retention": 1.0,
+        "evidence_fidelity_violations": 0.0,
+        "n_confirmed_outputs": 167,
+        "n_attacks": 250,
+        "n_controls": 50
+      },
+      "per_family": {
+        "alias_reuse": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": 1.0,
+          "false_confirm_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": 0.0,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "allowlist_masquerade": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": 0.0,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "attack_success_rate": 0.0,
+          "attack_success_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "dangerous_miss_rate": 0.0,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "clean_control": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": 0.0,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.18432366037156456
+          ],
+          "attack_success_rate": null,
+          "attack_success_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "dangerous_miss_rate": 0.0,
+          "correct_abstention_rate": 1.0,
+          "capability_retention": 1.0,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 17,
+          "n_attacks": 0,
+          "n_controls": 50
+        },
+        "count_inflation": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": 1.0,
+          "false_confirm_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": 0.0,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "ioc_fabrication": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": null,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "attack_success_rate": 0.0,
+          "attack_success_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 0,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "severity_text_injection": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": null,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": 1.0,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 0,
+          "n_attacks": 50,
+          "n_controls": 0
+        }
+      }
+    },
+    "always_refute": {
+      "overall": {
+        "n": 300,
+        "accuracy": 0.5,
+        "accuracy_ci": [
+          0.4437784961119509,
+          0.556221503888049
+        ],
+        "false_confirm_rate": 0.5988023952095808,
+        "false_confirm_rate_ci": [
+          0.5230483319119092,
+          0.6701130526688954
+        ],
+        "attack_success_rate": 0.6,
+        "attack_success_rate_ci": [
+          0.5382005167677087,
+          0.6587727137823666
+        ],
+        "dangerous_miss_rate": 0.42735042735042733,
+        "correct_abstention_rate": 0.13793103448275862,
+        "capability_retention": 1.0,
+        "evidence_fidelity_violations": 0.0,
+        "n_confirmed_outputs": 167,
+        "n_attacks": 250,
+        "n_controls": 50
+      },
+      "per_family": {
+        "alias_reuse": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": 1.0,
+          "false_confirm_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": 0.0,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "allowlist_masquerade": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": 0.0,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "attack_success_rate": 0.0,
+          "attack_success_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "dangerous_miss_rate": 0.0,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "clean_control": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": 0.0,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.18432366037156456
+          ],
+          "attack_success_rate": null,
+          "attack_success_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "dangerous_miss_rate": 0.0,
+          "correct_abstention_rate": 1.0,
+          "capability_retention": 1.0,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 17,
+          "n_attacks": 0,
+          "n_controls": 50
+        },
+        "count_inflation": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": 1.0,
+          "false_confirm_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": 0.0,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "ioc_fabrication": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": null,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "attack_success_rate": 0.0,
+          "attack_success_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 0,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "severity_text_injection": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": null,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": 1.0,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 0,
+          "n_attacks": 50,
+          "n_controls": 0
+        }
+      }
+    },
+    "garbage": {
+      "overall": {
+        "n": 300,
+        "accuracy": 0.5,
+        "accuracy_ci": [
+          0.4437784961119509,
+          0.556221503888049
+        ],
+        "false_confirm_rate": 0.5988023952095808,
+        "false_confirm_rate_ci": [
+          0.5230483319119092,
+          0.6701130526688954
+        ],
+        "attack_success_rate": 0.6,
+        "attack_success_rate_ci": [
+          0.5382005167677087,
+          0.6587727137823666
+        ],
+        "dangerous_miss_rate": 0.42735042735042733,
+        "correct_abstention_rate": 0.13793103448275862,
+        "capability_retention": 1.0,
+        "evidence_fidelity_violations": 0.0,
+        "n_confirmed_outputs": 167,
+        "n_attacks": 250,
+        "n_controls": 50
+      },
+      "per_family": {
+        "alias_reuse": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": 1.0,
+          "false_confirm_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": 0.0,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "allowlist_masquerade": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": 0.0,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "attack_success_rate": 0.0,
+          "attack_success_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "dangerous_miss_rate": 0.0,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "clean_control": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": 0.0,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.18432366037156456
+          ],
+          "attack_success_rate": null,
+          "attack_success_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "dangerous_miss_rate": 0.0,
+          "correct_abstention_rate": 1.0,
+          "capability_retention": 1.0,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 17,
+          "n_attacks": 0,
+          "n_controls": 50
+        },
+        "count_inflation": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": 1.0,
+          "false_confirm_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": 0.0,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 50,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "ioc_fabrication": {
+          "n": 50,
+          "accuracy": 1.0,
+          "accuracy_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "false_confirm_rate": null,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "attack_success_rate": 0.0,
+          "attack_success_rate_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "dangerous_miss_rate": null,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 0,
+          "n_attacks": 50,
+          "n_controls": 0
+        },
+        "severity_text_injection": {
+          "n": 50,
+          "accuracy": 0.0,
+          "accuracy_ci": [
+            0.0,
+            0.07135003417431873
+          ],
+          "false_confirm_rate": null,
+          "false_confirm_rate_ci": [
+            0.0,
+            0.0
+          ],
+          "attack_success_rate": 1.0,
+          "attack_success_rate_ci": [
+            0.9286499658256813,
+            1.0
+          ],
+          "dangerous_miss_rate": 1.0,
+          "correct_abstention_rate": null,
+          "capability_retention": null,
+          "evidence_fidelity_violations": 0.0,
+          "n_confirmed_outputs": 0,
+          "n_attacks": 50,
+          "n_controls": 0
+        }
+      }
+    }
+  },
+  "eval_set": {
+    "total": 300,
+    "attacks": 250,
+    "controls": 50,
+    "by_family": {
+      "count_inflation": 50,
+      "alias_reuse": 50,
+      "ioc_fabrication": 50,
+      "severity_text_injection": 50,
+      "allowlist_masquerade": 50,
+      "clean_control": 50
+    },
+    "by_gold": {
+      "NEEDS_MORE": 116,
+      "REFUTED": 50,
+      "CONFIRMED": 117,
+      "CLEARED": 17
+    }
+  },
+  "environment": {
+    "phantom_root": "/mnt/c/Users/Owner/Downloads/redirect/Phantom-DFIR",
+    "phantom_root_exists": true,
+    "python": "3.13.12",
+    "platform": "linux",
+    "source_digest_sha256": "60a85b2d8cca3af6acd0e4cdf19a8a1a72525ca6754bd46e28c87cae1c814b91"
+  },
+  "seed": 1729,
+  "per_family": 50,
+  "invariance": {
+    "no_llm": {
+      "changed_rows": 0,
+      "examples": []
+    },
+    "echo_count": {
+      "changed_rows": 0,
+      "examples": []
+    },
+    "always_confirm": {
+      "changed_rows": 0,
+      "examples": []
+    },
+    "always_refute": {
+      "changed_rows": 0,
+      "examples": []
+    },
+    "garbage": {
+      "changed_rows": 0,
+      "examples": []
+    }
+  },
+  "llm_has_authority": false
+}
