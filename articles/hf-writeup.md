@@ -50,12 +50,12 @@ The evaluation set is 400 synthetic rows across eight families plus a clean cont
 
 **Capability retention is measured on untouched control rows.** Without it, a system could post a perfect safety score by refusing to confirm anything, and the score would be meaningless.
 
-### Baseline, upstream, n=400
+### Baseline, upstream, n=550
 
 | Metric | Value |
 |---|---:|
-| False-confirm rate | 0.749 |
-| Attack success rate | 0.714 |
+| False-confirm rate | 0.839 |
+| Attack success rate | 0.800 |
 | Dangerous-miss rate | 0.427 |
 | Capability retention | 1.000 |
 
@@ -77,41 +77,50 @@ Capability retention of 1.000 is the important control: the upstream layer handl
 
 | Metric | Before | After |
 |---|---:|---:|
-| Accuracy vs gold | 0.375 | 0.875 |
-| False-confirm rate | 0.749 | 0.299 |
-| Attack success rate | 0.714 | 0.143 |
+| Accuracy vs gold | 0.273 | 0.636 |
+| False-confirm rate | 0.839 | 0.631 |
+| Attack success rate | 0.800 | 0.400 |
 | Dangerous-miss rate | 0.427 | **0.000** |
 | Capability retention | 1.000 | **1.000** |
-| Citation coverage on confirmed rows | 0/267 | 167/167 |
+| Citation coverage on confirmed rows | 0/417 | 317/317 |
 
 Paired exact McNemar: 200 rows wrong before and right after, **0 rows right before and wrong after**, p = 1.2e-60.
 
 ### Replication on a disjoint seed
 
-The figures above are measured on rows the repair was built against, which is a real weakness. So we generated a second set from a **disjoint seed range** (20000 for training, 90000 for held-out) with zero row-id overlap, and scored the repair on rows it had never been fitted to. It reproduces **exactly** — 0.875 / 0.299 / 0.143 / 0.000 / 1.000, with the same single family failing.
+The figures above are measured on rows the repair was built against, which is a real weakness. So we generated a second set from a **disjoint seed range** (20000 for training, 90000 for held-out) with zero row-id overlap, and scored the repair on rows it had never been fitted to. It reproduces **exactly** — 0.636 / 0.631 / 0.400 / 0.000 / 1.000, with the same four families failing.
 
 That rules out per-row memorisation and seed luck. It does **not** rule out generator overfitting, and section 4 is why that distinction matters.
 
 ---
 
-## 4. Where the repair fails
+## 4. Where the repair fails — and how we found out
 
-Family 8 (`behavioural_mention`) was written **after the verifier was frozen**, making it the only genuinely non-tuned measurement here.
+We did not trust the numbers above, because we wrote the attacks. So we ran a second red team with a different rule: **an independent model was given the specification of the repair and nothing else** — no implementation, no existing attacks, no code. Withholding the code was deliberate. It makes the attacks a test of whether the *idea* generalises, rather than a probe for implementation details.
 
-Four artifacts from genuine behavioural plugins — malfind, netscan, dlllist, cmdline — each name the file, and each describes activity that is entirely ordinary: no executable regions, a loopback-only listener, only system DLLs loaded, and a `--serve --local` command line.
+All three families it produced defeated the repair, each at attack success rate 1.00. **They take the after-score from 0.143 on the fully self-authored set to 0.400.** That is the honest number, and it is the most useful thing in this write-up.
 
-| | Before | After |
-|---|---:|---:|
-| ASR | 1.00 | **1.00** |
-| False-confirm rate | 1.00 | **1.00** |
+The failures are not all the same kind, and the difference is the interesting part.
 
-**The repair confirms every one of these rows.** The entire residual after-score is this family.
+### Implementation gaps — fixable in principle
 
-The lesson is precise: **behavioural relevance is not evidential weight.** The first version of the repair stopped treating a scan log as corroboration, then treated four innocuous behaviour records as corroboration instead. Both are counting name mentions. The upstream defect — an evidence count and a `BENIGN_INDICATORS` substring match — is the same flaw at shallower depth.
+**Identity alias multiplication.** The repair counts corroboration by distinct artifact identity, but nothing requires the identities an attacker supplies to be canonical. One process is described under four namespaces: a PID, a process GUID, an image path, a handle-table key. All four are genuine behavioural plugins; none denies anything. Because identity is compared as an opaque string, **one process becomes four votes** — the repair's central rule defeated through its own mechanism.
 
-Fixing it properly needs the evidence to assert *the suspicious predicate the claim depends on*: for a C2 claim, external network peers; for an injection claim, an executable region. That is a semantic judgement over arbitrary text, which is exactly what a fine-tuned model was meant to supply.
+**Semantic denial.** Citation validity requires that a cited artifact "mentions the indicator and does not deny it", with denial detected from a word list. These artifacts do deny the claim — each asserts the process never ran — but they say `launch count = 0`, which contains none of the listed words. The citation validates and corroborates. This is the *same class of defect as the upstream `BENIGN_INDICATORS` substring match*: a string test standing in for a meaning.
 
-**We deliberately did not ship a third rule.** A rule table written while looking at this family would be fitted to it and would demonstrate nothing. Reporting the ceiling is more useful than papering over it, and it is the honest reason the model half of the project matters.
+### A specification gap — not fixable by better code
+
+**Ordinary contact inflation.** Four genuinely distinct artifacts: four separate connections from four separate processes, all ordinary HTTPS traffic with modest byte counts. Every rule is satisfied honestly — distinct artifacts, behavioural plugin, indicator mentioned, nothing denied, claim wording inert. The repair **confirms while correctly implementing its own specification.**
+
+The defect is in the specification. It equates "three or more distinct behavioural artifacts mentioning the indicator" with established maliciousness, and contact is not capability or intent. No amount of code fixes this.
+
+A related family written by us after the verifier was frozen shows the same shape: four behavioural artifacts that merely *name* a file while describing unremarkable activity — no executable regions, a loopback-only listener, only system DLLs loaded. Also confirmed, also at ASR 1.00. **Behavioural relevance is not evidential weight**, and this is the flaw the first two versions of the repair shared: v1 treated a scan log as corroboration, v2 treated four innocuous behaviour records as corroboration. Both count name mentions. The upstream defect — an evidence count and a substring match — is the same flaw at shallower depth.
+
+### Why we ship the failure instead of a patch
+
+The reflex is to add canonicalisation and more negation patterns. We did not, for a specific reason: **the identity space is open-ended.** Extracting PIDs still leaves GUID and path namespaces distinct, so the alias attack survives a partial fix; and any lexical negation test is evaded by the next construction that means "no" without writing it. Patching would produce numbers fitted to this red-teamer rather than a more correct verifier.
+
+The honest conclusion is stronger than a patch: **the repair's central rule is not deterministically enforceable**, because "the same artifact" is an open-ended identity judgement and "denies the claim" is an open-ended semantic one. Both are exactly what a fine-tuned model was meant to supply. The blocked model component is therefore not a nice-to-have — it is where the remaining failures live.
 
 ---
 

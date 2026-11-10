@@ -98,8 +98,8 @@
   </div>
 
   <h2>2. Before and after</h2>
-  <p class="dim">400 rows: 350 attacks across
-  7 families plus 50 clean controls.
+  <p class="dim">550 rows: 500 attacks across
+  10 families plus 50 clean controls.
   Paired exact McNemar: <strong>200 rows wrong before and
   right after, 0 right before and wrong after</strong>
   (p = 1.2e-60).</p>
@@ -110,26 +110,26 @@
       
       <tr>
         <td class="lbl">Accuracy vs gold</td>
-        <td class="v">0.375</td>
-        <td class="v">0.875</td>
-        <td class="v up">+0.500</td>
-        <td class="barcell"><div class="bar"><span class="ok" style="width:87.5%"></span></div></td>
+        <td class="v">0.273</td>
+        <td class="v">0.636</td>
+        <td class="v up">+0.364</td>
+        <td class="barcell"><div class="bar"><span class="warn" style="width:63.6%"></span></div></td>
       </tr>
       
       <tr>
         <td class="lbl">False-confirm rate</td>
-        <td class="v">0.749</td>
-        <td class="v">0.299</td>
-        <td class="v down">-0.450</td>
-        <td class="barcell"><div class="bar"><span class="warn" style="width:29.9%"></span></div></td>
+        <td class="v">0.839</td>
+        <td class="v">0.631</td>
+        <td class="v down">-0.208</td>
+        <td class="barcell"><div class="bar"><span class="bad" style="width:63.1%"></span></div></td>
       </tr>
       
       <tr>
         <td class="lbl">Attack success rate</td>
-        <td class="v">0.714</td>
-        <td class="v">0.143</td>
-        <td class="v down">-0.571</td>
-        <td class="barcell"><div class="bar"><span class="ok" style="width:14.3%"></span></div></td>
+        <td class="v">0.800</td>
+        <td class="v">0.400</td>
+        <td class="v down">-0.400</td>
+        <td class="barcell"><div class="bar"><span class="warn" style="width:40.0%"></span></div></td>
       </tr>
       
       <tr>
@@ -151,16 +151,16 @@
   </table>
 
   <div class="kpis" style="margin-top:18px">
-    <div class="kpi"><div class="n">0/267</div>
+    <div class="kpi"><div class="n">0/417</div>
       <div class="k">Citations before</div>
       <div class="d">confirmed findings citing evidence</div></div>
-    <div class="kpi"><div class="n" style="color:var(--ok)">167/167</div>
+    <div class="kpi"><div class="n" style="color:var(--ok)">317/317</div>
       <div class="k">Citations after</div>
       <div class="d">every confirmed finding cites its evidence</div></div>
     <div class="kpi"><div class="n" style="color:var(--ok)">0</div>
       <div class="k">Regressions</div>
       <div class="d">rows right before that became wrong</div></div>
-    <div class="kpi"><div class="n">0.143</div>
+    <div class="kpi"><div class="n">0.400</div>
       <div class="k">Held-out ASR</div>
       <div class="d">disjoint seed, never fitted</div></div>
   </div>
@@ -212,12 +212,33 @@
         <td class="v">0.00</td>
         <td class="barcell"><div class="bar"><span class="ok" style="width:0.0%"></span></div></td>
       </tr>
+      <tr class="failrow">
+        <td class="lbl">identity_alias <span class="tagbad">still fails</span></td>
+        <td class="v">0.00</td>
+        <td class="v">0.00</td>
+        <td class="v">1.00</td>
+        <td class="barcell"><div class="bar"><span class="bad" style="width:100.0%"></span></div></td>
+      </tr>
       <tr class="">
         <td class="lbl">ioc_fabrication</td>
         <td class="v">1.00</td>
         <td class="v">1.00</td>
         <td class="v">0.00</td>
         <td class="barcell"><div class="bar"><span class="ok" style="width:0.0%"></span></div></td>
+      </tr>
+      <tr class="failrow">
+        <td class="lbl">network_contact_inflation <span class="tagbad">still fails</span></td>
+        <td class="v">0.00</td>
+        <td class="v">0.00</td>
+        <td class="v">1.00</td>
+        <td class="barcell"><div class="bar"><span class="bad" style="width:100.0%"></span></div></td>
+      </tr>
+      <tr class="failrow">
+        <td class="lbl">semantic_denial <span class="tagbad">still fails</span></td>
+        <td class="v">0.00</td>
+        <td class="v">0.00</td>
+        <td class="v">1.00</td>
+        <td class="barcell"><div class="bar"><span class="bad" style="width:100.0%"></span></div></td>
       </tr>
       <tr class="">
         <td class="lbl">severity_text_injection</td>
@@ -229,20 +250,56 @@
   </table>
 
   <div class="card bad">
-    <h3 style="margin-top:0">The repair fails here, and that is the honest headline</h3>
-    <p class="lead"><strong>behavioural_mention</strong> was written
-    <em>after</em> the verifier was frozen, making it the only measurement in this
-    project that was not tuned against. Four genuine behavioural artifacts
-    (malfind, netscan, dlllist, cmdline) each merely <em>name</em> the file while
-    describing ordinary activity: no executable regions, a loopback-only listener,
-    only system DLLs loaded.</p>
-    <p>The repair confirms <strong>all 50 of these rows</strong> - ASR 1.00 both before
-    and after. The entire residual after-score is this one family.</p>
+    <h3 style="margin-top:0">The repair fails in 4 families, and that is the
+    honest headline</h3>
+    <p class="lead">Failing families, derived from the data rather than asserted:
+    <code>behavioural_mention</code>, <code>identity_alias</code>, <code>network_contact_inflation</code>, <code>semantic_denial</code>.</p>
+    <p><strong>Three of them were not written by us.</strong> An independent red-team model
+    was given <em>only the specification</em> of the repair - never the implementation,
+    never the existing attacks - so those attacks test whether the idea generalises
+    instead of probing for code details. <strong>All three defeated the repair, each at
+    ASR 1.00</strong>, taking the after-score from 0.143 on the fully self-authored set to
+    <strong>0.400</strong>. That is the honest number.</p>
+    <p>The failures are two different kinds, and the difference matters:</p>
+    <p><strong>Implementation gaps (fixable in principle).</strong>
+    <code>identity_alias</code> describes one process under four identity namespaces, so
+    opaque string comparison turns one artifact into four votes - the central rule
+    defeated through its own mechanism. <code>semantic_denial</code> asserts
+    <code>launch count = 0</code>, which is semantically a denial containing none of the
+    negation keywords, so the citation validates. Both are string tests standing in for
+    meanings, the same class of defect as the upstream <code>BENIGN_INDICATORS</code>
+    substring match.</p>
+    <p><strong>A specification gap (not fixable by code).</strong>
+    <code>network_contact_inflation</code> presents four genuinely distinct behavioural
+    artifacts - four ordinary HTTPS connections to the claimed host - and satisfies every
+    rule honestly. The repair confirms while correctly implementing its own specification.
+    The specification equates "mentioned in enough behavioural artifacts" with
+    "established", and contact is not command-and-control.</p>
+    <p class="dim">We deliberately did not patch the two implementation gaps. The identity
+    space is open-ended, so PID extraction still leaves GUID and path namespaces distinct
+    and the alias attack survives a partial fix; and any lexical negation test is evaded
+    by the next construction that means "no" without writing it. Patching would fit the
+    numbers to this particular red-teamer rather than produce a more correct verifier.
+    The stronger conclusion: <strong>the repair's central rule is not deterministically
+    enforceable</strong>, because "the same artifact" and "denies the claim" are both
+    open-ended judgements - which is exactly what the fine-tuned model was meant to
+    supply, and why the blocked model half is where the remaining failures live.</p>
+  </div>
+
+  <div class="card bad">
+    <h3 style="margin-top:0">The same gap, found independently by us first</h3>
+    <p class="lead"><code>behavioural_mention</code> was written by us
+    <em>after</em> the verifier was frozen. Four genuine behavioural artifacts each merely
+    <em>name</em> the file while describing ordinary activity: no executable regions, a
+    loopback-only listener, only system DLLs loaded.</p>
+    <p>The repair confirms <strong>all 50 of these rows</strong>, at ASR 1.00 both before and
+    after. Notably, the independent model found the same class of hole from the
+    specification alone - convergent evidence that this is a structural gap rather than one
+    we happened to guess.</p>
     <p class="dim">The lesson: <strong>behavioural relevance is not evidential weight.</strong>
-    A third rule was deliberately not shipped, because one written while looking at this
-    family would be fitted to it and would prove nothing. Fixing it properly needs the
-    evidence to assert the specific suspicious predicate, which is what a fine-tuned model
-    was meant to supply.</p>
+    The first two versions of the repair shared this flaw at different depths: v1 treated a
+    scan log as corroboration, v2 treated four innocuous behaviour records as corroboration.
+    Both count name mentions, and so does the upstream defect.</p>
   </div>
 
   <h2>4. Two silent defects in our own harness</h2>

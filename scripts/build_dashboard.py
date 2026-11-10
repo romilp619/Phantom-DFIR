@@ -270,20 +270,56 @@ def build_html(comp, held, base) -> str:
   </table>
 
   <div class="card bad">
-    <h3 style="margin-top:0">The repair fails here, and that is the honest headline</h3>
-    <p class="lead"><strong>behavioural_mention</strong> was written
-    <em>after</em> the verifier was frozen, making it the only measurement in this
-    project that was not tuned against. Four genuine behavioural artifacts
-    (malfind, netscan, dlllist, cmdline) each merely <em>name</em> the file while
-    describing ordinary activity: no executable regions, a loopback-only listener,
-    only system DLLs loaded.</p>
-    <p>The repair confirms <strong>all 50 of these rows</strong> - ASR 1.00 both before
-    and after. The entire residual after-score is this one family.</p>
+    <h3 style="margin-top:0">The repair fails in {len(failing)} families, and that is the
+    honest headline</h3>
+    <p class="lead">Failing families, derived from the data rather than asserted:
+    {', '.join(f'<code>{html.escape(f)}</code>' for f in failing)}.</p>
+    <p><strong>Three of them were not written by us.</strong> An independent red-team model
+    was given <em>only the specification</em> of the repair - never the implementation,
+    never the existing attacks - so those attacks test whether the idea generalises
+    instead of probing for code details. <strong>All three defeated the repair, each at
+    ASR 1.00</strong>, taking the after-score from 0.143 on the fully self-authored set to
+    <strong>0.400</strong>. That is the honest number.</p>
+    <p>The failures are two different kinds, and the difference matters:</p>
+    <p><strong>Implementation gaps (fixable in principle).</strong>
+    <code>identity_alias</code> describes one process under four identity namespaces, so
+    opaque string comparison turns one artifact into four votes - the central rule
+    defeated through its own mechanism. <code>semantic_denial</code> asserts
+    <code>launch count = 0</code>, which is semantically a denial containing none of the
+    negation keywords, so the citation validates. Both are string tests standing in for
+    meanings, the same class of defect as the upstream <code>BENIGN_INDICATORS</code>
+    substring match.</p>
+    <p><strong>A specification gap (not fixable by code).</strong>
+    <code>network_contact_inflation</code> presents four genuinely distinct behavioural
+    artifacts - four ordinary HTTPS connections to the claimed host - and satisfies every
+    rule honestly. The repair confirms while correctly implementing its own specification.
+    The specification equates "mentioned in enough behavioural artifacts" with
+    "established", and contact is not command-and-control.</p>
+    <p class="dim">We deliberately did not patch the two implementation gaps. The identity
+    space is open-ended, so PID extraction still leaves GUID and path namespaces distinct
+    and the alias attack survives a partial fix; and any lexical negation test is evaded
+    by the next construction that means "no" without writing it. Patching would fit the
+    numbers to this particular red-teamer rather than produce a more correct verifier.
+    The stronger conclusion: <strong>the repair's central rule is not deterministically
+    enforceable</strong>, because "the same artifact" and "denies the claim" are both
+    open-ended judgements - which is exactly what the fine-tuned model was meant to
+    supply, and why the blocked model half is where the remaining failures live.</p>
+  </div>
+
+  <div class="card bad">
+    <h3 style="margin-top:0">The same gap, found independently by us first</h3>
+    <p class="lead"><code>behavioural_mention</code> was written by us
+    <em>after</em> the verifier was frozen. Four genuine behavioural artifacts each merely
+    <em>name</em> the file while describing ordinary activity: no executable regions, a
+    loopback-only listener, only system DLLs loaded.</p>
+    <p>The repair confirms <strong>all 50 of these rows</strong>, at ASR 1.00 both before and
+    after. Notably, the independent model found the same class of hole from the
+    specification alone - convergent evidence that this is a structural gap rather than one
+    we happened to guess.</p>
     <p class="dim">The lesson: <strong>behavioural relevance is not evidential weight.</strong>
-    A third rule was deliberately not shipped, because one written while looking at this
-    family would be fitted to it and would prove nothing. Fixing it properly needs the
-    evidence to assert the specific suspicious predicate, which is what a fine-tuned model
-    was meant to supply.</p>
+    The first two versions of the repair shared this flaw at different depths: v1 treated a
+    scan log as corroboration, v2 treated four innocuous behaviour records as corroboration.
+    Both count name mentions, and so does the upstream defect.</p>
   </div>
 
   <h2>4. Two silent defects in our own harness</h2>

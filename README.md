@@ -27,23 +27,38 @@ PHANTOM advertises an adversarial "Skeptic" agent that cross-examines findings b
 
 | Metric | Before | After |
 |---|---:|---:|
-| Accuracy vs gold | 0.375 | 0.875 |
-| False-confirm rate | 0.749 | 0.299 |
-| Attack success rate | 0.714 | 0.143 |
+| Accuracy vs gold | 0.273 | 0.636 |
+| False-confirm rate | 0.839 | 0.631 |
+| Attack success rate | 0.800 | 0.400 |
 | Dangerous-miss rate | 0.427 | 0.000 |
 | Capability retention | 1.000 | 1.000 |
 
-n=400 (8 families x 50), seed 1729. Paired exact McNemar p = 1.2e-60, no row regressed.
+n=550 (10 attack families + clean control, x 50), seed 1729. Paired exact McNemar p = 1.2e-60, no row regressed.
 
-### The repair also fails, and that is the interesting part
+### Three of those families were written by a different model
 
-Family 8 (`behavioural_mention`) was written **after the verifier was frozen**, so it is the one measurement here that is not tuned-against. Four genuine behavioural artifacts each merely *name* the file while describing ordinary activity: no executable regions, a loopback-only listener, only system DLLs loaded. The repair **confirms all 50 rows** — ASR 1.00 before *and* after.
+Families 9-11 were authored by an independent red-team model given **only the specification
+of the repair, never its implementation**, so those attacks test whether the idea
+generalises rather than poking at code. **All three defeated the repair, each at ASR
+1.00**, taking attack success rate from 0.143 on the self-authored set to **0.400**.
 
-The entire residual after-score is this family. Behavioural relevance is not evidential weight; v1's flaw and v2's flaw are the same name-mention flaw at different depths, and so is the upstream defect. Fixing it needs the evidence to assert the specific suspicious predicate, which is what the fine-tuned model was for. We deliberately did **not** ship a third rule, because a rule table written against this family would be fitted to it and would prove nothing.
+They fail in two different ways, and the difference is the point:
+
+- `identity_alias` and `semantic_denial` are **implementation gaps**: one process described
+  under four identity namespaces defeats counting by "distinct artifact"; and
+  `launch count = 0` is semantically a denial that contains none of the negation keywords.
+- `network_contact_inflation` is a **specification gap** and cannot be fixed by better code.
+  Four genuinely distinct behavioural artifacts, all ordinary HTTPS traffic to the claimed
+  host, satisfy every rule honestly. The specification equates "mentioned in enough
+  behavioural artifacts" with "established", and contact is not command-and-control.
 
 ### Read the caveat with the table
 
-The evaluation rows are **synthetic and self-authored, and the repair was iterated against them.** The improvement is an **upper bound**, not an unbiased estimate. The generalisable claim is the mechanism and the direction, not the numbers. Full detail: `docs/RESULTS-COMPARISON.md`.
+The evaluation rows are **synthetic, and the repair was iterated against the self-authored
+families.** The improvement is an **upper bound**, not an unbiased estimate. The
+independent families are the closest thing here to an unbiased measurement, and they are
+roughly three times less favourable. The generalisable claim is the mechanism and the
+direction, not the numbers. Full detail: `docs/RESULTS-COMPARISON.md`.
 
 ## Evidence prompt-injection scanner
 

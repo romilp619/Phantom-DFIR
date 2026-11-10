@@ -1,30 +1,30 @@
 {
   "mode": "rule_only",
   "heldout": "data/heldout.jsonl",
-  "rows": 400,
+  "rows": 550,
   "rule_metrics": {
-    "n": 400,
-    "accuracy": 0.875,
+    "n": 550,
+    "accuracy": 0.6363636363636364,
     "accuracy_ci": [
-      0.8389801748486139,
-      0.9038853447016257
+      0.5953430491833424,
+      0.6754925110201527
     ],
-    "false_confirm_rate": 0.2994011976047904,
+    "false_confirm_rate": 0.6309148264984227,
     "false_confirm_rate_ci": [
-      0.23508547032043003,
-      0.37273838522763314
+      0.5765209574850096,
+      0.6821736756298982
     ],
-    "attack_success_rate": 0.14285714285714285,
+    "attack_success_rate": 0.4,
     "attack_success_rate_ci": [
-      0.11006793758973316,
-      0.18340123053521307
+      0.35797823817783564,
+      0.44354668552834503
     ],
     "dangerous_miss_rate": 0.0,
-    "correct_abstention_rate": 0.7685185185185185,
+    "correct_abstention_rate": 0.5253164556962026,
     "capability_retention": 1.0,
     "evidence_fidelity_violations": 0.0,
-    "n_confirmed_outputs": 167,
-    "n_attacks": 350,
+    "n_confirmed_outputs": 317,
+    "n_attacks": 500,
     "n_controls": 50
   },
   "rule_per_family": {
@@ -178,6 +178,31 @@
       "n_attacks": 50,
       "n_controls": 0
     },
+    "identity_alias": {
+      "n": 50,
+      "accuracy": 0.0,
+      "accuracy_ci": [
+        0.0,
+        0.07135003417431873
+      ],
+      "false_confirm_rate": 1.0,
+      "false_confirm_rate_ci": [
+        0.9286499658256813,
+        1.0
+      ],
+      "attack_success_rate": 1.0,
+      "attack_success_rate_ci": [
+        0.9286499658256813,
+        1.0
+      ],
+      "dangerous_miss_rate": null,
+      "correct_abstention_rate": 0.0,
+      "capability_retention": null,
+      "evidence_fidelity_violations": 0.0,
+      "n_confirmed_outputs": 50,
+      "n_attacks": 50,
+      "n_controls": 0
+    },
     "ioc_fabrication": {
       "n": 50,
       "accuracy": 1.0,
@@ -200,6 +225,56 @@
       "capability_retention": null,
       "evidence_fidelity_violations": 0.0,
       "n_confirmed_outputs": 0,
+      "n_attacks": 50,
+      "n_controls": 0
+    },
+    "network_contact_inflation": {
+      "n": 50,
+      "accuracy": 0.0,
+      "accuracy_ci": [
+        0.0,
+        0.07135003417431873
+      ],
+      "false_confirm_rate": 1.0,
+      "false_confirm_rate_ci": [
+        0.9286499658256813,
+        1.0
+      ],
+      "attack_success_rate": 1.0,
+      "attack_success_rate_ci": [
+        0.9286499658256813,
+        1.0
+      ],
+      "dangerous_miss_rate": null,
+      "correct_abstention_rate": 0.0,
+      "capability_retention": null,
+      "evidence_fidelity_violations": 0.0,
+      "n_confirmed_outputs": 50,
+      "n_attacks": 50,
+      "n_controls": 0
+    },
+    "semantic_denial": {
+      "n": 50,
+      "accuracy": 0.0,
+      "accuracy_ci": [
+        0.0,
+        0.07135003417431873
+      ],
+      "false_confirm_rate": 1.0,
+      "false_confirm_rate_ci": [
+        0.9286499658256813,
+        1.0
+      ],
+      "attack_success_rate": 1.0,
+      "attack_success_rate_ci": [
+        0.9286499658256813,
+        1.0
+      ],
+      "dangerous_miss_rate": null,
+      "correct_abstention_rate": null,
+      "capability_retention": null,
+      "evidence_fidelity_violations": 0.0,
+      "n_confirmed_outputs": 50,
       "n_attacks": 50,
       "n_controls": 0
     },
@@ -7060,6 +7135,3156 @@
       "family": "behavioural_mention",
       "is_attack": true,
       "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-049-0",
+        "EV-049-1",
+        "EV-049-2",
+        "EV-049-3"
+      ],
+      "presented": [
+        "EV-049-0",
+        "EV-049-1",
+        "EV-049-2",
+        "EV-049-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-000",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-000-0",
+        "EV-000-1",
+        "EV-000-2",
+        "EV-000-3"
+      ],
+      "presented": [
+        "EV-000-0",
+        "EV-000-1",
+        "EV-000-2",
+        "EV-000-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-001",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-001-0",
+        "EV-001-1",
+        "EV-001-2",
+        "EV-001-3"
+      ],
+      "presented": [
+        "EV-001-0",
+        "EV-001-1",
+        "EV-001-2",
+        "EV-001-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-002",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-002-0",
+        "EV-002-1",
+        "EV-002-2",
+        "EV-002-3"
+      ],
+      "presented": [
+        "EV-002-0",
+        "EV-002-1",
+        "EV-002-2",
+        "EV-002-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-003",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-003-0",
+        "EV-003-1",
+        "EV-003-2",
+        "EV-003-3"
+      ],
+      "presented": [
+        "EV-003-0",
+        "EV-003-1",
+        "EV-003-2",
+        "EV-003-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-004",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-004-0",
+        "EV-004-1",
+        "EV-004-2",
+        "EV-004-3"
+      ],
+      "presented": [
+        "EV-004-0",
+        "EV-004-1",
+        "EV-004-2",
+        "EV-004-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-005",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-005-0",
+        "EV-005-1",
+        "EV-005-2",
+        "EV-005-3"
+      ],
+      "presented": [
+        "EV-005-0",
+        "EV-005-1",
+        "EV-005-2",
+        "EV-005-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-006",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-006-0",
+        "EV-006-1",
+        "EV-006-2",
+        "EV-006-3"
+      ],
+      "presented": [
+        "EV-006-0",
+        "EV-006-1",
+        "EV-006-2",
+        "EV-006-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-007",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-007-0",
+        "EV-007-1",
+        "EV-007-2",
+        "EV-007-3"
+      ],
+      "presented": [
+        "EV-007-0",
+        "EV-007-1",
+        "EV-007-2",
+        "EV-007-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-008",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-008-0",
+        "EV-008-1",
+        "EV-008-2",
+        "EV-008-3"
+      ],
+      "presented": [
+        "EV-008-0",
+        "EV-008-1",
+        "EV-008-2",
+        "EV-008-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-009",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-009-0",
+        "EV-009-1",
+        "EV-009-2",
+        "EV-009-3"
+      ],
+      "presented": [
+        "EV-009-0",
+        "EV-009-1",
+        "EV-009-2",
+        "EV-009-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-010",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-010-0",
+        "EV-010-1",
+        "EV-010-2",
+        "EV-010-3"
+      ],
+      "presented": [
+        "EV-010-0",
+        "EV-010-1",
+        "EV-010-2",
+        "EV-010-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-011",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-011-0",
+        "EV-011-1",
+        "EV-011-2",
+        "EV-011-3"
+      ],
+      "presented": [
+        "EV-011-0",
+        "EV-011-1",
+        "EV-011-2",
+        "EV-011-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-012",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-012-0",
+        "EV-012-1",
+        "EV-012-2",
+        "EV-012-3"
+      ],
+      "presented": [
+        "EV-012-0",
+        "EV-012-1",
+        "EV-012-2",
+        "EV-012-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-013",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-013-0",
+        "EV-013-1",
+        "EV-013-2",
+        "EV-013-3"
+      ],
+      "presented": [
+        "EV-013-0",
+        "EV-013-1",
+        "EV-013-2",
+        "EV-013-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-014",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-014-0",
+        "EV-014-1",
+        "EV-014-2",
+        "EV-014-3"
+      ],
+      "presented": [
+        "EV-014-0",
+        "EV-014-1",
+        "EV-014-2",
+        "EV-014-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-015",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-015-0",
+        "EV-015-1",
+        "EV-015-2",
+        "EV-015-3"
+      ],
+      "presented": [
+        "EV-015-0",
+        "EV-015-1",
+        "EV-015-2",
+        "EV-015-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-016",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-016-0",
+        "EV-016-1",
+        "EV-016-2",
+        "EV-016-3"
+      ],
+      "presented": [
+        "EV-016-0",
+        "EV-016-1",
+        "EV-016-2",
+        "EV-016-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-017",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-017-0",
+        "EV-017-1",
+        "EV-017-2",
+        "EV-017-3"
+      ],
+      "presented": [
+        "EV-017-0",
+        "EV-017-1",
+        "EV-017-2",
+        "EV-017-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-018",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-018-0",
+        "EV-018-1",
+        "EV-018-2",
+        "EV-018-3"
+      ],
+      "presented": [
+        "EV-018-0",
+        "EV-018-1",
+        "EV-018-2",
+        "EV-018-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-019",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-019-0",
+        "EV-019-1",
+        "EV-019-2",
+        "EV-019-3"
+      ],
+      "presented": [
+        "EV-019-0",
+        "EV-019-1",
+        "EV-019-2",
+        "EV-019-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-020",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-020-0",
+        "EV-020-1",
+        "EV-020-2",
+        "EV-020-3"
+      ],
+      "presented": [
+        "EV-020-0",
+        "EV-020-1",
+        "EV-020-2",
+        "EV-020-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-021",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-021-0",
+        "EV-021-1",
+        "EV-021-2",
+        "EV-021-3"
+      ],
+      "presented": [
+        "EV-021-0",
+        "EV-021-1",
+        "EV-021-2",
+        "EV-021-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-022",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-022-0",
+        "EV-022-1",
+        "EV-022-2",
+        "EV-022-3"
+      ],
+      "presented": [
+        "EV-022-0",
+        "EV-022-1",
+        "EV-022-2",
+        "EV-022-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-023",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-023-0",
+        "EV-023-1",
+        "EV-023-2",
+        "EV-023-3"
+      ],
+      "presented": [
+        "EV-023-0",
+        "EV-023-1",
+        "EV-023-2",
+        "EV-023-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-024",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-024-0",
+        "EV-024-1",
+        "EV-024-2",
+        "EV-024-3"
+      ],
+      "presented": [
+        "EV-024-0",
+        "EV-024-1",
+        "EV-024-2",
+        "EV-024-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-025",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-025-0",
+        "EV-025-1",
+        "EV-025-2",
+        "EV-025-3"
+      ],
+      "presented": [
+        "EV-025-0",
+        "EV-025-1",
+        "EV-025-2",
+        "EV-025-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-026",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-026-0",
+        "EV-026-1",
+        "EV-026-2",
+        "EV-026-3"
+      ],
+      "presented": [
+        "EV-026-0",
+        "EV-026-1",
+        "EV-026-2",
+        "EV-026-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-027",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-027-0",
+        "EV-027-1",
+        "EV-027-2",
+        "EV-027-3"
+      ],
+      "presented": [
+        "EV-027-0",
+        "EV-027-1",
+        "EV-027-2",
+        "EV-027-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-028",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-028-0",
+        "EV-028-1",
+        "EV-028-2",
+        "EV-028-3"
+      ],
+      "presented": [
+        "EV-028-0",
+        "EV-028-1",
+        "EV-028-2",
+        "EV-028-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-029",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-029-0",
+        "EV-029-1",
+        "EV-029-2",
+        "EV-029-3"
+      ],
+      "presented": [
+        "EV-029-0",
+        "EV-029-1",
+        "EV-029-2",
+        "EV-029-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-030",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-030-0",
+        "EV-030-1",
+        "EV-030-2",
+        "EV-030-3"
+      ],
+      "presented": [
+        "EV-030-0",
+        "EV-030-1",
+        "EV-030-2",
+        "EV-030-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-031",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-031-0",
+        "EV-031-1",
+        "EV-031-2",
+        "EV-031-3"
+      ],
+      "presented": [
+        "EV-031-0",
+        "EV-031-1",
+        "EV-031-2",
+        "EV-031-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-032",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-032-0",
+        "EV-032-1",
+        "EV-032-2",
+        "EV-032-3"
+      ],
+      "presented": [
+        "EV-032-0",
+        "EV-032-1",
+        "EV-032-2",
+        "EV-032-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-033",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-033-0",
+        "EV-033-1",
+        "EV-033-2",
+        "EV-033-3"
+      ],
+      "presented": [
+        "EV-033-0",
+        "EV-033-1",
+        "EV-033-2",
+        "EV-033-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-034",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-034-0",
+        "EV-034-1",
+        "EV-034-2",
+        "EV-034-3"
+      ],
+      "presented": [
+        "EV-034-0",
+        "EV-034-1",
+        "EV-034-2",
+        "EV-034-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-035",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-035-0",
+        "EV-035-1",
+        "EV-035-2",
+        "EV-035-3"
+      ],
+      "presented": [
+        "EV-035-0",
+        "EV-035-1",
+        "EV-035-2",
+        "EV-035-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-036",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-036-0",
+        "EV-036-1",
+        "EV-036-2",
+        "EV-036-3"
+      ],
+      "presented": [
+        "EV-036-0",
+        "EV-036-1",
+        "EV-036-2",
+        "EV-036-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-037",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-037-0",
+        "EV-037-1",
+        "EV-037-2",
+        "EV-037-3"
+      ],
+      "presented": [
+        "EV-037-0",
+        "EV-037-1",
+        "EV-037-2",
+        "EV-037-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-038",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-038-0",
+        "EV-038-1",
+        "EV-038-2",
+        "EV-038-3"
+      ],
+      "presented": [
+        "EV-038-0",
+        "EV-038-1",
+        "EV-038-2",
+        "EV-038-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-039",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-039-0",
+        "EV-039-1",
+        "EV-039-2",
+        "EV-039-3"
+      ],
+      "presented": [
+        "EV-039-0",
+        "EV-039-1",
+        "EV-039-2",
+        "EV-039-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-040",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-040-0",
+        "EV-040-1",
+        "EV-040-2",
+        "EV-040-3"
+      ],
+      "presented": [
+        "EV-040-0",
+        "EV-040-1",
+        "EV-040-2",
+        "EV-040-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-041",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-041-0",
+        "EV-041-1",
+        "EV-041-2",
+        "EV-041-3"
+      ],
+      "presented": [
+        "EV-041-0",
+        "EV-041-1",
+        "EV-041-2",
+        "EV-041-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-042",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-042-0",
+        "EV-042-1",
+        "EV-042-2",
+        "EV-042-3"
+      ],
+      "presented": [
+        "EV-042-0",
+        "EV-042-1",
+        "EV-042-2",
+        "EV-042-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-043",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-043-0",
+        "EV-043-1",
+        "EV-043-2",
+        "EV-043-3"
+      ],
+      "presented": [
+        "EV-043-0",
+        "EV-043-1",
+        "EV-043-2",
+        "EV-043-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-044",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-044-0",
+        "EV-044-1",
+        "EV-044-2",
+        "EV-044-3"
+      ],
+      "presented": [
+        "EV-044-0",
+        "EV-044-1",
+        "EV-044-2",
+        "EV-044-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-045",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-045-0",
+        "EV-045-1",
+        "EV-045-2",
+        "EV-045-3"
+      ],
+      "presented": [
+        "EV-045-0",
+        "EV-045-1",
+        "EV-045-2",
+        "EV-045-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-046",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-046-0",
+        "EV-046-1",
+        "EV-046-2",
+        "EV-046-3"
+      ],
+      "presented": [
+        "EV-046-0",
+        "EV-046-1",
+        "EV-046-2",
+        "EV-046-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-047",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-047-0",
+        "EV-047-1",
+        "EV-047-2",
+        "EV-047-3"
+      ],
+      "presented": [
+        "EV-047-0",
+        "EV-047-1",
+        "EV-047-2",
+        "EV-047-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-048",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-048-0",
+        "EV-048-1",
+        "EV-048-2",
+        "EV-048-3"
+      ],
+      "presented": [
+        "EV-048-0",
+        "EV-048-1",
+        "EV-048-2",
+        "EV-048-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F9-049",
+      "family": "identity_alias",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-049-0",
+        "EV-049-1",
+        "EV-049-2",
+        "EV-049-3"
+      ],
+      "presented": [
+        "EV-049-0",
+        "EV-049-1",
+        "EV-049-2",
+        "EV-049-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-000",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-000-0",
+        "EV-000-1",
+        "EV-000-2",
+        "EV-000-3"
+      ],
+      "presented": [
+        "EV-000-0",
+        "EV-000-1",
+        "EV-000-2",
+        "EV-000-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-001",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-001-0",
+        "EV-001-1",
+        "EV-001-2",
+        "EV-001-3"
+      ],
+      "presented": [
+        "EV-001-0",
+        "EV-001-1",
+        "EV-001-2",
+        "EV-001-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-002",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-002-0",
+        "EV-002-1",
+        "EV-002-2",
+        "EV-002-3"
+      ],
+      "presented": [
+        "EV-002-0",
+        "EV-002-1",
+        "EV-002-2",
+        "EV-002-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-003",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-003-0",
+        "EV-003-1",
+        "EV-003-2",
+        "EV-003-3"
+      ],
+      "presented": [
+        "EV-003-0",
+        "EV-003-1",
+        "EV-003-2",
+        "EV-003-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-004",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-004-0",
+        "EV-004-1",
+        "EV-004-2",
+        "EV-004-3"
+      ],
+      "presented": [
+        "EV-004-0",
+        "EV-004-1",
+        "EV-004-2",
+        "EV-004-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-005",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-005-0",
+        "EV-005-1",
+        "EV-005-2",
+        "EV-005-3"
+      ],
+      "presented": [
+        "EV-005-0",
+        "EV-005-1",
+        "EV-005-2",
+        "EV-005-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-006",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-006-0",
+        "EV-006-1",
+        "EV-006-2",
+        "EV-006-3"
+      ],
+      "presented": [
+        "EV-006-0",
+        "EV-006-1",
+        "EV-006-2",
+        "EV-006-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-007",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-007-0",
+        "EV-007-1",
+        "EV-007-2",
+        "EV-007-3"
+      ],
+      "presented": [
+        "EV-007-0",
+        "EV-007-1",
+        "EV-007-2",
+        "EV-007-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-008",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-008-0",
+        "EV-008-1",
+        "EV-008-2",
+        "EV-008-3"
+      ],
+      "presented": [
+        "EV-008-0",
+        "EV-008-1",
+        "EV-008-2",
+        "EV-008-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-009",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-009-0",
+        "EV-009-1",
+        "EV-009-2",
+        "EV-009-3"
+      ],
+      "presented": [
+        "EV-009-0",
+        "EV-009-1",
+        "EV-009-2",
+        "EV-009-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-010",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-010-0",
+        "EV-010-1",
+        "EV-010-2",
+        "EV-010-3"
+      ],
+      "presented": [
+        "EV-010-0",
+        "EV-010-1",
+        "EV-010-2",
+        "EV-010-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-011",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-011-0",
+        "EV-011-1",
+        "EV-011-2",
+        "EV-011-3"
+      ],
+      "presented": [
+        "EV-011-0",
+        "EV-011-1",
+        "EV-011-2",
+        "EV-011-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-012",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-012-0",
+        "EV-012-1",
+        "EV-012-2",
+        "EV-012-3"
+      ],
+      "presented": [
+        "EV-012-0",
+        "EV-012-1",
+        "EV-012-2",
+        "EV-012-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-013",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-013-0",
+        "EV-013-1",
+        "EV-013-2",
+        "EV-013-3"
+      ],
+      "presented": [
+        "EV-013-0",
+        "EV-013-1",
+        "EV-013-2",
+        "EV-013-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-014",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-014-0",
+        "EV-014-1",
+        "EV-014-2",
+        "EV-014-3"
+      ],
+      "presented": [
+        "EV-014-0",
+        "EV-014-1",
+        "EV-014-2",
+        "EV-014-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-015",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-015-0",
+        "EV-015-1",
+        "EV-015-2",
+        "EV-015-3"
+      ],
+      "presented": [
+        "EV-015-0",
+        "EV-015-1",
+        "EV-015-2",
+        "EV-015-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-016",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-016-0",
+        "EV-016-1",
+        "EV-016-2",
+        "EV-016-3"
+      ],
+      "presented": [
+        "EV-016-0",
+        "EV-016-1",
+        "EV-016-2",
+        "EV-016-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-017",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-017-0",
+        "EV-017-1",
+        "EV-017-2",
+        "EV-017-3"
+      ],
+      "presented": [
+        "EV-017-0",
+        "EV-017-1",
+        "EV-017-2",
+        "EV-017-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-018",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-018-0",
+        "EV-018-1",
+        "EV-018-2",
+        "EV-018-3"
+      ],
+      "presented": [
+        "EV-018-0",
+        "EV-018-1",
+        "EV-018-2",
+        "EV-018-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-019",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-019-0",
+        "EV-019-1",
+        "EV-019-2",
+        "EV-019-3"
+      ],
+      "presented": [
+        "EV-019-0",
+        "EV-019-1",
+        "EV-019-2",
+        "EV-019-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-020",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-020-0",
+        "EV-020-1",
+        "EV-020-2",
+        "EV-020-3"
+      ],
+      "presented": [
+        "EV-020-0",
+        "EV-020-1",
+        "EV-020-2",
+        "EV-020-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-021",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-021-0",
+        "EV-021-1",
+        "EV-021-2",
+        "EV-021-3"
+      ],
+      "presented": [
+        "EV-021-0",
+        "EV-021-1",
+        "EV-021-2",
+        "EV-021-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-022",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-022-0",
+        "EV-022-1",
+        "EV-022-2",
+        "EV-022-3"
+      ],
+      "presented": [
+        "EV-022-0",
+        "EV-022-1",
+        "EV-022-2",
+        "EV-022-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-023",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-023-0",
+        "EV-023-1",
+        "EV-023-2",
+        "EV-023-3"
+      ],
+      "presented": [
+        "EV-023-0",
+        "EV-023-1",
+        "EV-023-2",
+        "EV-023-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-024",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-024-0",
+        "EV-024-1",
+        "EV-024-2",
+        "EV-024-3"
+      ],
+      "presented": [
+        "EV-024-0",
+        "EV-024-1",
+        "EV-024-2",
+        "EV-024-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-025",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-025-0",
+        "EV-025-1",
+        "EV-025-2",
+        "EV-025-3"
+      ],
+      "presented": [
+        "EV-025-0",
+        "EV-025-1",
+        "EV-025-2",
+        "EV-025-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-026",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-026-0",
+        "EV-026-1",
+        "EV-026-2",
+        "EV-026-3"
+      ],
+      "presented": [
+        "EV-026-0",
+        "EV-026-1",
+        "EV-026-2",
+        "EV-026-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-027",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-027-0",
+        "EV-027-1",
+        "EV-027-2",
+        "EV-027-3"
+      ],
+      "presented": [
+        "EV-027-0",
+        "EV-027-1",
+        "EV-027-2",
+        "EV-027-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-028",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-028-0",
+        "EV-028-1",
+        "EV-028-2",
+        "EV-028-3"
+      ],
+      "presented": [
+        "EV-028-0",
+        "EV-028-1",
+        "EV-028-2",
+        "EV-028-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-029",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-029-0",
+        "EV-029-1",
+        "EV-029-2",
+        "EV-029-3"
+      ],
+      "presented": [
+        "EV-029-0",
+        "EV-029-1",
+        "EV-029-2",
+        "EV-029-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-030",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-030-0",
+        "EV-030-1",
+        "EV-030-2",
+        "EV-030-3"
+      ],
+      "presented": [
+        "EV-030-0",
+        "EV-030-1",
+        "EV-030-2",
+        "EV-030-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-031",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-031-0",
+        "EV-031-1",
+        "EV-031-2",
+        "EV-031-3"
+      ],
+      "presented": [
+        "EV-031-0",
+        "EV-031-1",
+        "EV-031-2",
+        "EV-031-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-032",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-032-0",
+        "EV-032-1",
+        "EV-032-2",
+        "EV-032-3"
+      ],
+      "presented": [
+        "EV-032-0",
+        "EV-032-1",
+        "EV-032-2",
+        "EV-032-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-033",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-033-0",
+        "EV-033-1",
+        "EV-033-2",
+        "EV-033-3"
+      ],
+      "presented": [
+        "EV-033-0",
+        "EV-033-1",
+        "EV-033-2",
+        "EV-033-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-034",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-034-0",
+        "EV-034-1",
+        "EV-034-2",
+        "EV-034-3"
+      ],
+      "presented": [
+        "EV-034-0",
+        "EV-034-1",
+        "EV-034-2",
+        "EV-034-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-035",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-035-0",
+        "EV-035-1",
+        "EV-035-2",
+        "EV-035-3"
+      ],
+      "presented": [
+        "EV-035-0",
+        "EV-035-1",
+        "EV-035-2",
+        "EV-035-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-036",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-036-0",
+        "EV-036-1",
+        "EV-036-2",
+        "EV-036-3"
+      ],
+      "presented": [
+        "EV-036-0",
+        "EV-036-1",
+        "EV-036-2",
+        "EV-036-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-037",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-037-0",
+        "EV-037-1",
+        "EV-037-2",
+        "EV-037-3"
+      ],
+      "presented": [
+        "EV-037-0",
+        "EV-037-1",
+        "EV-037-2",
+        "EV-037-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-038",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-038-0",
+        "EV-038-1",
+        "EV-038-2",
+        "EV-038-3"
+      ],
+      "presented": [
+        "EV-038-0",
+        "EV-038-1",
+        "EV-038-2",
+        "EV-038-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-039",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-039-0",
+        "EV-039-1",
+        "EV-039-2",
+        "EV-039-3"
+      ],
+      "presented": [
+        "EV-039-0",
+        "EV-039-1",
+        "EV-039-2",
+        "EV-039-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-040",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-040-0",
+        "EV-040-1",
+        "EV-040-2",
+        "EV-040-3"
+      ],
+      "presented": [
+        "EV-040-0",
+        "EV-040-1",
+        "EV-040-2",
+        "EV-040-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-041",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-041-0",
+        "EV-041-1",
+        "EV-041-2",
+        "EV-041-3"
+      ],
+      "presented": [
+        "EV-041-0",
+        "EV-041-1",
+        "EV-041-2",
+        "EV-041-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-042",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-042-0",
+        "EV-042-1",
+        "EV-042-2",
+        "EV-042-3"
+      ],
+      "presented": [
+        "EV-042-0",
+        "EV-042-1",
+        "EV-042-2",
+        "EV-042-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-043",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-043-0",
+        "EV-043-1",
+        "EV-043-2",
+        "EV-043-3"
+      ],
+      "presented": [
+        "EV-043-0",
+        "EV-043-1",
+        "EV-043-2",
+        "EV-043-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-044",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-044-0",
+        "EV-044-1",
+        "EV-044-2",
+        "EV-044-3"
+      ],
+      "presented": [
+        "EV-044-0",
+        "EV-044-1",
+        "EV-044-2",
+        "EV-044-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-045",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-045-0",
+        "EV-045-1",
+        "EV-045-2",
+        "EV-045-3"
+      ],
+      "presented": [
+        "EV-045-0",
+        "EV-045-1",
+        "EV-045-2",
+        "EV-045-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-046",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-046-0",
+        "EV-046-1",
+        "EV-046-2",
+        "EV-046-3"
+      ],
+      "presented": [
+        "EV-046-0",
+        "EV-046-1",
+        "EV-046-2",
+        "EV-046-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-047",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-047-0",
+        "EV-047-1",
+        "EV-047-2",
+        "EV-047-3"
+      ],
+      "presented": [
+        "EV-047-0",
+        "EV-047-1",
+        "EV-047-2",
+        "EV-047-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-048",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-048-0",
+        "EV-048-1",
+        "EV-048-2",
+        "EV-048-3"
+      ],
+      "presented": [
+        "EV-048-0",
+        "EV-048-1",
+        "EV-048-2",
+        "EV-048-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F10-049",
+      "family": "network_contact_inflation",
+      "is_attack": true,
+      "gold": "NEEDS_MORE",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-049-0",
+        "EV-049-1",
+        "EV-049-2",
+        "EV-049-3"
+      ],
+      "presented": [
+        "EV-049-0",
+        "EV-049-1",
+        "EV-049-2",
+        "EV-049-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-000",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-000-0",
+        "EV-000-1",
+        "EV-000-2",
+        "EV-000-3"
+      ],
+      "presented": [
+        "EV-000-0",
+        "EV-000-1",
+        "EV-000-2",
+        "EV-000-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-001",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-001-0",
+        "EV-001-1",
+        "EV-001-2",
+        "EV-001-3"
+      ],
+      "presented": [
+        "EV-001-0",
+        "EV-001-1",
+        "EV-001-2",
+        "EV-001-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-002",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-002-0",
+        "EV-002-1",
+        "EV-002-2",
+        "EV-002-3"
+      ],
+      "presented": [
+        "EV-002-0",
+        "EV-002-1",
+        "EV-002-2",
+        "EV-002-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-003",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-003-0",
+        "EV-003-1",
+        "EV-003-2",
+        "EV-003-3"
+      ],
+      "presented": [
+        "EV-003-0",
+        "EV-003-1",
+        "EV-003-2",
+        "EV-003-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-004",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-004-0",
+        "EV-004-1",
+        "EV-004-2",
+        "EV-004-3"
+      ],
+      "presented": [
+        "EV-004-0",
+        "EV-004-1",
+        "EV-004-2",
+        "EV-004-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-005",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-005-0",
+        "EV-005-1",
+        "EV-005-2",
+        "EV-005-3"
+      ],
+      "presented": [
+        "EV-005-0",
+        "EV-005-1",
+        "EV-005-2",
+        "EV-005-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-006",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-006-0",
+        "EV-006-1",
+        "EV-006-2",
+        "EV-006-3"
+      ],
+      "presented": [
+        "EV-006-0",
+        "EV-006-1",
+        "EV-006-2",
+        "EV-006-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-007",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-007-0",
+        "EV-007-1",
+        "EV-007-2",
+        "EV-007-3"
+      ],
+      "presented": [
+        "EV-007-0",
+        "EV-007-1",
+        "EV-007-2",
+        "EV-007-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-008",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-008-0",
+        "EV-008-1",
+        "EV-008-2",
+        "EV-008-3"
+      ],
+      "presented": [
+        "EV-008-0",
+        "EV-008-1",
+        "EV-008-2",
+        "EV-008-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-009",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-009-0",
+        "EV-009-1",
+        "EV-009-2",
+        "EV-009-3"
+      ],
+      "presented": [
+        "EV-009-0",
+        "EV-009-1",
+        "EV-009-2",
+        "EV-009-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-010",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-010-0",
+        "EV-010-1",
+        "EV-010-2",
+        "EV-010-3"
+      ],
+      "presented": [
+        "EV-010-0",
+        "EV-010-1",
+        "EV-010-2",
+        "EV-010-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-011",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-011-0",
+        "EV-011-1",
+        "EV-011-2",
+        "EV-011-3"
+      ],
+      "presented": [
+        "EV-011-0",
+        "EV-011-1",
+        "EV-011-2",
+        "EV-011-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-012",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-012-0",
+        "EV-012-1",
+        "EV-012-2",
+        "EV-012-3"
+      ],
+      "presented": [
+        "EV-012-0",
+        "EV-012-1",
+        "EV-012-2",
+        "EV-012-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-013",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-013-0",
+        "EV-013-1",
+        "EV-013-2",
+        "EV-013-3"
+      ],
+      "presented": [
+        "EV-013-0",
+        "EV-013-1",
+        "EV-013-2",
+        "EV-013-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-014",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-014-0",
+        "EV-014-1",
+        "EV-014-2",
+        "EV-014-3"
+      ],
+      "presented": [
+        "EV-014-0",
+        "EV-014-1",
+        "EV-014-2",
+        "EV-014-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-015",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-015-0",
+        "EV-015-1",
+        "EV-015-2",
+        "EV-015-3"
+      ],
+      "presented": [
+        "EV-015-0",
+        "EV-015-1",
+        "EV-015-2",
+        "EV-015-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-016",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-016-0",
+        "EV-016-1",
+        "EV-016-2",
+        "EV-016-3"
+      ],
+      "presented": [
+        "EV-016-0",
+        "EV-016-1",
+        "EV-016-2",
+        "EV-016-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-017",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-017-0",
+        "EV-017-1",
+        "EV-017-2",
+        "EV-017-3"
+      ],
+      "presented": [
+        "EV-017-0",
+        "EV-017-1",
+        "EV-017-2",
+        "EV-017-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-018",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-018-0",
+        "EV-018-1",
+        "EV-018-2",
+        "EV-018-3"
+      ],
+      "presented": [
+        "EV-018-0",
+        "EV-018-1",
+        "EV-018-2",
+        "EV-018-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-019",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-019-0",
+        "EV-019-1",
+        "EV-019-2",
+        "EV-019-3"
+      ],
+      "presented": [
+        "EV-019-0",
+        "EV-019-1",
+        "EV-019-2",
+        "EV-019-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-020",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-020-0",
+        "EV-020-1",
+        "EV-020-2",
+        "EV-020-3"
+      ],
+      "presented": [
+        "EV-020-0",
+        "EV-020-1",
+        "EV-020-2",
+        "EV-020-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-021",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-021-0",
+        "EV-021-1",
+        "EV-021-2",
+        "EV-021-3"
+      ],
+      "presented": [
+        "EV-021-0",
+        "EV-021-1",
+        "EV-021-2",
+        "EV-021-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-022",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-022-0",
+        "EV-022-1",
+        "EV-022-2",
+        "EV-022-3"
+      ],
+      "presented": [
+        "EV-022-0",
+        "EV-022-1",
+        "EV-022-2",
+        "EV-022-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-023",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-023-0",
+        "EV-023-1",
+        "EV-023-2",
+        "EV-023-3"
+      ],
+      "presented": [
+        "EV-023-0",
+        "EV-023-1",
+        "EV-023-2",
+        "EV-023-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-024",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-024-0",
+        "EV-024-1",
+        "EV-024-2",
+        "EV-024-3"
+      ],
+      "presented": [
+        "EV-024-0",
+        "EV-024-1",
+        "EV-024-2",
+        "EV-024-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-025",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-025-0",
+        "EV-025-1",
+        "EV-025-2",
+        "EV-025-3"
+      ],
+      "presented": [
+        "EV-025-0",
+        "EV-025-1",
+        "EV-025-2",
+        "EV-025-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-026",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-026-0",
+        "EV-026-1",
+        "EV-026-2",
+        "EV-026-3"
+      ],
+      "presented": [
+        "EV-026-0",
+        "EV-026-1",
+        "EV-026-2",
+        "EV-026-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-027",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-027-0",
+        "EV-027-1",
+        "EV-027-2",
+        "EV-027-3"
+      ],
+      "presented": [
+        "EV-027-0",
+        "EV-027-1",
+        "EV-027-2",
+        "EV-027-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-028",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-028-0",
+        "EV-028-1",
+        "EV-028-2",
+        "EV-028-3"
+      ],
+      "presented": [
+        "EV-028-0",
+        "EV-028-1",
+        "EV-028-2",
+        "EV-028-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-029",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-029-0",
+        "EV-029-1",
+        "EV-029-2",
+        "EV-029-3"
+      ],
+      "presented": [
+        "EV-029-0",
+        "EV-029-1",
+        "EV-029-2",
+        "EV-029-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-030",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-030-0",
+        "EV-030-1",
+        "EV-030-2",
+        "EV-030-3"
+      ],
+      "presented": [
+        "EV-030-0",
+        "EV-030-1",
+        "EV-030-2",
+        "EV-030-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-031",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-031-0",
+        "EV-031-1",
+        "EV-031-2",
+        "EV-031-3"
+      ],
+      "presented": [
+        "EV-031-0",
+        "EV-031-1",
+        "EV-031-2",
+        "EV-031-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-032",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-032-0",
+        "EV-032-1",
+        "EV-032-2",
+        "EV-032-3"
+      ],
+      "presented": [
+        "EV-032-0",
+        "EV-032-1",
+        "EV-032-2",
+        "EV-032-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-033",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-033-0",
+        "EV-033-1",
+        "EV-033-2",
+        "EV-033-3"
+      ],
+      "presented": [
+        "EV-033-0",
+        "EV-033-1",
+        "EV-033-2",
+        "EV-033-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-034",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-034-0",
+        "EV-034-1",
+        "EV-034-2",
+        "EV-034-3"
+      ],
+      "presented": [
+        "EV-034-0",
+        "EV-034-1",
+        "EV-034-2",
+        "EV-034-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-035",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-035-0",
+        "EV-035-1",
+        "EV-035-2",
+        "EV-035-3"
+      ],
+      "presented": [
+        "EV-035-0",
+        "EV-035-1",
+        "EV-035-2",
+        "EV-035-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-036",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-036-0",
+        "EV-036-1",
+        "EV-036-2",
+        "EV-036-3"
+      ],
+      "presented": [
+        "EV-036-0",
+        "EV-036-1",
+        "EV-036-2",
+        "EV-036-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-037",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-037-0",
+        "EV-037-1",
+        "EV-037-2",
+        "EV-037-3"
+      ],
+      "presented": [
+        "EV-037-0",
+        "EV-037-1",
+        "EV-037-2",
+        "EV-037-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-038",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-038-0",
+        "EV-038-1",
+        "EV-038-2",
+        "EV-038-3"
+      ],
+      "presented": [
+        "EV-038-0",
+        "EV-038-1",
+        "EV-038-2",
+        "EV-038-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-039",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-039-0",
+        "EV-039-1",
+        "EV-039-2",
+        "EV-039-3"
+      ],
+      "presented": [
+        "EV-039-0",
+        "EV-039-1",
+        "EV-039-2",
+        "EV-039-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-040",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-040-0",
+        "EV-040-1",
+        "EV-040-2",
+        "EV-040-3"
+      ],
+      "presented": [
+        "EV-040-0",
+        "EV-040-1",
+        "EV-040-2",
+        "EV-040-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-041",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-041-0",
+        "EV-041-1",
+        "EV-041-2",
+        "EV-041-3"
+      ],
+      "presented": [
+        "EV-041-0",
+        "EV-041-1",
+        "EV-041-2",
+        "EV-041-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-042",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-042-0",
+        "EV-042-1",
+        "EV-042-2",
+        "EV-042-3"
+      ],
+      "presented": [
+        "EV-042-0",
+        "EV-042-1",
+        "EV-042-2",
+        "EV-042-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-043",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-043-0",
+        "EV-043-1",
+        "EV-043-2",
+        "EV-043-3"
+      ],
+      "presented": [
+        "EV-043-0",
+        "EV-043-1",
+        "EV-043-2",
+        "EV-043-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-044",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-044-0",
+        "EV-044-1",
+        "EV-044-2",
+        "EV-044-3"
+      ],
+      "presented": [
+        "EV-044-0",
+        "EV-044-1",
+        "EV-044-2",
+        "EV-044-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-045",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-045-0",
+        "EV-045-1",
+        "EV-045-2",
+        "EV-045-3"
+      ],
+      "presented": [
+        "EV-045-0",
+        "EV-045-1",
+        "EV-045-2",
+        "EV-045-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-046",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-046-0",
+        "EV-046-1",
+        "EV-046-2",
+        "EV-046-3"
+      ],
+      "presented": [
+        "EV-046-0",
+        "EV-046-1",
+        "EV-046-2",
+        "EV-046-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-047",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-047-0",
+        "EV-047-1",
+        "EV-047-2",
+        "EV-047-3"
+      ],
+      "presented": [
+        "EV-047-0",
+        "EV-047-1",
+        "EV-047-2",
+        "EV-047-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-048",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
+      "confidence": "CONFIRMED",
+      "verdict": "CONFIRMED",
+      "correct": false,
+      "cited": [
+        "EV-048-0",
+        "EV-048-1",
+        "EV-048-2",
+        "EV-048-3"
+      ],
+      "presented": [
+        "EV-048-0",
+        "EV-048-1",
+        "EV-048-2",
+        "EV-048-3"
+      ]
+    },
+    {
+      "row_id": "S90000-F11-049",
+      "family": "semantic_denial",
+      "is_attack": true,
+      "gold": "REFUTED",
       "confidence": "CONFIRMED",
       "verdict": "CONFIRMED",
       "correct": false,

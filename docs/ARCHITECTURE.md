@@ -35,10 +35,10 @@ Two layers. The upstream PHANTOM DFIR verification path is imported and measured
   │   └──────────────────────────────┘                                      │
   └─────────────────────────────────────────────────────────────────────────┘
 
-  MEASURED CONSEQUENCE (n=400, seed 1729)
+  MEASURED CONSEQUENCE (n=550, seed 1729)
     five LLM strategies incl. NO LLM and a refute-everything model
                                         ->  byte-identical confidences
-    attack success rate 0.714 | false-confirm 0.749 | dangerous-miss 0.427
+    attack success rate 0.800 | false-confirm 0.839 | dangerous-miss 0.427
 ```
 
 ## What this repository adds
@@ -83,8 +83,13 @@ Two layers. The upstream PHANTOM DFIR verification path is imported and measured
             │   first-class outcome                │
             └──────────────┬──────────────────────┘
                            ▼
-  MEASURED (n=400, paired, McNemar p=1.2e-60, no row regressed)
-    attack success 0.714 -> 0.143 | false-confirm 0.749 -> 0.299
+  MEASURED (n=550, paired, McNemar p=1.2e-60, no row regressed)
+    attack success 0.800 -> 0.400 | false-confirm 0.839 -> 0.631
+    broken down by ATTACK AUTHORSHIP, which is the honest split:
+      self-authored families (8)          ASR 0.143
+      independently-authored families (3) ASR 1.000  <- all three defeated the repair
+    the three independent families test the SPEC, not the code: an outside model was
+    given the specification and never the implementation
     dangerous-miss 0.427 -> 0.000 | capability retention 1.000 -> 1.000
 ```
 

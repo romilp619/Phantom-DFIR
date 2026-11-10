@@ -256,7 +256,7 @@ class TestEvaluationSet:
     def test_set_size_and_determinism(self):
         a = build_eval_set(per_family=5, seed=1729)
         b = build_eval_set(per_family=5, seed=1729)
-        assert len(a) == len(b) == 40  # 8 families x 5
+        assert len(a) == len(b) == 55  # 10 attack families + clean control, x 5
         assert [r.row_id for r in a] == [r.row_id for r in b]
         assert [r.gold for r in a] == [r.gold for r in b]
 

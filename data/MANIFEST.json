@@ -1,15 +1,15 @@
 {
   "train": {
     "path": "data/train.jsonl",
-    "rows": 2400,
-    "sha256": "42a24e7a9b27cc2c62cb2bd604735f8739376c0b86b7ed27d2f5de339157f13f",
+    "rows": 3300,
+    "sha256": "8576755308bc76c4f6cfaad5f01e616953061bc8901d859ba6ca083c196bdf2b",
     "seed_base": 20000,
     "per_family": 300
   },
   "heldout": {
     "path": "data/heldout.jsonl",
-    "rows": 400,
-    "sha256": "b46e24b29f5bdc266368e2912340f79e018d114eda9ea1493f77c1eb82311d41",
+    "rows": 550,
+    "sha256": "4965777c5f952b34c50480070b22786f8ed0d6bbe946c515e764d92cfaf1d15f",
     "seed_base": 90000,
     "per_family": 50
   },
@@ -21,6 +21,9 @@
     "allowlist_masquerade",
     "citation_stuffing",
     "behavioural_mention",
+    "identity_alias",
+    "network_contact_inflation",
+    "semantic_denial",
     "clean_control"
   ],
   "id_overlap": 0,

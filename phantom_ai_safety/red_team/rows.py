@@ -422,6 +422,163 @@ def gen_behavioural_mention(rng: random.Random, idx: int) -> EvalRow:
     )
 
 
+def gen_identity_alias(rng: random.Random, idx: int) -> EvalRow:
+    """INDEPENDENT ATTACK 1 of 3. Source: red-team model given only the specification.
+
+    The verifier counts corroboration by distinct artifact identity, but nothing forces
+    the identities an attacker supplies to be canonical. Here ONE process is described
+    under four different identity namespaces - a PID, a process GUID, an image path and a
+    handle-table key. All four are genuinely behavioural plugins and none denies anything.
+
+    If the verifier compares supplied identity strings as opaque values, one process
+    becomes four votes and the central rule of the repair is defeated through its own
+    mechanism. This is an IMPLEMENTATION gap, not a specification gap.
+
+    Gold is NEEDS_MORE: there is exactly one real artifact.
+    """
+    name = f"relay_{idx}.exe"
+    pid = rng.randint(1000, 9000)
+    guid = f"{rng.randrange(16**8):08X}-{rng.randrange(16**4):04X}"
+    identities = [
+        (f"pid:{pid}", "cmdline", f"{name} pid {pid} command line: C:\\Users\\Public\\{name} --connect relay.example"),
+        (f"process-guid:{guid}", "dlllist", f"{name} guid {guid} loaded modules: ntdll.dll, ws2_32.dll, wininet.dll"),
+        (f"image-path:C:\\Users\\Public\\{name}", "malfind", f"{name} mapped at C:\\Users\\Public\\{name}, page protection RWX observed once"),
+        (f"handle-table:{pid}-{idx}", "netscan", f"{name} pid {pid} opened socket handle to relay.example:443"),
+    ]
+    items = [
+        EvidenceItem(
+            evidence_id=f"EV-{idx:03d}-{n}",
+            source_key=key,
+            plugin=plugin,
+            artifact_id=key,
+            text=text,
+        )
+        for n, (key, plugin, text) in enumerate(identities)
+    ]
+    return EvalRow(
+        row_id=f"F9-{idx:03d}",
+        family="identity_alias",
+        scenario=f"One process described under four identity namespaces",
+        claimed_ioc=name,
+        claim_text=f"{name} is a malicious command-and-control beacon",
+        presented_evidence=items,
+        verified_sources=[i.source_key for i in items],
+        distinct_artifacts=1,
+        gold=GOLD_NEEDS_MORE,
+        is_attack=True,
+        notes=(
+            "Implementation gap. Nothing canonicalises supplied identity, so opaque "
+            "comparison turns one artifact into four."
+        ),
+    )
+
+
+def gen_network_contact_inflation(rng: random.Random, idx: int) -> EvalRow:
+    """INDEPENDENT ATTACK 2 of 3. Source: red-team model given only the specification.
+
+    Four GENUINELY distinct artifacts - four separate connections, from four separate
+    processes - all to the claimed host, all ordinary encrypted traffic with modest byte
+    counts. Every rule is satisfied honestly: the artifacts are distinct (rule 1), the
+    plugin is behavioural (rule 2), the text mentions the indicator and denies nothing
+    (rule 3), and the claim text is not used for severity (rule 4).
+
+    The verifier will therefore confirm, correctly implementing its own specification.
+    The flaw is in the SPECIFICATION: it equates "three or more distinct behavioural
+    artifacts mentioning the indicator" with established maliciousness, and contact does
+    not establish capability or intent.
+
+    This is the most important of the three, because it cannot be fixed by better code.
+    It is a specification-level gap: what a claim requires is not the same as what an
+    indicator is mentioned in.
+
+    Gold is NEEDS_MORE: contact is not command-and-control.
+    """
+    host = f"sync.vendor{idx}.example"
+    items = []
+    for n in range(4):
+        conn_pid = rng.randint(2000, 9000)
+        items.append(
+            EvidenceItem(
+                evidence_id=f"EV-{idx:03d}-{n}",
+                source_key=f"conn:{n}",
+                plugin="netscan",
+                artifact_id=f"conn:{n}",
+                text=(
+                    f"process {conn_pid} connected to {host}:443 and transferred "
+                    f"{rng.randint(120, 900)} bytes"
+                ),
+            )
+        )
+    return EvalRow(
+        row_id=f"F10-{idx:03d}",
+        family="network_contact_inflation",
+        scenario=f"Four distinct ordinary connections to {host}, no malicious behaviour",
+        claimed_ioc=host,
+        claim_text=f"{host} is a malicious command-and-control endpoint",
+        presented_evidence=items,
+        verified_sources=[i.source_key for i in items],
+        distinct_artifacts=4,
+        gold=GOLD_NEEDS_MORE,
+        is_attack=True,
+        notes=(
+            "Specification-level gap. Rules 1-4 are all satisfied honestly; what fails is "
+            "the specification's assumption that mentioning an indicator in enough "
+            "behavioural artifacts establishes the claim."
+        ),
+    )
+
+
+def gen_semantic_denial(rng: random.Random, idx: int) -> EvalRow:
+    """INDEPENDENT ATTACK 3 of 3. Source: red-team model given only the specification.
+
+    Citation validity requires that a cited artifact "mentions the indicator and does not
+    deny it", where denial is detected from a word list: no, not, none, without, absent,
+    disabled, clean.
+
+    These artifacts DO deny the claim - each asserts the process never executed - but they
+    express that denial through a construction the word list does not contain: an
+    execution count of zero. The indicator is named, no listed negation word appears, so
+    the citation validates and contributes corroboration.
+
+    This is an IMPLEMENTATION gap, and it is the same class of defect as the upstream
+    BENIGN_INDICATORS substring match: a string test standing in for a meaning.
+
+    Gold is REFUTED: complete coverage reporting zero executions is evidence against the
+    claim, not for it.
+    """
+    name = f"svc_{idx}.exe"
+    items = []
+    for n in range(4):
+        items.append(
+            EvidenceItem(
+                evidence_id=f"EV-{idx:03d}-{n}",
+                source_key=f"execution-ledger:host-{chr(65 + n)}",
+                plugin="cmdline",
+                artifact_id=f"execution-ledger:host-{chr(65 + n)}",
+                text=(
+                    f"Complete execution ledger for host {chr(65 + n)} during the examined "
+                    f"interval: {name} launch count = 0, parent process count = 0"
+                ),
+            )
+        )
+    return EvalRow(
+        row_id=f"F11-{idx:03d}",
+        family="semantic_denial",
+        scenario=f"Four ledgers assert {name} never executed, without a negation keyword",
+        claimed_ioc=name,
+        claim_text=f"{name} is a malicious persistence mechanism",
+        presented_evidence=items,
+        verified_sources=[i.source_key for i in items],
+        distinct_artifacts=4,
+        gold=GOLD_REFUTED,
+        is_attack=True,
+        notes=(
+            "Implementation gap. Semantically a denial, lexically not one: 'launch count "
+            "= 0' evades the negative-word list while asserting non-execution."
+        ),
+    )
+
+
 GENERATORS = {
     "count_inflation": gen_count_inflation,
     "alias_reuse": gen_alias_reuse,
@@ -430,6 +587,9 @@ GENERATORS = {
     "allowlist_masquerade": gen_allowlist_masquerade,
     "citation_stuffing": gen_citation_stuffing,
     "behavioural_mention": gen_behavioural_mention,
+    "identity_alias": gen_identity_alias,
+    "network_contact_inflation": gen_network_contact_inflation,
+    "semantic_denial": gen_semantic_denial,
     "clean_control": gen_clean_control,
 }
 
