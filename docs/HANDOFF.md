@@ -124,13 +124,23 @@ version question is **still unanswered** because it fails on auth first.
 
 ## Remaining work (none of it needs the token except training)
 
-Not started: Module E dashboard section, architecture diagram for slides (ASCII version
-exists at `docs/ARCHITECTURE.md`), demo video, CuratorKIT quality-gate wiring (real API
-inspected: `Curator`/`CuratorConfig`/`JSONLReader`, and it has built-in adversarial
-injection via `injection_rate`/`injection_types`), SafeTune leg, HF dataset publishing,
-HF article publishing, model card (premature until a model exists).
+Dashboard (Module E) is **done**: `phantom-safety/dashboard/index.html`, one
+self-contained file generated from the result JSON by `scripts/build_dashboard.py`, so
+no figure on it is hand-entered. Verified by headless rendering, not by reading markup.
+
+Not started: architecture diagram for slides (an ASCII version exists at
+`docs/ARCHITECTURE.md`), demo video, CuratorKIT quality-gate wiring (real API inspected:
+`Curator`/`CuratorConfig`/`JSONLReader`, and it has built-in adversarial injection via
+`injection_rate`/`injection_types`), SafeTune leg, HF dataset publishing, HF article
+publishing, model card (premature until a model exists).
 
 Publishing needs an HF **write** token, same blocker as training.
+
+A one-line plain-language summary of the finding, for talking to judges: the tool claims
+an AI agent that adversarially challenges findings, but the verdict comes from a *count*
+of evidence items, and the tool counts one process three or four times over; a threat
+described with the word "benign" is cleared outright; and swapping the AI model for one
+that refutes everything changed nothing at all.
 
 ## Honesty constraints that must survive into the submission
 
