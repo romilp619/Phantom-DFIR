@@ -25,10 +25,46 @@ Paired exact McNemar: 200 rows wrong before and right after, 0 rows right before
 
 Capability retention is unchanged at 1.000, which is the number that stops the repair from winning by refusing to work.
 
+## Replication on a disjoint seed
+
+The numbers above come from rows the repair was tuned against. To test whether they are an artifact of that, the same eight generators were run from a **disjoint seed range** (`20000` for training, `90000` for the held-out split), with zero row-id overlap, and the repair was scored on the held-out rows it had never been fitted to.
+
+It reproduces **exactly**:
+
+| Metric | Tuned seed | Held-out seed |
+|---|---:|---:|
+| Accuracy vs gold | 0.875 | 0.875 |
+| False-confirm rate | 0.299 | 0.299 |
+| Attack success rate | 0.143 | 0.143 |
+| Dangerous-miss rate | 0.000 | 0.000 |
+| Capability retention | 1.000 | 1.000 |
+
+Per family, every family behaves identically, and the only residual failure is `behavioural_mention` in both cases. Reproduce with:
+
+```
+python -m phantom_ai_safety.repair.eval_model --rule-only --out results/heldout_rule_only.json
+```
+
+**What this does and does not establish.** It rules out per-row memorisation and seed luck: the result is stable across disjoint random draws. It does **not** rule out generator overfitting, because both splits come from the same eight generators, so the result is still about the shape of *these* attacks rather than attacks nobody anticipated. Family 8 is the one case where a genuinely unanticipated attack was written, and it defeated the repair.
+
+## Two silent measurement defects found while building this
+
+The held-out run initially disagreed with the tuned run in a way that was not possible if both measured the same verifier. It did not. The rendered prompt used for training was losing structured evidence metadata, and each loss changed what the evaluation measured while still producing plausible numbers:
+
+1. **The `plugin` field was dropped.** Rebuilt rows defaulted to `plugin="unknown"`, which is not in the behavioural set, so *no* artifact could ever corroborate anything. This reported capability retention of 0.660 on untouched control rows, which was the visible symptom.
+2. **The artifact identity was collapsed into the evidence id.** The fence carried the evidence id only, so on rebuild `artifact_id` became unique per item. Five evidence items describing **one** PID then looked like five distinct artifacts, defeating the exact rule the repair is built on and making `count_inflation` report ASR 1.00.
+
+Both are the same failure: a field the verifier keys on did not survive a serialisation round trip. Neither produced an error; both produced a results table.
+
+The fix is structural rather than a patch. The fence header now carries `id`, `artifact` and `plugin`; a missing field is a **hard error**, not a default; the parser lives in one place shared by the dataset builder and the evaluator; and `check_roundtrip` re-runs the verifier on every row rebuilt from the written file, asserting that verdict, distinct-artifact count and citations all reproduce. That gate runs on every dataset build, covers all 2,800 rows, and is covered by three tests.
+
+This is worth stating plainly in the write-up. The measured improvement is only as trustworthy as the integrity of the harness around it, and the harness had two defects that would have silently inflated the result in the other direction if the two splits had not been compared.
+
 ## What should and should not be believed
 
 The repair was built and iterated against these families, twice. Reading the table honestly:
 
+- **The repair was built and iterated against these families, twice.** The disjoint-seed replication above rules out seed luck and per-row memorisation, but **not generator overfitting**: both splits come from the same eight generators, so the result concerns the shape of these attacks, not attacks nobody anticipated. Family 8 is the one case of a genuinely unanticipated attack, and it defeated the repair.
 - **Believe the mechanism and the direction.** Every failure mode is reproducible against unmodified upstream code, and the two regressions below were found by attacking the repair, not by reviewing it.
 - **Do not believe 0.143 as a real-world attack success rate.** The residual is one family, described next, that reproduces on demand.
 - **Believe the negative control.** Capability retention 1.000 on untouched rows means the improvement is in adversarial robustness specifically, not general breakage or blanket abstention.
@@ -99,7 +135,7 @@ The scanner reports zero findings on the evaluation set by design: those rows mo
 - **No real memory image, no Volatility, no disk image.** The harness exercises the verification and scoring components only, on synthetic evidence, with the tool layer stubbed. Nothing here describes behaviour on a real case.
 - **No CFReDS, SysInternals or other upstream case was run.** The upstream headline of F1 100.0 percent was neither reproduced nor re-tested. What is documented is the metric-construction problem, in `PROJECT_AUDIT.md`.
 - **Trivial-baseline ceilings in `metrics.py` are approximate** hand-computed references, not measured, and are labelled in the source as such.
-- **Training and held-out splits are not yet evaluated end to end.** `data/MANIFEST.json` records 2,400 train and 400 held-out rows from disjoint seed ranges (id overlap 0). That split guards against per-row memorisation only; it reuses the same eight generators, so it is **not** a test against novel attack types, and family 8 already demonstrates why that distinction matters.
+- **Training and held-out splits are evaluated separately, not yet trained on.** `data/MANIFEST.json` records 2,400 train and 400 held-out rows from disjoint seed ranges (id overlap 0, round-trip integrity verified). The held-out split was used only to replicate the deterministic result above. Because it reuses the same eight generators, it is **not** a test against novel attack types, and family 8 already demonstrates why that distinction matters.
 
 ## Responsible disclosure
 

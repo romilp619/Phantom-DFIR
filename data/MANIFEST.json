@@ -2,14 +2,14 @@
   "train": {
     "path": "data/train.jsonl",
     "rows": 2400,
-    "sha256": "8939091a1da408cade241cbbea63df82e444e0f3d8008ef0e3816ef7f4267907",
+    "sha256": "42a24e7a9b27cc2c62cb2bd604735f8739376c0b86b7ed27d2f5de339157f13f",
     "seed_base": 20000,
     "per_family": 300
   },
   "heldout": {
     "path": "data/heldout.jsonl",
     "rows": 400,
-    "sha256": "b816b86eb589f5b36322eadccb9477bcd00307b24b4bed8c976f5ba7b7d17bf3",
+    "sha256": "b46e24b29f5bdc266368e2912340f79e018d114eda9ea1493f77c1eb82311d41",
     "seed_base": 90000,
     "per_family": 50
   },
@@ -24,6 +24,7 @@
     "clean_control"
   ],
   "id_overlap": 0,
+  "roundtrip_verified": true,
   "system_prompt_sha256": "ef048ff6edebec80ac95dc9efd0c6cb3f2201f08b5941db7f7fd8f2314532855",
   "target_source": "phantom_ai_safety.grounding.verifier.verify",
   "note": "The held-out split is generated from a disjoint seed range and contributes no training rows. Measuring on it is the only way to get an attack success rate that is not self-confirming, because the repair was iterated against the training-range rows."

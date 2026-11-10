@@ -23,6 +23,7 @@ import hashlib
 import json
 import os
 import random
+import re
 import sys
 from dataclasses import asdict
 
@@ -33,7 +34,112 @@ if PKG_ROOT not in sys.path:
 
 from phantom_ai_safety.evidence_scanner.scanner import quarantine_text, scan_artifact  # noqa: E402
 from phantom_ai_safety.grounding.verifier import verify  # noqa: E402
-from phantom_ai_safety.red_team.rows import GENERATORS, EvalRow, build_eval_set  # noqa: E402
+from phantom_ai_safety.red_team.rows import (  # noqa: E402
+    GENERATORS,
+    EvalRow,
+    EvidenceItem,
+    build_eval_set,
+)
+
+# One parser, used by both the integrity check here and the evaluator, so the two
+# cannot drift. Both earlier defects in this file's history were cases of the rendered
+# prompt losing structured metadata that the verifier keys on.
+_FENCE_RE = re.compile(
+    r"<<UNTRUSTED_EVIDENCE id=(\S+) artifact=(\S+)(?: plugin=(\S+))? sha256=([0-9a-f]+)>>\n"
+    r"(.*?)\n<<END_UNTRUSTED_EVIDENCE>>",
+    re.DOTALL,
+)
+
+
+def parse_rendered_rows(path: str) -> list[EvalRow]:
+    """Rebuild EvalRow objects from a rendered JSONL file.
+
+    Every structured field the verifier depends on must survive the round trip. The
+    fence header is the transport, and a field that is absent is a hard error rather
+    than a default, because a silent default changes what an evaluation measures while
+    still producing numbers. Two versions of this pipeline did exactly that: first
+    dropping `plugin` (so nothing could be behavioural) and then collapsing `artifact`
+    into the evidence id (so five records of one artifact looked like five artifacts).
+    """
+    rows: list[EvalRow] = []
+    with open(path, "r", encoding="utf-8") as fh:
+        for line in fh:
+            if not line.strip():
+                continue
+            rec = json.loads(line)
+            user = next(m["content"] for m in rec["messages"] if m["role"] == "user")
+            m_claim = re.search(r"^CLAIM: (.*)$", user, re.MULTILINE)
+            m_ioc = re.search(r"^CLAIMED INDICATOR: (.*)$", user, re.MULTILINE)
+            blocks = _FENCE_RE.findall(user)
+            if not blocks:
+                raise ValueError(
+                    f"{rec.get('id', '?')}: no fenced evidence found. The dataset was "
+                    "rendered by an older header; regenerate with "
+                    "phantom_ai_safety.repair.dataset."
+                )
+            items = []
+            for eid, artifact, plugin, _digest, body in blocks:
+                if not plugin:
+                    raise ValueError(
+                        f"{rec.get('id', '?')}: evidence {eid} has no plugin in its fence. "
+                        "Regenerate the dataset; scoring without it measures the wrong verifier."
+                    )
+                items.append(
+                    EvidenceItem(
+                        evidence_id=eid,
+                        source_key=eid,
+                        plugin=plugin,
+                        artifact_id=artifact,
+                        text=body.split("\n", 2)[-1],
+                    )
+                )
+            rows.append(
+                EvalRow(
+                    row_id=rec["id"],
+                    family=rec["family"],
+                    scenario="",
+                    claimed_ioc=(m_ioc.group(1) if m_ioc else ""),
+                    claim_text=(m_claim.group(1) if m_claim else ""),
+                    presented_evidence=items,
+                    verified_sources=[i.source_key for i in items],
+                    distinct_artifacts=len({i.artifact_id for i in items}),
+                    gold=rec["gold"],
+                    is_attack=rec["is_attack"],
+                    notes="",
+                )
+            )
+    return rows
+
+
+def check_roundtrip(original: list[EvalRow], path: str) -> list[str]:
+    """Assert the rendered file reproduces the verifier's decisions exactly.
+
+    Compares verdict, distinct-artifact count and citation set between the original row
+    and the row rebuilt from the prompt text. Any difference means the prompt lost or
+    distorted evidence metadata, and every number derived from that file would be
+    measuring something other than the verifier under test.
+
+    Returns a list of human-readable problems; empty means faithful.
+    """
+    rebuilt = parse_rendered_rows(path)
+    by_id = {r.row_id: r for r in rebuilt}
+    problems: list[str] = []
+    for row in original:
+        rt = by_id.get(row.row_id)
+        if rt is None:
+            problems.append(f"{row.row_id}: missing from {path}")
+            continue
+        a = verify(row.claim_text, row.claimed_ioc, row.presented_evidence)
+        b = verify(rt.claim_text, rt.claimed_ioc, rt.presented_evidence)
+        if a.verdict != b.verdict:
+            problems.append(f"{row.row_id}: verdict {a.verdict} -> {b.verdict}")
+        elif a.distinct_artifacts != b.distinct_artifacts:
+            problems.append(
+                f"{row.row_id}: distinct_artifacts {a.distinct_artifacts} -> {b.distinct_artifacts}"
+            )
+        elif set(a.citations) != set(b.citations):
+            problems.append(f"{row.row_id}: citations {a.citations} -> {b.citations}")
+    return problems
 
 # Seeds are partitioned so train and held-out rows can never share a row id.
 TRAIN_SEED_BASE = 20_000
@@ -60,11 +166,19 @@ SYSTEM_PROMPT = (
 
 
 def render_prompt(row: EvalRow) -> str:
-    """Prompt with evidence fenced as untrusted content."""
+    """Prompt with evidence fenced as untrusted content.
+
+    The plugin name travels inside the fence header so the rendered prompt carries the
+    full evidence record and can be rebuilt exactly. See quarantine_text.
+    """
     blocks = []
     for item in row.presented_evidence:
         result = scan_artifact(item.evidence_id, item.text)
-        blocks.append(quarantine_text(result, item.text))
+        blocks.append(
+            quarantine_text(
+                result, item.text, plugin=item.plugin, artifact_id=item.artifact_id
+            )
+        )
     evidence = "\n".join(blocks) if blocks else "(no evidence presented)"
     return (
         f"EVIDENCE:\n{evidence}\n\n"
@@ -170,6 +284,20 @@ def main() -> int:
     train_digest = write_jsonl(train_path, train_records)
     heldout_digest = write_jsonl(heldout_path, heldout_records)
 
+    # Integrity gate: the written prompt file must reproduce the verifier's decisions
+    # exactly. This is the check that would have caught both earlier metadata defects
+    # at build time instead of in a results table.
+    problems = check_roundtrip(train_rows, train_path) + check_roundtrip(heldout_rows, heldout_path)
+    if problems:
+        print("\n" + "!" * 70)
+        print(f"ROUND-TRIP INTEGRITY FAILURE: {len(problems)} row(s) do not reproduce")
+        print("!" * 70)
+        for p in problems[:10]:
+            print(f"  {p}")
+        print("\nThe rendered prompts lost or distorted evidence metadata. Any evaluation")
+        print("using these files would measure a different verifier than the one under test.")
+        return 1
+
     manifest = {
         "train": {"path": train_path, "rows": len(train_records), "sha256": train_digest,
                   "seed_base": TRAIN_SEED_BASE, "per_family": args.train_per_family},
@@ -178,6 +306,7 @@ def main() -> int:
                     "per_family": args.heldout_per_family},
         "families": list(GENERATORS),
         "id_overlap": len(overlap),
+        "roundtrip_verified": True,
         "system_prompt_sha256": hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest(),
         "target_source": "phantom_ai_safety.grounding.verifier.verify",
         "note": (
@@ -205,6 +334,7 @@ def main() -> int:
     print(f"  train    : {len(train_records):5d} rows  {train_digest[:16]}...  {train_path}")
     print(f"  held-out : {len(heldout_records):5d} rows  {heldout_digest[:16]}...  {heldout_path}")
     print(f"  id overlap: {len(overlap)}")
+    print(f"  round-trip integrity: VERIFIED (verdict, artifact count and citations all reproduce)")
     print(f"\n  train label census    : {json.dumps(census(train_records), sort_keys=True)}")
     print(f"  heldout label census  : {json.dumps(census(heldout_records), sort_keys=True)}")
     print(f"\n  manifest: {manifest_path}")
