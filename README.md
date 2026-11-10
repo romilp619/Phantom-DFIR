@@ -75,6 +75,21 @@ python scripts/summarize_results.py results/comparison.json
 pytest tests/ -q
 ```
 
+## Reproducibility note: the upstream clone is content-unmodified
+
+If you run `git status` inside the upstream clone **under WSL**, it reports all 83 files as modified:
+`83 files changed, 124215 insertions(+), 124215 deletions(-)`.
+
+That is a CRLF/LF representation artifact, not an edit. The clone was checked out on Windows with
+`core.autocrlf=true`, while WSL git leaves `core.autocrlf` unset, so the same bytes are read
+differently. Confirmed by two independent routes: Windows git reports zero diffs, and **every** file's
+insertion count exactly equals its deletion count, which is the signature of a line-ending rewrite and
+never happens with a real content change. `HEAD` remains `3005762`.
+
+The `source_digest_sha256` recorded in every result file is computed over `correlation/confidence.py`,
+`agents/skeptic.py` and `agents/evidence.py` as they exist on disk, and is the check that actually
+matters: it pins the exact bytes the findings were measured against.
+
 ## Status
 
 - Working and verified: harness, red-team set, baseline measurement, repair, before/after comparison, injection scanner, tests.
