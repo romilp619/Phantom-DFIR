@@ -137,6 +137,26 @@ The scanner reports zero findings on the evaluation set by design: those rows mo
 - **Trivial-baseline ceilings in `metrics.py` are approximate** hand-computed references, not measured, and are labelled in the source as such.
 - **Training and held-out splits are evaluated separately, not yet trained on.** `data/MANIFEST.json` records 2,400 train and 400 held-out rows from disjoint seed ranges (id overlap 0, round-trip integrity verified). The held-out split was used only to replicate the deterministic result above. Because it reuses the same eight generators, it is **not** a test against novel attack types, and family 8 already demonstrates why that distinction matters.
 
+## Duplicate check: is this already known upstream?
+
+Checked before claiming novelty, because a red-team finding that the maintainer already
+fixed is worth nothing.
+
+At commit `3005762`, the verification logic has **not** been revisited:
+
+- `git log -- agents/skeptic.py correlation/confidence.py` returns only three commits:
+  the original v2.1 submission, a multi-provider routing change, and a logging change.
+  No commit addresses source counting, alias handling, or claim-text severity.
+- `README.md` contains no known-issue, limitation, TODO, or caveat section.
+- The most recent twenty commits are almost entirely judge-facing presentation:
+  README architecture diagrams, a judge readiness checklist, a judge benchmark package,
+  benchmark reproduction commands, and setup documentation.
+
+That last point is itself part of the finding. The commit history shows sustained effort
+invested in how the project reads to reviewers, and no corresponding effort on whether the
+verification claim holds. Those defects were not known, not documented, and not fixed -
+they were presented.
+
 ## Responsible disclosure
 
 This work identifies weaknesses in the safety claims of a public open-source project. It is a defensive finding.
