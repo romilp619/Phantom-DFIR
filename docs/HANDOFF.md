@@ -103,6 +103,34 @@ invented ones (`PeftConfigData.rank`, not `lora_rank`; `EvaluationConfig` lives 
 `aligntune.core.sft.config`). Unresolved risk: AlignTune pins `transformers 5.22.2` /
 `trl 1.7.1` while Cohere checkpoints target 4.x; the gate currently fails on auth first.
 
+## Laptop is provisioned and VERIFIED — only the weights are missing
+
+The 4060 laptop is no longer a risk. A real QLoRA step ran on project data:
+4-bit NF4 load 27.9s, LoRA r=16 at 5.659% trainable, 2.02 s/step, **peak VRAM 1603 MiB of
+8188**, 19.6 MB adapter written and verified non-empty. Full recipe and the two traps are
+in `TRAINING-ENVIRONMENT.md`.
+
+Working set (do not deviate without re-testing):
+`Python 3.12.16` (via uv, **not** the distro 3.14), `torch 2.13.0+cu130`,
+`transformers 5.22.2`, `trl 1.7.1`, `peft 0.21.2`, `bitsandbytes 0.50.2`,
+`datasets 5.2.0`, `aligntune 0.1.34`. Venv at `/opt/train312`.
+
+Two traps that cost real time:
+1. Distro Python 3.14 breaks AlignTune's `immutables` C extension. Use uv + 3.12.
+2. The cu124 index serves stale `torch 2.6.0`, which breaks `peft` import with a
+   misleading `BloomPreTrainedModel` error that blames transformers. Let the resolver
+   choose torch (it picks 2.13.0+cu130) and peft imports fine.
+
+Paths on the laptop: venv `/opt/train312`; dataset `/mnt/c/Users/Moo/phantom-data/`;
+smoke adapters `/opt/qlora-smoke`; log `/opt/provision.log`. Scripts are kept in
+`lexsi-work/` (`provision_laptop.sh`, `laptop_train312.sh`, `laptop_torch_fix.sh`,
+`qlora_smoke.py`) and copied to `/opt/` on the laptop.
+
+Still unresolved, and untestable until the gate opens: the working stack carries
+`transformers 5.22.2` while the Cohere checkpoints were published against 4.x. Fallback if
+they do not load is a second 4.x venv training with plain `transformers` + `peft` + `trl`,
+which the smoke test already proves works.
+
 ## Tooling notes discovered this session
 
 - **Fulcrum's decision service is DOWN.** `moo-ask.mjs predict` returned
