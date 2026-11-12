@@ -13,3 +13,11 @@ test-images/
 *.raw
 *.vmem
 *.lime
+# Trained adapters and evaluation scratch. A LoRA adapter is ~115 MB; committing it
+# would bloat every clone for an artifact that is reproducible from data/train.jsonl
+# in ~22 minutes on a 4060. Copy from the training box with scripts/pull_adapter.sh
+# and evaluate locally. Keep the METRICS in git, not the weights.
+artifacts/*-adapter/
+artifacts/*.log
+artifacts/.hf_token
+*.safetensors
