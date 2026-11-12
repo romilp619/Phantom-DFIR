@@ -10,18 +10,18 @@ the old detection rate, never to a false positive from a text mutation.
 
 Every extraction is constrained:
 
-- base64/hex: only runs inside suspicious-looking regions (near the kinds of
-  markers real encodings carry, like "echo | base64" or "0x" / "line:" prefixes),
-  because forensic evidence contains legit hashes and base64 blobs constantly
-- homoglyphs: only when a word matches a known attack pattern after folding,
-  because folding "C:\mimikatz" for every artifact would drown real evidence in
-  noise
-- invisible characters: removed from the original text only before scanning,
-  never persisted
+- base64/hex: decoding is attempted on runs that look deliberately placed, and the
+  result is kept only when it is mostly printable and contains letters. Forensic
+  evidence contains legit digests and base64 blobs constantly, so binary-noise
+  rejection is the thing that keeps this usable.
+- nested encodings: unwrapped up to `_MAX_LAYERS`, because base64-of-base64 is a
+  standard evasion and a single-pass decoder misses it entirely.
+- homoglyphs: folded only when the folded form matches a known attack pattern,
+  because folding every artifact would drown real evidence in noise.
 
 What this does not catch: multi-turn injection, indirect injection, large-context
-burial, encrypted or non-base64/non-hex encoded payloads. Those are stated
-limitations, not bugs.
+burial, encrypted payloads, and encodings other than base64 and hex. Those are
+stated limitations, not bugs.
 """
 from __future__ import annotations
 
@@ -59,6 +59,82 @@ def _textual(s: str) -> bool:
     return alpha >= 3
 
 
+# How many encoding layers to unwrap. Two covers the realistic evasion (base64 of a
+# base64 payload). Higher values buy little and multiply work on innocent input.
+_MAX_LAYERS = 3
+
+
+def _try_b64(chunk: str, min_out: int = 8) -> str | None:
+    """Decode one base64 run, or None when it is not readable text."""
+    pad = (-len(chunk)) % 4
+    try:
+        raw = base64.b64decode(chunk + "=" * pad, validate=False)
+    except Exception:
+        return None
+    try:
+        decoded = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return None
+    if len(decoded) < min_out:
+        return None
+    if _printable_fraction(decoded) < 0.90:
+        return None
+    if not _textual(decoded):
+        return None
+    return decoded
+
+
+def _try_hex(chunk: str, min_out: int = 8) -> str | None:
+    """Decode one hex run, or None when it is not readable text."""
+    if len(chunk) % 2:
+        return None
+    try:
+        raw = bytes.fromhex(chunk)
+    except ValueError:
+        return None
+    try:
+        decoded = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return None
+    if len(decoded) < min_out:
+        return None
+    if _printable_fraction(decoded) < 0.90:
+        return None
+    if not _textual(decoded):
+        return None
+    return decoded
+
+
+def _decode_layers(text: str, depth: int, min_out: int = 12) -> str:
+    """Unwrap up to `depth` further encoding layers, returning the deepest result.
+
+    Bounded on purpose. An unbounded decoder on attacker-controlled input is a
+    denial-of-service waiting to happen, and the marginal detection from a fourth
+    layer is negligible against the cost of scanning it.
+
+    Returns the innermost successfully decoded form, or the input unchanged when no
+    further layer decodes.
+    """
+    current = text
+    for _ in range(max(0, depth)):
+        nxt = None
+        # Try the whole string first, which is the common shape of a nested payload.
+        stripped = current.strip()
+        if len(stripped) >= 24:
+            nxt = _try_b64(stripped, min_out=min_out) or _try_hex(stripped, min_out=min_out)
+        if nxt is None:
+            # Then try any embedded run, in case the layer is wrapped in prose.
+            for m in _B64_RUN.finditer(current):
+                if len(m.group(0)) >= 24:
+                    nxt = _try_b64(m.group(0), min_out=min_out)
+                    if nxt:
+                        break
+        if nxt is None:
+            break
+        current = nxt
+    return current
+
+
 def extract_candidates(text: str) -> list[str]:
     """Extract decoded or normalised substrings that could hide an injection.
 
@@ -94,36 +170,24 @@ def extract_candidates(text: str) -> list[str]:
         chunk = m.group(0)
         if len(chunk) < 24:
             continue
-        pad = (-len(chunk)) % 4
-        try:
-            raw = base64.b64decode(chunk + "=" * pad, validate=False)
-        except Exception:
-            continue
-        try:
-            decoded = raw.decode("utf-8")
-        except UnicodeDecodeError:
-            continue
-        if _printable_fraction(decoded) >= 0.90 and _textual(decoded):
+        decoded = _try_b64(chunk)
+        if decoded is not None:
             add(decoded)
+            # Nested encoding: an attacker who base64s a base64 payload defeats a
+            # single-pass decoder. Recurse, bounded, until a layer fails to decode
+            # or the depth cap is reached.
+            add(_decode_layers(decoded, depth=_MAX_LAYERS))
 
-    # 3. Hex candidates. Skip lengths that are known hash digests — those are
+    # 3. Hex candidates. Skip lengths that are known hash digests, those are
     # everywhere in forensic output. Only decode when it is clearly not a hash.
     for m in _HEX_RUN.finditer(text):
         chunk = m.group(1)
         if len(chunk) in _HASH_LENGTHS:
             continue
-        if len(chunk) % 2:
-            continue
-        try:
-            raw = bytes.fromhex(chunk)
-        except ValueError:
-            continue
-        try:
-            decoded = raw.decode("utf-8")
-        except UnicodeDecodeError:
-            continue
-        if _printable_fraction(decoded) >= 0.90 and _textual(decoded):
+        decoded = _try_hex(chunk)
+        if decoded is not None:
             add(decoded)
+            add(_decode_layers(decoded, depth=_MAX_LAYERS))
 
     # 4. Unicode normalisation with confusable folding. Applied only to the
     # stripped text, not the original full artifact.
