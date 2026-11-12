@@ -1,144 +1,108 @@
-# PHANTOM DFIR — Architecture
+# PHANTOM DFIR Architecture
 
-## System Architecture Diagram
+PHANTOM has separate execution paths for memory, disk, and network evidence. The unified router selects the path from the evidence type, invokes the existing analysis program, and can collect its reports into a unified report.
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         PHANTOM DFIR v2.1                                   │
-│              Parallel Hypothesis Analysis with Multi-agent                  │
-│              Threat Hunting Overlay Network                                 │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  ┌──────────────────────────────────────────────────────────────────────┐   │
-│  │                    LangGraph StateGraph                              │   │
-│  │                                                                      │   │
-│  │   ┌───────────┐    ┌──────────────┐    ┌──────────┐                 │   │
-│  │   │ COLLECTOR │───>│ INVESTIGATOR │───>│ EVIDENCE │                 │   │
-│  │   │           │    │              │    │          │                 │   │
-│  │   │ • OS race │    │ • Static     │    │ • PID    │                 │   │
-│  │   │ • 35+     │    │   rules      │    │   malfind│                 │   │
-│  │   │   plugins │    │ • LLM hyps   │    │ • IP     │                 │   │
-│  │   │ • 16      │    │ • Benign     │    │   filter │                 │   │
-│  │   │   workers │    │   detection  │    │ • DLL    │                 │   │
-│  │   └───────────┘    └──────────────┘    │   list   │                 │   │
-│  │                                        └────┬─────┘                 │   │
-│  │                                             │                       │   │
-│  │                                             ▼                       │   │
-│  │   ┌──────────┐                        ┌──────────┐                  │   │
-│  │   │ REPORTER │<───────────────────────│ SKEPTIC  │                  │   │
-│  │   │          │     (or loop back)     │          │                  │   │
-│  │   │ • JSON   │◄──── reporter ────────►│ • LLM    │                  │   │
-│  │   │ • MD     │                        │   debate │                  │   │
-│  │   │ • Exec   │◄──── evidence ────────►│ • Rule   │                  │   │
-│  │   │   log    │     (max 3 rounds)     │   verify │                  │   │
-│  │   │ • Reason │                        │ • CLEARED│                  │   │
-│  │   │   trace  │                        │ • Progress                  │   │
-│  │   └──────────┘                        │   file   │                  │   │
-│  │                                        └──────────┘                  │   │
-│  └──────────────────────────────────────────────────────────────────────┘   │
-│                                                                             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                          TOOL LAYER                                         │
-│                                                                             │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐   │
-│  │ vol3_tools  │  │ vol2_tools  │  │disk_correlat │  │  MCP Server     │   │
-│  │             │  │             │  │              │  │                 │   │
-│  │ 40+ Win     │  │ auto-profile│  │ Memory↔Disk  │  │ 20 typed tools  │   │
-│  │ 30+ Linux   │  │ kdbgscan    │  │ log2timeline │  │ stdio + HTTP    │   │
-│  │ plugins     │  │ hashdump    │  │ MFT parse    │  │ SHA256 verify   │   │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬───────┘  └────────┬────────┘   │
-│         │                │                │                    │            │
-├─────────┴────────────────┴────────────────┴────────────────────┴────────────┤
-│                     SECURITY BOUNDARY                                       │
-│                                                                             │
-│  ┌──────────────────────────────────────────────────────────────────────┐   │
-│  │                 ARCHITECTURAL GUARDRAILS                              │   │
-│  │                                                                      │   │
-│  │  • MCP Server: Agent CANNOT run arbitrary shell commands              │   │
-│  │    → Only 20 pre-defined, typed functions are exposed                │   │
-│  │    → No execute_shell_cmd, no rm, no dd, no write commands           │   │
-│  │                                                                      │   │
-│  │  • Evidence Integrity: SHA256 hash registered at load time           │   │
-│  │    → verify_integrity() checks hash before EVERY analysis            │   │
-│  │    → Any modification = analysis HALTED                              │   │
-│  │                                                                      │   │
-│  │  • Read-Only Tool Design: All vol3/vol2 wrappers use                 │   │
-│  │    subprocess.run() with capture_output=True                         │   │
-│  │    → No tool writes to disk (except final reports)                   │   │
-│  │    → Memory image is NEVER modified                                  │   │
-│  │                                                                      │   │
-│  │  • Max Iteration Cap: MAX_SKEPTIC_ROUNDS = 3                         │   │
-│  │    → Hard cap prevents infinite agent loops                          │   │
-│  │    → Graceful degradation: reports whatever is verified              │   │
-│  └──────────────────────────────────────────────────────────────────────┘   │
-│                                                                             │
-│  ┌──────────────────────────────────────────────────────────────────────┐   │
-│  │                 PROMPT-BASED GUARDRAILS                               │   │
-│  │                                                                      │   │
-│  │  • IOC Validation: _is_valid_ioc() rejects vague LLM outputs        │   │
-│  │    → IOCs must be <40 chars, no spaces, must be filename/IP/PID     │   │
-│  │    → System processes (svchost, csrss, etc.) auto-excluded           │   │
-│  │                                                                      │   │
-│  │  • Investigator Prompt: Strict JSON schema with examples             │   │
-│  │    → "BAD ioc examples" listed to prevent common LLM mistakes       │   │
-│  │                                                                      │   │
-│  │  NOTE: If the LLM ignores prompt restrictions, the static            │   │
-│  │  rule-based fallback still generates correct hypotheses.             │   │
-│  │  LLM output is MERGED with (never replaces) static baseline.        │   │
-│  └──────────────────────────────────────────────────────────────────────┘   │
-│                                                                             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                          DATA FLOW                                          │
-│                                                                             │
-│  Memory Image ──► SHA256 ──► Vol3/Vol2 Plugins ──► Raw Evidence             │
-│                                                        │                    │
-│  Raw Evidence ──► Investigator (Static + LLM) ──► Hypotheses               │
-│                                                        │                    │
-│  Hypotheses ──► Evidence Agent (PID/IP targeted) ──► Verified Sources       │
-│                                                        │                    │
-│  Verified Sources ──► Skeptic (debate loop) ──► Confidence Buckets          │
-│       ▲                    │                         │                      │
-│       └────── (max 3) ─────┘                         ▼                      │
-│                                              ┌──────────────┐              │
-│                                              │    REPORTS    │              │
-│                                              │              │              │
-│                                              │ • JSON       │              │
-│                                              │ • Markdown   │              │
-│                                              │ • Exec Log   │              │
-│                                              │ • Progress   │              │
-│                                              │ • Benchmark  │              │
-│                                              └──────────────┘              │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph SOURCES["Evidence sources"]
+        MEM["Memory image"]
+        DISK["Disk image / E01 / raw"]
+        PCAP["PCAP / PCAPNG"]
+    end
+
+    ROUTER["phantom_router.py\nDetect type, dispatch, gather reports"]
+
+    subgraph MEMORY["Memory analysis: main.py"]
+        COL["Collector\nVolatility 2 / 3 plugins"]
+        INV["Investigator\nRules + optional LLM"]
+        EVD["Evidence agent\nTargeted evidence queries"]
+        SKP["Skeptic\nReview and challenge findings"]
+        GAP["Self-correction control\nRequest more evidence or finish"]
+        REP["Memory reporter"]
+        COL --> INV --> EVD --> SKP --> GAP
+        GAP -->|"More evidence, within configured limit"| EVD
+        GAP -->|"Finish"| REP
+    end
+
+    subgraph DISKNET["Disk and network analysis: disk_correlator.py"]
+        DISK_ANALYSIS["Disk artifact analysis\nFilesystem, registry, browser and related artifacts"]
+        PCAP_ANALYSIS["Network capture analysis\nSupported PCAP / PCAPNG artifacts"]
+    end
+
+    MCP["Optional standalone MCP server\nTyped forensic tools and evidence hash checks"]
+
+    MEM --> ROUTER
+    DISK --> ROUTER
+    PCAP --> ROUTER
+    ROUTER -->|"Memory"| COL
+    ROUTER -->|"Disk / E01 / raw"| DISK_ANALYSIS
+    ROUTER -->|"PCAP / PCAPNG"| PCAP_ANALYSIS
+
+    REP --> MEMORY_REPORTS["Memory JSON / Markdown / execution log"]
+    DISK_ANALYSIS --> DISK_REPORTS["Disk analysis reports"]
+    PCAP_ANALYSIS --> PCAP_REPORTS["Network analysis reports"]
+    MEMORY_REPORTS --> UNIFIED["Optional unified router report"]
+    DISK_REPORTS --> UNIFIED
+    PCAP_REPORTS --> UNIFIED
 ```
 
-## Architectural Pattern
+## How the paths work
 
-**Multi-Agent Framework (LangGraph)** + **Custom MCP Server**
+- **Memory:** `phantom_router.py` dispatches to `main.py`. The LangGraph workflow collects Volatility output, forms and validates hypotheses, challenges findings, applies the configured self-correction loop, and writes reports.
+- **Disk and PCAP:** The router dispatches these inputs to `disk_correlator.py`, which runs the applicable analysis and writes its reports. The router can gather discovered reports and produce an additional unified report.
+- **MCP:** `mcpserver/mcp_server.py` is a separate server exposing named forensic tools. Starting the MCP server does not automatically make it a stage in the router or LangGraph workflow; a compatible MCP client must connect to it.
 
-PHANTOM combines the two most valued approaches from the hackathon guidelines:
+## Trust boundaries and limitations
 
-1. **LangGraph StateGraph**: 5 specialized agents communicate through a shared TypedDict state. No single model holds all raw data — evidence is distributed across plugin outputs and summarized before LLM context.
+- The MCP server exposes an allowlist of named tools rather than a general-purpose shell tool. Tool access is limited to the functions it defines.
+- Evidence registration and integrity verification use SHA-256 hashes. Hash checks can detect content changes between checks; they do not by themselves make evidence storage immutable or guarantee that every analysis path verifies the hash at every step.
+- Analysis tools are intended to read evidence. They may write reports, temporary data, or extracted artifacts to output locations. Keep original evidence in a protected location and analyze a verified working copy when preserving chain of custody is required.
+- LLM output is optional and should be treated as analysis assistance. Findings need to be judged from the underlying artifacts and corroborating sources.
+- The self-correction loop has a configured iteration limit. This bounds repeated analysis; it does not guarantee that every finding is correct or that every evidence gap can be resolved.
 
-2. **Purpose-Built MCP Server**: 20 typed, read-only functions. The agent physically cannot run destructive commands because the server doesn't expose them.
+## The AI safety and red-team layer
 
-## Trust Boundaries
+PHANTOM ships a second, complementary body of work: **`phantom-safety`**, an AI safety and
+red-team evaluation layer that measures and hardens the forensic agent's reasoning against
+adversarial evidence.
 
-| Boundary | Type | Enforcement |
-|----------|------|-------------|
-| No shell access via MCP | **Architectural** | Server exposes only 20 predefined functions |
-| Evidence immutability | **Architectural** | SHA256 hash verified before every analysis |
-| Read-only tool execution | **Architectural** | All subprocess calls use `capture_output=True`, no writes |
-| Max iteration cap | **Architectural** | `MAX_SKEPTIC_ROUNDS = 3` hard-coded constant |
-| IOC validation | **Prompt + Code** | `_is_valid_ioc()` rejects vague LLM outputs post-hoc |
-| Investigator prompt schema | **Prompt** | If LLM ignores, static fallback guarantees baseline |
+It lives on the branch **`ai-safety/phantom-safety`** (also reachable under its original name
+`backup/pre-redteam-2026-11-12`), not on `main`. That separation is deliberate and is the
+layer's core methodological claim: it imports the forensic application **content-unmodified**
+and measures it from the outside, so no safety result can be an artefact of editing the system
+under test. Nothing in that branch edits the forensic engine, and nothing on `main` depends on
+it. The two trees share no module, function, or dependency.
 
-## Spoliation Testing
+> **Do not delete the `ai-safety/phantom-safety` branch.** It is the only copy of that work —
+> there is no separate working directory for it on disk. Its former name
+> (`backup/pre-redteam-2026-11-12`) reads like a disposable backup; it is not one.
 
-The MCP server was tested for evidence spoliation risk:
+### What the layer contains
 
-1. **No write tools exposed**: The MCP server has no `write_file`, `delete_file`, or `execute_command` tools
-2. **SHA256 verification**: `register_evidence()` hashes the file at load; `verify_integrity()` re-hashes before analysis
-3. **Subprocess isolation**: All Volatility calls use `subprocess.run()` with `capture_output=True` — stdout/stderr are captured, never piped to disk
-4. **Failure mode**: If the model somehow requests a non-existent tool, the server returns `{"error": "Unknown tool"}` — no fallback to shell
+| Component | Role |
+|---|---|
+| `phantom_ai_safety/red_team/` | Adversarial evidence-injection attack generation and evaluation |
+| `phantom_ai_safety/evidence_scanner/` | Prompt-injection scanner over forensic evidence, with a detection-normalisation pass |
+| `phantom_ai_safety/grounding/` | Evidence-grounded verification of agent claims |
+| `phantom_ai_safety/curation/` | Training-data curation guards |
+| `phantom_ai_safety/evaluation/` | Baseline, comparison, and metrics harness |
+| `phantom_ai_safety/repair/` | QLoRA repair training and held-out model evaluation |
+| `phantom-guard/` | Compiled Rust guard — a process-isolated verdict path that cannot be argued out of its result |
+| `dashboard/`, `docs/`, `results/` | Reported figures, with `scripts/verify_report_claims.py` failing the build if a quoted number stops matching a stored result |
 
-**Result: Zero evidence spoliation risk through architectural enforcement.**
+### How it relates to the forensic paths above
+
+The safety layer wraps the **memory analysis path** (`main.py` → Collector → Investigator →
+Evidence → Skeptic) as the system under test. It is important not to confuse two distinct
+uses of the word *adversarial* in this project:
+
+- The **Skeptic agent** (`agents/skeptic.py`), described above, is a *forensic* adversary. It
+  challenges hypotheses about an intrusion and demands independent evidence sources. It is
+  original PHANTOM functionality and part of the normal analysis run.
+- The **red-team layer** (`phantom_ai_safety/red_team/`) is a *security* adversary. It attacks
+  the agent itself with injected evidence to measure whether the agent can be talked into a
+  wrong verdict. It runs as a separate evaluation, never as part of an investigation.
+
+Neither replaces the other, and consolidating them would be a category error.
+
+For command examples and setup, see the [README](README.md). For implementation details, see `phantom_router.py`, `main.py`, `disk_correlator.py`, and `mcpserver/mcp_server.py`.
