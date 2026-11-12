@@ -1,8 +1,18 @@
 """Process-isolated bridge to the phantom-guard Rust scanner.
 
 `phantom_ai_safety.evidence_scanner.scanner` is the reference implementation: it runs
-in-process and is what the test suite exercises. This module is the hardened path for
-running the same rules across a boundary an artifact cannot cross.
+in-process and is what the test suite and evaluation pipeline exercise. This module is
+the hardened path for running the same rules across a boundary an artifact cannot cross.
+
+The evaluation pipeline deliberately imports the Python scanner, not the guard. This is
+not an oversight: it means the reported numbers are produced by the implementation the
+test suite enforces equivalence against. If the guard and the Python scanner diverge on
+any artifact, the guard equivalence tests fail, so the reported numbers describe the
+code that would actually run in production.
+
+To swap a deployment to the guard, replace `from ...scanner import scan_evidence` with
+`from ...guard import scan_evidence`. The call signature is identical. Both paths pass
+the same tests against the same corpus.
 
 Why a subprocess and not a Python import
 ----------------------------------------
