@@ -1,3 +1,4 @@
+# --- PHANTOM DFIR (original) ---
 base-admin-memory.img
 __pycache__/
 *.pyc
@@ -6,3 +7,28 @@ __pycache__/
 *.E01
 *.img
 *.raw
+
+# --- AI safety module ---
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+.ipynb_checkpoints/
+# Rust builds
+phantom-guard/target/
+# Memory images for local integration testing. Never committed: a 2 GB image
+# in git makes every clone miserable. Fetch with scripts/fetch_test_image.sh.
+test-images/
+*.raw
+*.vmem
+*.lime
+# Trained adapters and evaluation scratch. A LoRA adapter is ~115 MB; committing it
+# would bloat every clone for an artifact that is reproducible from data/train.jsonl
+# in ~22 minutes on a 4060. Copy from the training box with scripts/pull_adapter.sh
+# and evaluate locally. Keep the METRICS in git, not the weights.
+artifacts/*-adapter/
+artifacts/*.log
+artifacts/.hf_token
+*.safetensors

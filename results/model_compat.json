@@ -1,0 +1,34 @@
+{
+  "versions": {
+    "torch": "2.13.0+cu130",
+    "transformers": "5.22.2",
+    "tokenizers": "0.23.3",
+    "trl": "1.7.1",
+    "peft": "0.21.2",
+    "datasets": "5.2.0",
+    "accelerate": "1.15.0",
+    "bitsandbytes": "0.50.2",
+    "aligntune": "0.1.33",
+    "curatorkit": "0.1.24",
+    "huggingface_hub": "2.4.0"
+  },
+  "checks": [
+    {
+      "repo": "CohereLabs/tiny-aya-global",
+      "config_error": "OSError: You are trying to access a gated repo.\nMake sure to have access to it at https://huggingface.co/CohereLabs/tiny-aya-global.\n401 Client Error. (Request ID: Root=1-6af2e486-2e99330e7ca64b1937269cb0;82bfbeb9-130f-430c-8a35-a190d185ae01)\n\nCannot access gated repo for url https://huggingface.co/CohereLabs/tiny-aya-global/resolve/af89d219b53ed9b13b8a4645f9c8028973510324/config.json.\nAccess to m"
+    },
+    {
+      "repo": "CohereLabs/tiny-aya-base",
+      "config_error": "OSError: You are trying to access a gated repo.\nMake sure to have access to it at https://huggingface.co/CohereLabs/tiny-aya-base.\n401 Client Error. (Request ID: Root=1-6af2e487-62a013f80147c94d5b210286;10446a25-3f8c-48be-976a-730b77e0da26)\n\nCannot access gated repo for url https://huggingface.co/CohereLabs/tiny-aya-base/resolve/d62ac17e241c871fc52e9a95d7b0e2615189d7d5/config.json.\nAccess to model"
+    },
+    {
+      "repo": "CohereLabs/aya-expanse-8b",
+      "config_error": "OSError: You are trying to access a gated repo.\nMake sure to have access to it at https://huggingface.co/CohereLabs/aya-expanse-8b.\n401 Client Error. (Request ID: Root=1-6af2e487-1307d45b312c3d7b1c42318c;a2081611-a1b8-4030-8c5d-cd11232f9046)\n\nCannot access gated repo for url https://huggingface.co/CohereLabs/aya-expanse-8b/resolve/5062468bf9bc0c6035fd64e06274333ec127d980/config.json.\nAccess to mod"
+    }
+  ],
+  "failures": [
+    "CohereLabs/tiny-aya-global: authentication required",
+    "CohereLabs/tiny-aya-base: authentication required",
+    "CohereLabs/aya-expanse-8b: authentication required"
+  ]
+}
