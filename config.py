@@ -26,6 +26,7 @@ MMLS      = shutil.which("mmls")   or "mmls"
 FLS       = shutil.which("fls")    or "fls"
 ICAT      = shutil.which("icat")   or "icat"
 STRINGS   = shutil.which("strings") or "strings"
+YARA      = shutil.which("yara") or "yara"
 
 # ── Timeouts (seconds) ───────────────────────────────────────────────────────
 TIMEOUT_OS_DETECT   = 120   # Per engine OS detection
@@ -33,6 +34,8 @@ TIMEOUT_PLUGIN_FAST = 120   # pslist, netscan etc.
 TIMEOUT_PLUGIN_SLOW = 180   # malfind, psscan, shimcache (was 300)
 TIMEOUT_VOL2_HASH   = 180   # hashdump/lsadump
 TIMEOUT_LLM         = 120   # Per Ollama call
+TIMEOUT_STRINGS_TRIAGE = int(os.environ.get("PHANTOM_STRINGS_TRIAGE_TIMEOUT", "90"))
+TIMEOUT_YARA_MEMORY    = int(os.environ.get("PHANTOM_YARA_MEMORY_TIMEOUT", "120"))
 MAX_PARALLEL_WORKERS = 16   # ThreadPoolExecutor workers (was 8)
 
 # ── Adversarial loop settings ─────────────────────────────────────────────────
