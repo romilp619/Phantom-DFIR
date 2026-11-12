@@ -11,6 +11,11 @@
 langgraph>=0.2.0
 langchain-core>=0.2.0
 langchain-ollama>=0.1.0
+# tools/llm_provider.py imports these provider packages directly. Without them the
+# Anthropic, Groq and OpenAI routes cannot be constructed.
+langchain-anthropic>=0.1.0
+langchain-groq>=0.1.0
+langchain-openai>=0.1.0
 
 # Memory forensics
 volatility3>=2.7.0
@@ -23,3 +28,7 @@ mcp>=1.0.0
 # Artifact parsing and triage helpers
 pefile>=2023.2.7
 pyAesCrypt>=6.1.1
+# disk_correlator.py parses Windows Event Logs with `from Evtx.Evtx import Evtx`
+# (three call sites: 15199, 15597, 15972). The import name is Evtx; the PyPI
+# distribution is python-evtx.
+python-evtx>=0.7.4

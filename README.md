@@ -788,17 +788,26 @@ phantom-dfir/
 
 ---
 
+
+
+*PHANTOM DFIR v2.1 - Find Evil! Hackathon 2026*
+
 ---
 
-## Safety layer: evidence-grounded verification
+# AI Red Teaming, Safety and Alignment
 
-> The section above documents PHANTOM DFIR itself. Everything below is the additive
-> safety layer built on top of it for the Find Evil! Hackathon - it measures how the
-> agent above fails under adversarial pressure, repairs it, and proves the repair.
+> **Module, not a replacement.** Everything above this line is the original
+> PHANTOM DFIR forensic engine and its usage guide, preserved as the primary
+> project. Everything below is an additive safety layer that consumes the
+> engine's findings as untrusted evidence. No forensic capability is removed,
+> renamed, or rewritten by this module.
+
+## The headline
 
 An AI forensic agent that confidently reports a clean host, or misses a real intrusion, is
-worse than no agent at all. This layer measures that failure on the code above, repairs it,
-and proves the repair with a process-isolated scanner that cannot be talked out of its verdict.
+worse than no agent at all. This repository measures that failure on the upstream project,
+repairs it, and proves the repair with a process-isolated scanner that cannot be talked out
+of its verdict.
 
 ![Before and after the repair](docs/img/before-after.png)
 
@@ -810,10 +819,12 @@ and proves the repair with a process-isolated scanner that cannot be talked out 
 | Distinct-artifact misreporting | 0.427 | **0.000** |
 
 n = 550 (500 attacks, 50 controls, 11 families). McNemar 200/0, p = 1.24e-60.
-Every figure here is enforced by `scripts/verify_report_claims.py`, which fails the build
-if a quoted number stops matching a stored result.
+Every figure in this README is enforced by `scripts/verify_report_claims.py`, which fails
+the build if a quoted number stops matching a stored result.
 
-### The finding
+---
+
+## The finding
 
 PHANTOM advertises an adversarial "Skeptic" agent that cross-examines findings before they can
 be reported as CRITICAL. Measured against the real code, that layer does not verify:
@@ -836,7 +847,9 @@ be reported as CRITICAL. Measured against the real code, that layer does not ver
 The pattern underneath all four: **the system trusts a count it obtained from the party it is
 supposed to be checking.** Every repair below removes one instance of that.
 
-### The repair
+---
+
+## The repair
 
 `phantom_ai_safety/grounding/verifier.py` replaces the upstream confidence policy:
 
@@ -855,16 +868,18 @@ roughly three times less favourably, and that is reported rather than hidden. Fu
 `identity_alias`, `network_contact_inflation`, and `semantic_denial`. ASR is 0.400, not 0.
 A 40% attack success rate is a research result, not a shipping guarantee.
 
-### Evidence prompt-injection scanner
+---
+
+## Evidence prompt-injection scanner
 
 Untrusted recovered content is scanned before it reaches a model.
 `phantom_ai_safety/evidence_scanner/scanner.py` carries 27 rules across 7 categories.
 
 Validated against 15 labelled payloads across 7 categories (**recall 15/15**) and 12 negative
-controls of ordinary hostile-looking forensic text (**0 false positives**) - because a scanner
+controls of ordinary hostile-looking forensic text (**0 false positives**) — because a scanner
 that flags malware paths would suppress real analysis.
 
-#### Detection normalisation
+### Detection normalisation
 
 An attacker who encodes a payload defeats every lexical rule. The normalisation pass
 extracts candidates the rules would miss, with one design rule: **the original text is never
@@ -885,7 +900,7 @@ Nested encodings were a **real gap found by adversarial probing**: a payload bas
 decoded only one layer, so double-encoded injections walked past every rule. Fixed and
 regression-tested.
 
-#### The compiled Rust guard
+### The compiled Rust guard
 
 `phantom-guard/` mirrors every rule at memory-safe process distance. The hard process
 boundary means evidence text cannot reach the caller's interpreter, cannot rebind a name,
@@ -896,7 +911,7 @@ Why a separate process rather than a faster function:
 - **Memory safety by construction.** The scanning path contains no `unsafe` code. A malformed
   artifact can cause an allocation failure, not a memory-safety violation.
 - **A verifiable identity.** The binary is one artifact with one hash. A Python module is a
-  file plus its imports plus whatever `sys.path` resolved to at runtime - exactly the surface
+  file plus its imports plus whatever `sys.path` resolved to at runtime — exactly the surface
   an attacker with write access would target.
 
 The two implementations are held to **exact agreement** on every artifact, category, offset,
@@ -905,7 +920,9 @@ either can make alone.
 
 ![Guard and reference agree exactly](docs/img/equivalence.png)
 
-### Security work on this repository
+---
+
+## Security work on this repository
 
 The scanner is the thing standing between an attacker's text and an analyst's judgement, so
 it got attacked first. Every issue below was found by probing our own code and is fixed with
@@ -920,9 +937,9 @@ a regression test.
 ![Per-KB scan cost before and after the quadratic fix](docs/img/quadratic-fix.png)
 
 Rising ms/KB means superlinear scanning; flat means linear. The fix is 4.2x faster at 2 MB and
-the gap widens with size, which is what removing an O(n^2) term looks like.
+the gap widens with size, which is what removing an O(n²) term looks like.
 
-#### What the security posture is, precisely
+### What the security posture is, precisely
 
 **Verified:** 0 false positives on a real 324,414-character memory image across 6 Volatility
 plugins; 0 of 17 benign forensic artifacts flagged; 0 of 400 random high-entropy blobs produce
@@ -940,7 +957,9 @@ guard's justification is the process boundary and memory safety, not speed. See
 a local attacker who can replace the binary. It removes a class of in-process attack, not all
 attacks.
 
-### Safety layer layout
+---
+
+## Layout
 
 ```
 phantom-guard/         compiled scanner (Rust), held to exact equivalence
@@ -957,7 +976,9 @@ docs/                  architecture, results, and analysis
 docs/img/              README figures, generated by scripts/make_figures.py
 ```
 
-### Running the safety layer
+---
+
+## Running it
 
 Requires Python 3.11+ and the upstream clone. No GPU, no Volatility, no memory image needed
 for the core result.
@@ -977,7 +998,7 @@ python scripts/verify_report_claims.py                               # guard eve
 pytest tests/ -q
 ```
 
-#### Optional: the real memory image
+### Optional: the real memory image
 
 The integration test is the one thing the synthetic corpus cannot cover.
 
@@ -993,7 +1014,9 @@ python scripts/test_real_image.py          # scan and cross-check
 ships images this way. Note `windows.hivelist` does not exist in Volatility 3; the plugin
 moved to `windows.registry.hivelist`.
 
-### Reproducibility note: the upstream clone is content-unmodified
+---
+
+## Reproducibility note: the upstream clone is content-unmodified
 
 If you run `git status` inside the upstream clone **under WSL**, it reports all 83 files as
 modified: `83 files changed, 124215 insertions(+), 124215 deletions(-)`.
@@ -1002,14 +1025,16 @@ That is a CRLF/LF representation artifact, not an edit. The clone was checked ou
 with `core.autocrlf=true`, while WSL git leaves `core.autocrlf` unset, so the same bytes are
 read differently. Confirmed by two independent routes: Windows git reports zero diffs, and
 **every** file's insertion count exactly equals its deletion count, which is the signature of
-a line-ending rewrite and never happens with a real content change.
+a line-ending rewrite and never happens with a real content change. `HEAD` remains `3005762`.
 
 The `source_digest_sha256` recorded in every result file is computed over
 `correlation/confidence.py`, `agents/skeptic.py` and `agents/evidence.py` as they exist on
 disk. That is the check that matters: it pins the exact bytes the findings were measured
 against.
 
-### Safety layer status
+---
+
+## Status
 
 **Working and verified:** harness, red-team set, baseline measurement, repair, before/after
 comparison, injection scanner with normalisation, Rust guard, real memory image integration
@@ -1028,7 +1053,9 @@ model.
 or architecture. See [`docs/REAL-IMAGE-TEST.md`](docs/REAL-IMAGE-TEST.md) for exactly what the
 one real image does and does not prove.
 
-### Safety layer documentation
+---
+
+## Documentation
 
 | document | what it covers |
 |---|---|
@@ -1039,7 +1066,9 @@ one real image does and does not prove.
 | [`docs/TRAINING-ENVIRONMENT.md`](docs/TRAINING-ENVIRONMENT.md) | fine-tune setup and hardware |
 | [`docs/HANDOFF.md`](docs/HANDOFF.md) | current state and next actions |
 
-### Licensing and disclosure
+---
+
+## Licensing and disclosure
 
 The upstream project's licence governs the imported code. The sponsor repositories are
 source-available under their own licences rather than uniformly open source. AlignTune vendors
@@ -1047,9 +1076,11 @@ AGPL and LGPL components. AuditKIT Section 1A asks an organisation doing red-tea
 written acknowledgement to support@lexsi.ai. The Cohere checkpoints are `cc-by-nc-4.0`, so
 non-commercial.
 
-### A note for whoever picks this up next
+---
 
-Three things are worth knowing before you change anything in the safety layer.
+## A note for whoever picks this up next
+
+Three things are worth knowing before you change anything here.
 
 **The numbers are enforced, not decorative.** `scripts/verify_report_claims.py` reads this
 README and the docs and fails if a quoted figure stops matching a stored result. If you change
@@ -1066,5 +1097,3 @@ to read the detection rules in the same file as the numbers they produce.
 **The false-positive rate is the metric that matters most.** A scanner that flags ordinary
 forensic noise gets disabled by the analyst using it, and then it protects nothing. Every new
 rule should be run against `scripts/probe_normalize.py` and the real image before it lands.
-
-*PHANTOM DFIR v2.1 - Find Evil! Hackathon 2026*
