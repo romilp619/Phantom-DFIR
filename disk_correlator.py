@@ -16,6 +16,56 @@ Usage:
   python3 disk_correlator.py -m memory.img -d disk.E01 -o /cases/001/
   python3 disk_correlator.py -m memory.img -d disk.E01 --no-timeline
 """
+# -----------------------------------------------------------------------------
+# MAINTAINER NOTE - THE LAYERED WRAPPER CHAIN. READ BEFORE "DEDUPLICATING".
+#
+# This module intentionally defines several names MORE THAN ONCE at module
+# level. There are 711 top-level definitions, of which 63 names are redefined -
+# for example generate_report (x20), forensic_reasoning (x17),
+# deep_forensic_analysis (x17) and write_challenge_report (x17).
+#
+# These are NOT dead duplicates and MUST NOT be collapsed into one definition.
+# Each redefinition is a successive refinement layer that captures the previous
+# version and delegates to it, in the pattern:
+#
+#     def forensic_reasoning(...):            # layer N
+#         ...
+#
+#     _phantom_previous_forensic_reasoning = forensic_reasoning
+#
+#     def forensic_reasoning(...):            # layer N+1, shadows the name
+#         if <this layer does not apply>:
+#             return _phantom_previous_forensic_reasoning(...)   # delegates back
+#         ...
+#
+# There are 153 such module-level captures and 154 call sites that invoke a
+# captured predecessor. The earlier definitions therefore stay reachable
+# through those aliases for the life of the process. Deleting an
+# "unused-looking" earlier definition silently removes a behaviour layer and
+# changes forensic output without raising any error - a NameError would at
+# least be visible; this failure mode is not.
+#
+# Consequences for anyone editing this file:
+#   * Do not reorder top-level definitions. Layer order IS the behaviour.
+#   * Do not remove a definition because a later one has the same name.
+#   * Do not move these definitions into a class or into separate modules
+#     without first rebuilding the delegation chain explicitly.
+#   * `builtins.print` is also wrapped at module level
+#     (_phantom_last_builtin_print); output formatting depends on it.
+#   * Add new behaviour as a NEW trailing layer that captures and delegates to
+#     the current definition, matching the pattern above.
+#
+# Verify the chain before and after any change to this file:
+#   python3 - <<'EOF'
+#   import ast, collections
+#   t = ast.parse(open('disk_correlator.py', encoding='utf-8').read())
+#   d = collections.Counter(
+#       n.name for n in t.body
+#       if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)))
+#   print('top-level defs:', sum(d.values()), '| redefined names:',
+#         sum(1 for v in d.values() if v > 1))
+#   EOF
+# -----------------------------------------------------------------------------
 import argparse
 import hashlib
 import json
