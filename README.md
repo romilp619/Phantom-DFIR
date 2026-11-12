@@ -51,7 +51,7 @@ PHANTOM DFIR supports both:
 - SANS SIFT Workstation
 
 ---
-# Automatic Installation (Recommended)
+## Automatic Installation (Recommended)
 
 PHANTOM includes an automated installer that:
 
@@ -96,7 +96,7 @@ Run PHANTOM:
 ~/phantom-memory -f /path/to/memory.img --no-llm --self-correct
 ```
 
-# Option 1 - SANS SIFT Workstation
+## Option 1 - SANS SIFT Workstation
 
 Recommended for:
 - Professional DFIR workflows
@@ -110,7 +110,7 @@ PHANTOM solves this by using a local Python virtual environment.
 
 ---
 
-## Prerequisites
+### Prerequisites
 
 - SANS SIFT Workstation
 - Python 3.10+
@@ -118,7 +118,7 @@ PHANTOM solves this by using a local Python virtual environment.
 
 ---
 
-## Step 1: Clone Repository
+### Step 1: Clone Repository
 
 ```bash
 cd ~
@@ -130,7 +130,7 @@ cd Phantom-DFIR
 
 ---
 
-## Step 2: Run Installer
+### Step 2: Run Installer
 
 ```bash
 bash install.sh
@@ -148,7 +148,7 @@ Installer automatically:
 
 ---
 
-## Step 3: Activate Environment
+### Step 3: Activate Environment
 
 ```bash
 source .venv/bin/activate
@@ -156,7 +156,129 @@ source .venv/bin/activate
 
 ---
 
-## Step 4: Install Ollama (Optional)
+Now continue with [Running PHANTOM](#running-phantom-both-platforms) below.
+
+---
+
+## Option 2 - Windows WSL / Kali / Ubuntu
+
+Recommended for:
+- Faster setup
+- Local development
+- Easier Volatility configuration
+
+### Prerequisites
+
+- Windows WSL2, Kali Linux, or Ubuntu
+- Python 3.10+
+- Git
+- Internet connection (for initial Volatility symbol download)
+
+---
+
+### Step 1: Clone Repository
+
+```bash
+cd ~
+
+git clone https://github.com/romilp619/Phantom-DFIR.git
+
+cd Phantom-DFIR
+```
+
+---
+
+### Step 2: Create Virtual Environment
+
+```bash
+python3 -m venv venv
+
+source venv/bin/activate
+```
+
+---
+
+### Step 3: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+
+pip install volatility3 fastapi uvicorn mcp pefile pyAesCrypt
+```
+
+---
+
+### Step 3A: Install System DFIR Tools
+
+PHANTOM calls many native forensic tools directly. On Ubuntu/WSL/SIFT, install
+the common external dependencies with:
+
+```bash
+sudo apt update
+sudo apt install -y \
+  sleuthkit \
+  tshark \
+  ewf-tools \
+  plaso \
+  clamav \
+  clamav-daemon \
+  libbde-utils \
+  dislocker \
+  gnupg
+```
+
+Some distros package libbde differently. Verify the crypto tools with:
+
+```bash
+which gpg
+which dislocker
+which bdemount
+which bdeinfo
+```
+
+---
+
+### Step 3B: Enable ClamAV / clamdscan
+
+PHANTOM's malware triage prefers `clamdscan --multiscan` because the daemon
+keeps signatures loaded in memory. If unavailable, PHANTOM falls back to
+`clamscan`, which works but can be slower.
+
+Install and update signatures:
+
+```bash
+sudo apt install -y clamav clamav-daemon
+sudo systemctl stop clamav-freshclam 2>/dev/null || true
+sudo freshclam
+sudo systemctl enable --now clamav-daemon 2>/dev/null || sudo service clamav-daemon start
+```
+
+Verify:
+
+```bash
+which clamdscan
+clamdscan --version
+clamdscan --ping
+```
+
+If `clamdscan --ping` fails in WSL, start the daemon manually:
+
+```bash
+sudo service clamav-daemon start
+```
+
+Now continue with [Running PHANTOM](#running-phantom-both-platforms) below.
+
+---
+
+## Running PHANTOM (both platforms)
+
+Steps 4-9 are identical on SANS SIFT and on WSL / Kali / Ubuntu. If you used the
+automated installer, `vol` and `vol2` are already on your `PATH`.
+
+---
+
+### Step 4: Install Ollama (Optional)
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
@@ -176,7 +298,7 @@ ollama pull qwen2.5:14b
 
 ---
 
-## Step 5: First Volatility Symbol Download
+### Step 5: First Volatility Symbol Download
 
 Run once:
 
@@ -191,7 +313,7 @@ IMPORTANT:
 
 ---
 
-## Volatility 2 Wrapper
+### Volatility 2 Wrapper
 
 PHANTOM supports both Volatility 3 and Volatility 2 because some older Windows memory images still parse better with Volatility 2 profiles. Volatility 2 depends on Python 2.7-era packages, so the installer keeps it isolated from PHANTOM's Python 3 `.venv`.
 
@@ -222,21 +344,21 @@ vol2 -f memory.raw imageinfo
 
 ---
 
-## Step 6: Run Analysis
+### Step 6: Run Analysis
 
-### Full analysis (with LLM)
+#### Full analysis (with LLM)
 
 ```bash
 python3 main.py -f /path/to/memory.img
 ```
 
-### Rule-based only
+#### Rule-based only (deterministic)
 
 ```bash
 python3 main.py -f /path/to/memory.img --no-llm
 ```
 
-### Custom model
+#### Custom model
 
 ```bash
 python3 main.py -f /path/to/memory.img --model qwen2.5:14b
@@ -244,7 +366,7 @@ python3 main.py -f /path/to/memory.img --model qwen2.5:14b
 
 ---
 
-## Step 7: Benchmark Accuracy
+### Step 7: Benchmark Accuracy
 
 ```bash
 python3 benchmark.py \
@@ -254,15 +376,15 @@ python3 benchmark.py \
 
 ---
 
-## Step 8: MCP Server
+### Step 8: MCP Server
 
-### Terminal 1
+#### Terminal 1
 
 ```bash
 python3 mcpserver/mcp_server.py --transport http --port 8765
 ```
 
-### Terminal 2
+#### Terminal 2
 
 ```bash
 python3 test_mcp.py --memory /path/to/memory.img
@@ -270,207 +392,7 @@ python3 test_mcp.py --memory /path/to/memory.img
 
 ---
 
-## Step 9: Memory + Disk Correlation
-
-```bash
-python3 disk_correlator.py \
-  -m /path/to/memory.img \
-  -d /path/to/disk.E01
-```
-
----
-
-
-# Option 2 - Windows WSL / Kali / Ubuntu
-
-Recommended for:
-- Faster setup
-- Local development
-- Easier Volatility configuration
-
-## Prerequisites
-
-- Windows WSL2, Kali Linux, or Ubuntu
-- Python 3.10+
-- Git
-- Internet connection (for initial Volatility symbol download)
-
----
-
-## Step 1: Clone Repository
-
-```bash
-cd ~
-
-git clone https://github.com/romilp619/Phantom-DFIR.git
-
-cd Phantom-DFIR
-```
-
----
-
-## Step 2: Create Virtual Environment
-
-```bash
-python3 -m venv venv
-
-source venv/bin/activate
-```
-
----
-
-## Step 3: Install Dependencies
-
-```bash
-pip install -r requirements.txt
-
-pip install volatility3 fastapi uvicorn mcp pefile pyAesCrypt
-```
-
----
-
-## Step 3A: Install System DFIR Tools
-
-PHANTOM calls many native forensic tools directly. On Ubuntu/WSL/SIFT, install
-the common external dependencies with:
-
-```bash
-sudo apt update
-sudo apt install -y \
-  sleuthkit \
-  tshark \
-  ewf-tools \
-  plaso \
-  clamav \
-  clamav-daemon \
-  libbde-utils \
-  dislocker \
-  gnupg
-```
-
-Some distros package libbde differently. Verify the crypto tools with:
-
-```bash
-which gpg
-which dislocker
-which bdemount
-which bdeinfo
-```
-
----
-
-## Step 3B: Enable ClamAV / clamdscan
-
-PHANTOM's malware triage prefers `clamdscan --multiscan` because the daemon
-keeps signatures loaded in memory. If unavailable, PHANTOM falls back to
-`clamscan`, which works but can be slower.
-
-Install and update signatures:
-
-```bash
-sudo apt install -y clamav clamav-daemon
-sudo systemctl stop clamav-freshclam 2>/dev/null || true
-sudo freshclam
-sudo systemctl enable --now clamav-daemon 2>/dev/null || sudo service clamav-daemon start
-```
-
-Verify:
-
-```bash
-which clamdscan
-clamdscan --version
-clamdscan --ping
-```
-
-If `clamdscan --ping` fails in WSL, start the daemon manually:
-
-```bash
-sudo service clamav-daemon start
-```
-
-## Step 4: Install Ollama (Optional)
-
-```bash
-curl -fsSL https://ollama.com/install.sh | sh
-```
-
-Start Ollama:
-
-```bash
-ollama serve
-```
-
-Pull model:
-
-```bash
-ollama pull qwen2.5:14b
-```
-
----
-
-## Step 5: First Volatility Symbol Download
-
-Run once:
-
-```bash
-vol -f /path/to/memory.img windows.info
-```
-
-IMPORTANT:
-- First run may take 5-15 minutes
-- Do NOT interrupt symbol download
-
----
-
-## Step 6: Run Analysis
-
-### Full analysis (with LLM)
-
-```bash
-python3 main.py -f /path/to/memory.img
-```
-
-### Rule-based only (deterministic)
-
-```bash
-python3 main.py -f /path/to/memory.img --no-llm
-```
-
-### Custom model
-
-```bash
-python3 main.py -f /path/to/memory.img --model qwen2.5:14b
-```
-
----
-
-## Step 7: Benchmark Accuracy
-
-```bash
-python3 benchmark.py \
-  -f /path/to/memory.img \
-  --ground-truth ground_truth_base_admin.json
-```
-
----
-
-## Step 8: MCP Server
-
-### Terminal 1
-
-```bash
-python3 mcpserver/mcp_server.py --transport http --port 8765
-```
-
-### Terminal 2
-
-```bash
-python3 test_mcp.py --memory /path/to/memory.img
-```
-
----
-
-## Step 9: Memory + Disk Correlation
+### Step 9: Memory + Disk Correlation
 
 ```bash
 python3 disk_correlator.py \
@@ -611,7 +533,7 @@ Verdicts matched: 5/5
 
 ---
 
-# Output Files
+## Output Files
 
 After each run, PHANTOM generates:
 
