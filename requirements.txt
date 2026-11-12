@@ -32,3 +32,18 @@ pyAesCrypt>=6.1.1
 # (three call sites: 15199, 15597, 15972). The import name is Evtx; the PyPI
 # distribution is python-evtx.
 python-evtx>=0.7.4
+
+# Test suite (tests/ - 6 suites: injection, curation guards, scanner
+# normalisation, the Rust guard, bounded-guard and core).
+pytest>=7.4.0
+
+# Optional, AI-safety repair track only. These are large GPU packages and are
+# NOT needed to run the forensic engine, the evidence scanner or the test
+# suite. Install them only to retrain or evaluate the QLoRA repair adapter
+# (phantom_ai_safety/repair/, scripts/check_model_compat.py):
+#   torch
+#   transformers
+#   trl
+#   peft
+#   datasets
+

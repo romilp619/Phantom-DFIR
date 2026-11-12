@@ -38,6 +38,27 @@ except ImportError:
     print("[WARN] mcp package not installed. Run: pip install mcp --break-system-packages",
           file=sys.stderr)
 
+    # The tool catalogue below is built at module level and references Tool(...)
+    # unconditionally (20 call sites). Without these placeholders the module
+    # raises "NameError: name 'Tool' is not defined" on import, which hides the
+    # warning above and breaks any caller that merely imports this module.
+    # MCP_AVAILABLE stays False, so the server still refuses to serve.
+    class _MCPUnavailable:
+        """Inert stand-in used only when the mcp package is missing."""
+
+        def __init__(self, *args, **kwargs):
+            self.args = args
+            self.kwargs = kwargs
+
+        def __call__(self, *args, **kwargs):
+            raise RuntimeError(
+                "mcp package not installed; install it with: pip install mcp")
+
+    Tool = _MCPUnavailable
+    TextContent = _MCPUnavailable
+    Server = _MCPUnavailable
+    stdio_server = _MCPUnavailable
+
 # ── Config ────────────────────────────────────────────────────────────────────
 # Insert project root (parent of mcpserver/) into path for config import
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

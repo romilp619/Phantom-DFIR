@@ -25,15 +25,40 @@ import sys
 import types
 from typing import Any, Callable, Optional
 
+# Legacy locations from before the forensic engine was merged into this
+# repository, when it was a separate external clone. They are kept only as a
+# last-resort fallback; they refer to another machine's user directory and do
+# not exist here.
 WSL_PHANTOM_ROOT = "/mnt/c/Users/Owner/Downloads/redirect/Phantom-DFIR"
 WIN_PHANTOM_ROOT = r"C:\Users\Owner\Downloads\redirect\Phantom-DFIR"
 
+# This file is <repo>/phantom_ai_safety/harness/env.py, so the repository root
+# is three levels up. Since the integration, the forensic engine lives in that
+# root (agents/, tools/, correlation/), which makes the repository its own
+# upstream and the harness self-contained on any checkout.
+REPO_ROOT = os.path.abspath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+
+
+def _looks_like_phantom_root(path: str) -> bool:
+    """True when path holds the forensic engine the harness imports from."""
+    return all(
+        os.path.isdir(os.path.join(path, d))
+        for d in ("agents", "correlation")
+    )
+
 
 def phantom_root() -> str:
-    """Resolve the upstream clone location, overridable via PHANTOM_ROOT."""
+    """Resolve where the forensic engine lives, overridable via PHANTOM_ROOT.
+
+    Order: an explicit PHANTOM_ROOT, then this repository (the normal case
+    since the integration), then the pre-integration external clone paths.
+    """
     env = os.environ.get("PHANTOM_ROOT")
     if env:
         return env
+    if _looks_like_phantom_root(REPO_ROOT):
+        return REPO_ROOT
     return WIN_PHANTOM_ROOT if os.name == "nt" else WSL_PHANTOM_ROOT
 
 
