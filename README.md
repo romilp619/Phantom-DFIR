@@ -4,7 +4,7 @@ Evidence-grounded, adversarially resilient verification for AI forensic analysis
 
 This is an additive safety layer over [PHANTOM DFIR](https://github.com/romilp619/Phantom-DFIR). The upstream clone is imported and measured **unmodified**; nothing in this repository edits it.
 
-Built for the Lexsi AI Safety and Alignment Hackathon, Track 2 (AI Red Teaming, Safety and Alignment).
+Built for the Find Evil! Hackathon (SANS Institute).
 
 ## The finding
 
@@ -119,6 +119,6 @@ matters: it pins the exact bytes the findings were measured against.
 
 ## Licensing and disclosure
 
-The upstream project's licence governs the imported code. The Lexsi repositories are source-available under LSAL v1.1/v1.2 rather than uniformly open source, AlignTune vendors AGPL and LGPL components, and AuditKIT Section 1A asks an organisation doing red-teaming to send written acknowledgement to support@lexsi.ai. The Cohere checkpoints are `cc-by-nc-4.0`, so non-commercial.
+The upstream project's licence governs the imported code. The sponsor repositories are source-available under their own licences rather than uniformly open source, AlignTune vendors AGPL and LGPL components, and AuditKIT Section 1A asks an organisation doing red-teaming to send written acknowledgement to support@lexsi.ai. The Cohere checkpoints are `cc-by-nc-4.0`, so non-commercial.
 
 This is a defensive finding about a public project. All attacks are synthetic evaluation rows; no exploit targeting a live system is published, and no upstream file was modified.

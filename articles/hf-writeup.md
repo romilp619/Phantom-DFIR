@@ -194,6 +194,6 @@ Every result file records the SHA-256 digest of the upstream verification source
 
 ## Licence and disclosure notes
 
-The upstream project's licence governs the imported code. The Lexsi repositories are source-available under LSAL v1.1/v1.2 rather than uniformly open source; AlignTune vendors AGPL and LGPL components; AuditKIT Section 1A asks organisations doing red-teaming to send written acknowledgement to support@lexsi.ai. Cohere checkpoints are `cc-by-nc-4.0` (non-commercial).
+The upstream project's licence governs the imported code. The sponsor repositories are source-available under their own licences rather than uniformly open source; AlignTune vendors AGPL and LGPL components; AuditKIT Section 1A asks organisations doing red-teaming to send written acknowledgement to support@lexsi.ai. Cohere checkpoints are `cc-by-nc-4.0` (non-commercial).
 
-This is a defensive security finding about a public project, prepared for the Lexsi AI Safety and Alignment Hackathon, Track 2.
+This is a defensive security finding about a public project, prepared for the Find Evil! Hackathon.

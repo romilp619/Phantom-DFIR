@@ -1,6 +1,6 @@
 """Discover the REAL AlignTune / CuratorKIT APIs before writing a trainer.
 
-The project spec is explicit: integrate the Lexsi libraries without inventing APIs.
+The project spec is explicit: integrate the sponsor libraries without inventing APIs.
 This script prints the actual public surface of what is installed, so the training
 script is written against signatures that exist rather than signatures I assumed.
 

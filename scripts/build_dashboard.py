@@ -458,7 +458,7 @@ def build_html(comp, held, base, red=None, cur=None) -> str:
 <div class="wrap">
 
   <header class="hero">
-    <div class="eyebrow">Lexsi AI Safety &amp; Alignment Hackathon &middot; Track 2</div>
+    <div class="eyebrow">Find Evil! Hackathon &middot; SANS Institute</div>
     <h1>AI Safety &amp; Red Teaming</h1>
     <p class="sub">Audit of the adversarial &ldquo;Skeptic&rdquo; verification layer in
     PHANTOM DFIR, and an evidence-grounded replacement.</p>

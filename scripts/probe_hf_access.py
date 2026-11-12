@@ -1,6 +1,6 @@
 """Probe Hugging Face gating status for candidate Cohere backbones.
 
-The Lexsi track expects a Cohere model. The Tiny Aya family is gated, which blocks
+The track expects a sponsor open-weights model. The Tiny Aya family is gated, which blocks
 an unattended run. This script asks the HF API for each candidate's gating status
 anonymously, so the blocker is established by evidence rather than assumed.
 

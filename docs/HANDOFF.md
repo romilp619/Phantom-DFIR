@@ -1,4 +1,4 @@
-# Handoff — Lexsi Track 2 submission (phantom-safety)
+# Handoff — Find Evil! submission (phantom-safety)
 
 State as of 2026-11-10 09:20 America/Chicago. Cold-start brief.
 Repo `phantom-safety`, 9 commits, HEAD `ce410d4`, 48 tracked files, working tree clean.
@@ -6,7 +6,7 @@ Long-form docs in `lexsi-work/`, mirrored into `phantom-safety/docs/`.
 
 ## Objective
 
-Winning submission for the Lexsi AI Safety and Alignment Hackathon, Track 2 (AI Red
+Winning submission for the Find Evil! Hackathon (AI Red
 Teaming, Safety and Alignment). Deadline 2026-11-15 11:59 PM AoE. Moo registers and
 submits manually.
 
@@ -168,7 +168,7 @@ Publishing needs an HF **write** token, same blocker as training.
 3. The identity and negation gaps are **not** to be patched with keyword lists.
 4. Do not claim a fine-tuned model, HF dataset, or HF model repo exists until it does.
 5. `allowlist_masquerade` did NOT reproduce as measured; it stays a source reading.
-6. Lexsi repos are LSAL source-available, not uniformly open source. AuditKIT Section 1A
+6. Sponsor repos are source-available, not uniformly open source. AuditKIT Section 1A
    wants written acknowledgement to support@lexsi.ai. **Moo sends it.**
 7. Cohere checkpoints are `cc-by-nc-4.0` (non-commercial).
 

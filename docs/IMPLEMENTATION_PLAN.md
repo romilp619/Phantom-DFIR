@@ -19,7 +19,7 @@ Improved condition = a Cohere Labs model that emits evidence-grounded verdicts, 
   - Upgrade path if training moves to the 16 GB box: `CohereLabs/aya-expanse-8b` at 2048-4096 context.
   - Not viable at 8 GB: `aya-expanse-32b` (about 16.5 GB at 4-bit); `aya-expanse-8b` fits only near 1024 context, too short for evidence plus claim plus schema.
 - **Stack**: CuratorKIT for dataset curation, AlignTune for SFT, AuditKIT for before/after metrics.
-- **Licences are not uniform and must be stated in the write-up**: all Cohere checkpoints are `cc-by-nc-4.0` (non-commercial). AlignTune is MIT + Apache + AGPL + LGPL (it vendors unsloth and mergekit). The remaining Lexsi repositories are LSAL v1.1/v1.2 source-available, and AuditKIT Section 1A requires an organisation doing red-teaming to obtain written permission or send written acknowledgement to support@lexsi.ai. **Action for the human: send that acknowledgement before publishing.** Draft only; do not send from here.
+- **Licences are not uniform and must be stated in the write-up**: all Cohere checkpoints are `cc-by-nc-4.0` (non-commercial). AlignTune is MIT + Apache + AGPL + LGPL (it vendors unsloth and mergekit). The sponsor repositories are LSAL v1.1/v1.2 source-available, and AuditKIT Section 1A requires an organisation doing red-teaming to obtain written permission or send written acknowledgement to support@lexsi.ai. **Action for the human: send that acknowledgement before publishing.** Draft only; do not send from here.
 - **Two environments are mandatory**: AlignTune pins `trl==1.7.1` while SafeTune caps `trl<1.15`. Training and evaluation must not share a venv.
 
 ## Blocking unknown to resolve before any training
