@@ -54,6 +54,12 @@ const SEV_MEDIUM: &str = "MEDIUM";
 ///
 /// Ordering is deliberate and matches the Python module: direct address of a model is
 /// stronger evidence of an attempt to manipulate the analyst than a bare keyword.
+///
+/// **Maintenance rule: every rule here must exist in the same position in
+/// `scanner.py` with the same category, severity, and regex patterns. The equivalence
+/// tests (`scripts/check_normalization_equivalence.py` and
+/// `tests/test_rust_guard.py`) fail if the two diverge. Add a rule on one side, add
+/// it on the other, or the CI catches you.**
 struct Rule {
     category: &'static str,
     severity: &'static str,

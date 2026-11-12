@@ -16,6 +16,18 @@ Design rules, taken from the project's security requirements:
   that addresses an AI system or an instruction channel, not text that merely looks
   nasty.
 - Every finding carries a severity and a human-readable explanation of the match.
+
+  The rule table (`RULES`) is the canonical list. It lives here, not in a separate
+  config file, because a security reviewer should be able to read all 27 patterns in
+  one screen and know exactly what triggers a finding. If you add a rule here, you
+  must also add it to `phantom-guard/src/main.rs` in the same position with the same
+  severity and the same regex, or the equivalence tests will fail.
+
+  The scanner runs on the raw text first, then on every candidate produced by
+  `normalize.extract_candidates()`. Findings from normalisation carry
+  `char_offset=-1` and `matched_text` prefixed `[decoded]`, because offsets have no
+  meaning in a reconstructed candidate. Callers iterate `findings` and never need to
+  know which pass produced which one.
 """
 from __future__ import annotations
 
