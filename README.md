@@ -553,47 +553,17 @@ After each run, PHANTOM generates:
 
 ## Architecture
 
-```mermaid
-flowchart TB
-    subgraph INPUT["Evidence Sources"]
-        MEM["Memory image"]
-        DISK["Disk image / E01"]
-        PCAP["PCAP / PCAPNG"]
-    end
+The full architecture diagram lives in **[ARCHITECTURE.md](ARCHITECTURE.md)**, which is the
+single source of truth for it. It shows the three evidence paths (memory, disk/E01, PCAP),
+the LangGraph agent pipeline with its self-correction loop, and where reports are produced.
 
-    ROUTER["phantom_router.py\nDetect evidence type and dispatch"]
+In short:
 
-    subgraph PIPELINE["Memory Agent Pipeline"]
-        direction TB
-        COL["Collector\nVolatility plugins"]
-        INV["Investigator\nRules + optional LLM"]
-        EVD["Evidence Agent\nTargeted validation"]
-        SKP["Skeptic\nChallenge findings"]
-        GAP["Evidence gap / self-correction\nRerun or finalize"]
-        RPT["Reporter\nJSON + Markdown + logs"]
-
-        COL --> INV --> EVD --> SKP --> GAP
-        GAP -->|"More evidence"| EVD
-        GAP -->|"Final"| RPT
-    end
-
-    subgraph OTHER["Disk and Network Analysis"]
-        DISKENG["disk_correlator.py\nDisk / E01 analysis"]
-        PCAPENG["disk_correlator.py\nPCAP / PCAPNG analysis"]
-    end
-
-    MCP["Separate MCP server\nTyped read-only forensic tools"]
-
-    MEM --> ROUTER
-    DISK --> ROUTER
-    PCAP --> ROUTER
-    ROUTER -->|"Memory"| COL
-    ROUTER -->|"Disk"| DISKENG
-    ROUTER -->|"PCAP / PCAPNG"| PCAPENG
-    RPT --> O1["Forensic JSON"]
-    RPT --> O2["Analyst Markdown"]
-    RPT --> O3["Execution and reasoning logs"]
-```
+- `phantom_router.py` detects the evidence type and dispatches it.
+- Memory goes to `main.py`: Collector, Investigator, Evidence, Skeptic, then the
+  self-correction control, then the reporter.
+- Disk, E01 and PCAP go to `disk_correlator.py`.
+- The router can gather the resulting reports into one unified report.
 
 > The MCP server is a separate interface; it is not shown as an automatic stage in the router pipeline. See [ARCHITECTURE.md](ARCHITECTURE.md) for details and trust boundaries.
 
