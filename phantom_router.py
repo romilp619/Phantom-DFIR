@@ -90,6 +90,10 @@ Existing tools remain available and unchanged:
                    help="Optional child process timeout in seconds (0 = no timeout)")
     p.add_argument("--dry-run", action="store_true",
                    help="Print selected command without running it")
+    p.add_argument("--no-evidence-self-correct", action="store_true",
+                   help="Disable router-level gap checks/reruns for disk and PCAP evidence")
+    p.add_argument("--gap-confidence", type=float, default=0.85,
+                   help="Target confidence for router evidence gap controller (default: 0.85)")
     return p.parse_args()
 
 
@@ -245,7 +249,244 @@ def load_json_reports(paths: Iterable[Path]) -> List[Dict[str, Any]]:
     return loaded
 
 
-def compact_value(value: Any, depth: int = 0, max_list: int = 8) -> Any:
+def _count_key_hits(value: Any, key_patterns: Iterable[str]) -> int:
+    patterns = [re.compile(p, re.I) for p in key_patterns]
+    count = 0
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if any(p.search(str(key)) for p in patterns):
+                if isinstance(child, list):
+                    count += len(child)
+                elif isinstance(child, dict):
+                    count += len(child)
+                elif child not in ("", None, 0, False):
+                    count += 1
+            count += _count_key_hits(child, key_patterns)
+    elif isinstance(value, list):
+        for child in value:
+            count += _count_key_hits(child, key_patterns)
+    return count
+
+
+def _gap_text_blob(value: Any, limit: int = 250000) -> str:
+    try:
+        text = json.dumps(value, default=str)
+    except Exception:
+        text = str(value)
+    return text[:limit].lower()
+
+
+def _gap_controller_confidence(
+    evidence_type: str,
+    reports: List[Dict[str, Any]],
+    stdout: str,
+) -> Tuple[float, List[Dict[str, Any]]]:
+    """Conservative coverage check for non-memory evidence routes."""
+    gaps: List[Dict[str, Any]] = []
+    payload = {"reports": reports, "stdout_tail": stdout[-20000:]}
+    blob = _gap_text_blob(payload)
+
+    def add_gap(name: str, severity: str, detail: str, action: str) -> None:
+        gaps.append({
+            "gap": name,
+            "severity": severity,
+            "detail": detail,
+            "recommended_action": action,
+        })
+
+    if not reports:
+        add_gap(
+            "missing_structured_reports",
+            "high",
+            "No JSON reports were discovered after the child analyzer finished.",
+            "rerun_child_analyzer",
+        )
+    if "verdict" not in blob and "reasoning" not in blob:
+        add_gap(
+            "missing_reasoning_verdict",
+            "medium",
+            "No verdict or reasoning object was visible in generated reports.",
+            "rerun_with_deep_analysis",
+        )
+
+    if evidence_type == "disk":
+        timeline_hits = _count_key_hits(payload, [r"timeline", r"events"])
+        registry_hits = _count_key_hits(payload, [r"registry", r"hive", r"userassist", r"amcache", r"bam"])
+        execution_hits = _count_key_hits(payload, [r"prefetch", r"execution", r"program", r"service"])
+        user_hits = _count_key_hits(payload, [r"account", r"user", r"sid"])
+
+        if timeline_hits < 3:
+            add_gap(
+                "disk_timeline_sparse",
+                "medium",
+                "Few or no timeline events were recovered from disk artifacts.",
+                "rerun_with_timeline_enabled",
+            )
+        if registry_hits < 2:
+            add_gap(
+                "registry_artifacts_sparse",
+                "medium",
+                "Registry and user-execution artifact coverage appears sparse.",
+                "rerun_with_deep_analysis",
+            )
+        if execution_hits < 2:
+            add_gap(
+                "execution_artifacts_sparse",
+                "medium",
+                "Execution evidence such as Prefetch/UserAssist/Amcache/BAM/services appears sparse.",
+                "rerun_with_deep_analysis",
+            )
+        if user_hits < 1:
+            add_gap(
+                "user_attribution_sparse",
+                "low",
+                "No clear user/account attribution artifacts were visible.",
+                "rerun_with_deep_analysis",
+            )
+
+    elif evidence_type == "pcap":
+        flow_hits = _count_key_hits(payload, [r"flow", r"conversation", r"http", r"dns", r"tls"])
+        identity_hits = _count_key_hits(payload, [r"identity", r"webmail", r"account", r"participant"])
+        communication_hits = _count_key_hits(payload, [r"communication", r"post", r"message", r"sender", r"recipient"])
+        classification_hits = _count_key_hits(payload, [r"classification", r"attribution", r"verdict"])
+
+        if flow_hits < 3:
+            add_gap(
+                "network_flow_sparse",
+                "high",
+                "Network flow/protocol coverage is sparse for a PCAP input.",
+                "rerun_with_deep_analysis",
+            )
+        if identity_hits < 1:
+            add_gap(
+                "identity_attribution_missing",
+                "medium",
+                "No identity/webmail/account attribution evidence was visible.",
+                "rerun_pcap_attribution",
+            )
+        if communication_hits < 1:
+            add_gap(
+                "communication_context_missing",
+                "medium",
+                "No message/POST/sender/recipient communication context was visible.",
+                "rerun_pcap_attribution",
+            )
+        if classification_hits < 1:
+            add_gap(
+                "network_classification_missing",
+                "medium",
+                "No network case classification or attribution verdict was visible.",
+                "rerun_with_deep_analysis",
+            )
+
+    penalty = 0.0
+    for item in gaps:
+        severity = item.get("severity")
+        penalty += 0.28 if severity == "high" else 0.16 if severity == "medium" else 0.08
+    return max(0.0, min(1.0, 1.0 - penalty)), gaps
+
+
+def _gap_controller_next_command(
+    command: List[str],
+    evidence_type: str,
+    gaps: List[Dict[str, Any]],
+) -> Tuple[List[str], List[str]]:
+    next_cmd = list(command)
+    actions: List[str] = []
+    wanted = {item.get("recommended_action", "") for item in gaps}
+
+    if evidence_type in {"disk", "pcap"}:
+        if "rerun_with_deep_analysis" in wanted or "rerun_pcap_attribution" in wanted:
+            if "--no-deep" in next_cmd:
+                next_cmd = [item for item in next_cmd if item != "--no-deep"]
+                actions.append("removed --no-deep")
+            if "--deep" not in next_cmd:
+                next_cmd.append("--deep")
+                actions.append("enabled --deep analysis")
+        if "rerun_with_timeline_enabled" in wanted and "--no-timeline" in next_cmd:
+            next_cmd = [item for item in next_cmd if item != "--no-timeline"]
+            actions.append("enabled timeline generation")
+
+    if next_cmd == command:
+        actions.append("no safer additional command change available; child engine already ran requested modules")
+    return next_cmd, actions
+
+
+def evidence_gap_controller(
+    evidence_type: str,
+    command: List[str],
+    output_dir: Path,
+    initial_started: float,
+    initial_returncode: int,
+    initial_stdout: str,
+    args: argparse.Namespace,
+) -> Tuple[int, str, List[Path], List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Bounded router self-correction for disk and PCAP evidence."""
+    trace: List[Dict[str, Any]] = []
+    stdout = initial_stdout
+    returncode = initial_returncode
+    report_paths = unique_existing(
+        extract_report_paths(stdout) + scan_fresh_reports(output_dir, initial_started)
+    )
+    json_reports = load_json_reports(report_paths)
+
+    if evidence_type == "memory" or args.no_evidence_self_correct:
+        return returncode, stdout, report_paths, json_reports, trace
+
+    current_command = list(command)
+    max_iterations = max(1, min(int(args.max_iterations or 1), 3))
+    target = max(0.0, min(float(args.gap_confidence), 1.0))
+
+    for iteration in range(1, max_iterations + 1):
+        confidence, gaps = _gap_controller_confidence(evidence_type, json_reports, stdout)
+        next_command, actions = _gap_controller_next_command(current_command, evidence_type, gaps)
+        record = {
+            "iteration": iteration,
+            "timestamp": datetime.now().isoformat(),
+            "evidence_type": evidence_type,
+            "confidence": round(confidence, 3),
+            "target_confidence": target,
+            "gaps": gaps,
+            "actions": actions,
+            "command": current_command,
+        }
+        trace.append(record)
+
+        print("=" * 64)
+        print("PHANTOM ROUTER - Evidence Gap Controller")
+        print("=" * 64)
+        print(f"Iteration      : {iteration}/{max_iterations}")
+        print(f"Evidence type  : {evidence_type}")
+        print(f"Confidence     : {confidence:.2f} / target {target:.2f}")
+        print(f"Gaps detected  : {len(gaps)}")
+        for item in gaps[:8]:
+            print(f"  - [{item.get('severity')}] {item.get('gap')}: {item.get('detail')}")
+        for action in actions:
+            print(f"Action         : {action}")
+
+        if confidence >= target or not gaps:
+            record["decision"] = "complete"
+            break
+        if next_command == current_command:
+            record["decision"] = "stopped_no_new_command"
+            break
+        if iteration >= max_iterations:
+            record["decision"] = "stopped_max_iterations"
+            break
+
+        record["decision"] = "rerun"
+        current_command = next_command
+        started = time.time()
+        returncode, stdout = stream_command(current_command, ROOT, timeout=args.timeout)
+        report_paths = unique_existing(
+            extract_report_paths(stdout) + scan_fresh_reports(output_dir, started)
+        )
+        json_reports = load_json_reports(report_paths)
+
+    return returncode, stdout, report_paths, json_reports, trace
+
+
+def compact_value(value: Any, depth: int = 0, max_list: int = 6) -> Any:
     if depth > 4:
         return "<truncated>"
     if isinstance(value, dict):
@@ -264,7 +505,7 @@ def compact_value(value: Any, depth: int = 0, max_list: int = 8) -> Any:
     if isinstance(value, list):
         return [compact_value(v, depth + 1, max_list) for v in value[:max_list]]
     if isinstance(value, str):
-        return value[:1200] + ("..." if len(value) > 1200 else "")
+        return value[:700] + ("..." if len(value) > 700 else "")
     return value
 
 
@@ -322,8 +563,8 @@ def llm_invoke_text(prompt: str, args: argparse.Namespace) -> Tuple[str, str]:
 
 def make_unified_prompt(evidence_type: str, evidence_path: Path, summary: Dict[str, Any]) -> str:
     payload = json.dumps(summary, indent=2, default=str)
-    if len(payload) > 45000:
-        payload = payload[:45000] + "\n...TRUNCATED..."
+    if len(payload) > 18000:
+        payload = payload[:18000] + "\n...TRUNCATED: compact evidence summary exceeded router LLM budget..."
     return f"""You are PHANTOM DFIR's unified analyst layer.
 
 Evidence type: {evidence_type}
@@ -356,6 +597,7 @@ def write_unified_reports(
     llm_status: str,
     llm_text: str,
     stdout_tail: str,
+    gap_trace: Optional[List[Dict[str, Any]]] = None,
 ) -> Tuple[Path, Path]:
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     stem = re.sub(r"[^A-Za-z0-9_.-]+", "_", evidence_path.name)[:80]
@@ -375,6 +617,7 @@ def write_unified_reports(
         "json_findings_summary": summarize_reports(json_reports),
         "llm_status": llm_status,
         "unified_analysis": llm_text,
+        "evidence_gap_controller": gap_trace or [],
         "stdout_tail": stdout_tail[-12000:],
     }
     with json_path.open("w", encoding="utf-8") as f:
@@ -410,6 +653,35 @@ def write_unified_reports(
         "",
         llm_text.strip() or "No unified analysis text generated.",
         "",
+        "## Evidence Gap Controller",
+        "",
+    ]
+    if gap_trace:
+        final_gap = gap_trace[-1]
+        md.extend([
+            f"**Iterations**: {len(gap_trace)}",
+            f"**Final confidence**: `{final_gap.get('confidence')}`",
+            f"**Target confidence**: `{final_gap.get('target_confidence')}`",
+            f"**Decision**: `{final_gap.get('decision', 'recorded')}`",
+            "",
+        ])
+        if final_gap.get("gaps"):
+            md.append("### Remaining Gaps")
+            md.append("")
+            for item in final_gap.get("gaps", [])[:12]:
+                md.append(f"- **{item.get('gap')}** ({item.get('severity')}): {item.get('detail')}")
+            md.append("")
+        if final_gap.get("actions"):
+            md.append("### Actions")
+            md.append("")
+            for action in final_gap.get("actions", [])[:12]:
+                md.append(f"- {action}")
+            md.append("")
+    else:
+        md.append("Router-level gap controller was skipped for this evidence type or disabled.")
+        md.append("")
+
+    md += [
         "## Findings Summary",
         "",
         "```json",
@@ -451,10 +723,15 @@ def main() -> int:
     started = time.time()
     returncode, stdout = stream_command(command, ROOT, timeout=args.timeout)
 
-    report_paths = extract_report_paths(stdout)
-    report_paths.extend(scan_fresh_reports(output_dir, started))
-    report_paths = unique_existing(report_paths)
-    json_reports = load_json_reports(report_paths)
+    returncode, stdout, report_paths, json_reports, gap_trace = evidence_gap_controller(
+        evidence_type=evidence_type,
+        command=command,
+        output_dir=output_dir,
+        initial_started=started,
+        initial_returncode=returncode,
+        initial_stdout=stdout,
+        args=args,
+    )
     summary = summarize_reports(json_reports)
 
     prompt = make_unified_prompt(evidence_type, evidence_path, summary)
@@ -471,6 +748,7 @@ def main() -> int:
         llm_status=llm_status,
         llm_text=llm_text,
         stdout_tail=stdout,
+        gap_trace=gap_trace,
     )
 
     print("=" * 64)
@@ -478,6 +756,9 @@ def main() -> int:
     print("=" * 64)
     print(f"Child return code : {returncode}")
     print(f"Reports found     : {len(report_paths)}")
+    if gap_trace:
+        final_gap = gap_trace[-1]
+        print(f"Gap controller    : {len(gap_trace)} iteration(s), confidence={final_gap.get('confidence')}")
     print(f"Unified JSON      : {unified_json}")
     print(f"Unified MD        : {unified_md}")
     if llm_status != "ok":
