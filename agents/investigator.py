@@ -67,6 +67,8 @@ Return ONLY valid JSON array, no other text.
 def _truncate_evidence(raw_evidence: dict, max_chars: int = 12000) -> str:
     """Build a focused evidence summary, prioritising high-value plugins."""
     priority = [
+        "memory:triage_summary", "memory:strings_ioc", "memory:yara_scan",
+        "memory:timeline_hints",
         "vol3:pslist", "vol3:pstree", "vol3:netscan", "vol3:shimcachemem",
         "vol3:svcscan", "vol3:cmdline", "vol3:malfind", "vol3:svcdiff",
         "vol3:psxview", "vol2:svcscan", "vol2:netscan",
@@ -327,6 +329,15 @@ def _extract_suspicious_services(raw_evidence: dict) -> list:
     """
     suspicious = []
     seen_exes = set()
+
+    # Windows has a small number of legitimate service binaries outside
+    # System32. Treat these as explainable findings, not compromise.
+    known_legitimate_service_paths = {
+        "trustedinstaller.exe": [
+            r"c:\windows\servicing\trustedinstaller.exe",
+        ],
+    }
+
     for plugin in ["vol3:svcscan", "vol3:svclist", "vol2:svcscan"]:
         text = raw_evidence.get(plugin, "")
         if not text:
@@ -342,12 +353,122 @@ def _extract_suspicious_services(raw_evidence: dict) -> list:
                     exe_name = m.group(1)
                     if exe_name.lower() not in seen_exes:
                         seen_exes.add(exe_name.lower())
+                        exe_key = exe_name.lower()
+                        is_known_legit = any(
+                            legit_path in ll
+                            for legit_path in known_legitimate_service_paths.get(exe_key, [])
+                        )
                         suspicious.append({
                             "exe": exe_name,
                             "line": line.strip()[:200],
                             "plugin": plugin,
+                            "known_legitimate": is_known_legit,
                         })
     return suspicious
+
+
+def _choose_triage_ioc(category: str, line: str) -> str:
+    """Return a short, stable IOC from a memory-triage line."""
+    lower = line.lower()
+    if category == "network_indicator":
+        m = re.search(r"https?://[^\s\"'<>]{4,}|(?:\d{1,3}\.){3}\d{1,3}:\d{2,5}", line, re.I)
+        if m:
+            return m.group(0).rstrip(".,);]")[:40]
+    keyword_map = {
+        "credential_theft": ["mimikatz", "sekurlsa", "lsass.dmp", "procdump", "comsvcs.dll", "wdigest"],
+        "c2_framework": ["meterpreter", "metasploit", "cobalt strike", "beacon", "sliver", "havoc"],
+        "powershell_stager": ["powershell", "pwsh", "-encodedcommand", "frombase64string"],
+        "suspicious_shell": ["cmd.exe", "rundll32.exe", "regsvr32.exe", "mshta.exe", "wscript.exe", "cscript.exe"],
+        "linux_reverse_shell": ["/dev/tcp", "/dev/udp", "mkfifo", "nc -e", "bash -i"],
+    }
+    for keyword in keyword_map.get(category, []):
+        if keyword in lower:
+            return keyword
+    m = re.search(r"([A-Za-z0-9_.:/-]{3,40})", line)
+    return m.group(1) if m else category
+
+
+def _extract_memory_triage_hypotheses(raw_evidence: dict) -> list:
+    """Convert bounded memory-triage hits into falsifiable baseline hypotheses."""
+    hypotheses = []
+    seen = set()
+    category_map = {
+        "credential_theft": (
+            "CredentialAccess",
+            "Credential-theft indicator found in raw memory triage",
+            ["vol2:hashdump", "vol2:lsadump", "vol3:malfind"],
+        ),
+        "c2_framework": (
+            "C2",
+            "Known C2 framework indicator found in raw memory triage",
+            ["vol3:netscan", "vol2:netscan", "vol3:malfind"],
+        ),
+        "powershell_stager": (
+            "Execution",
+            "PowerShell encoded-command or stager pattern found in raw memory triage",
+            ["vol3:cmdline", "vol2:cmdscan", "vol2:consoles"],
+        ),
+        "suspicious_shell": (
+            "Execution",
+            "Suspicious Windows script or shell execution pattern found in raw memory triage",
+            ["vol3:cmdline", "vol3:pstree", "vol2:cmdscan"],
+        ),
+        "linux_reverse_shell": (
+            "C2",
+            "Linux reverse-shell indicator found in raw memory triage",
+            ["vol3:linux_bash", "vol3:linux_sockstat", "vol3:linux_psaux"],
+        ),
+    }
+
+    for line in raw_evidence.get("memory:strings_ioc", "").splitlines():
+        m = re.match(r"\[([a-z_]+)\]\s+(.*)", line)
+        if not m:
+            continue
+        category, body = m.group(1), m.group(2)
+        if category not in category_map:
+            continue
+        phase, claim, verify = category_map[category]
+        ioc = _choose_triage_ioc(category, body)
+        key = (category, ioc.lower())
+        if key in seen or not _is_valid_ioc(ioc):
+            continue
+        seen.add(key)
+        hypotheses.append({
+            "id": "H-MEM",
+            "claim": f"{claim}: {ioc}",
+            "ioc": ioc,
+            "attack_phase": phase,
+            "raw_evidence_quote": line[:180],
+            "requires_verification": verify,
+        })
+        if len(hypotheses) >= 8:
+            break
+
+    for line in raw_evidence.get("memory:yara_scan", "").splitlines():
+        if not line or line.startswith("["):
+            continue
+        rule = line.split()[0]
+        if not rule.startswith("PHANTOM_Memory_"):
+            continue
+        ioc = rule.replace("PHANTOM_Memory_", "").lower()[:40]
+        key = ("yara", ioc)
+        if key in seen or not _is_valid_ioc(ioc):
+            continue
+        seen.add(key)
+        phase = "C2" if "c2" in ioc or "reverse" in ioc else "Execution"
+        if "mimikatz" in ioc:
+            phase = "CredentialAccess"
+        hypotheses.append({
+            "id": "H-YARA",
+            "claim": f"Embedded PHANTOM YARA memory rule matched: {rule}",
+            "ioc": ioc,
+            "attack_phase": phase,
+            "raw_evidence_quote": line[:180],
+            "requires_verification": ["vol3:malfind", "vol3:pslist", "vol3:netscan"],
+        })
+        if len(hypotheses) >= 10:
+            break
+    return hypotheses
 
 
 def run_investigator(state: InvestigationState) -> InvestigationState:
@@ -474,14 +595,22 @@ def run_investigator(state: InvestigationState) -> InvestigationState:
             "timestamp": _time.time(),
         })
 
-    # Track cleared processes from legitimacy engine
+    # Track cleared processes from legitimacy engine without duplicating them
+    # across skeptic/self-correction rounds.
     existing_fp = state.get("false_positives_detected", [])
-    existing_fp.extend(filtered)
+    merged_fp = []
+    seen_fp = set()
+    for item in existing_fp + filtered:
+        key = (item.get("ioc") or item.get("claim") or "").lower().strip()
+        if not key or key in seen_fp:
+            continue
+        seen_fp.add(key)
+        merged_fp.append(item)
 
     return {
         **state,
         "hypotheses": kept,
-        "false_positives_detected": existing_fp,
+        "false_positives_detected": merged_fp,
         "cleared_findings": filtered,
         "reasoning_log": reasoning,
     }
@@ -492,7 +621,7 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
     Rule-based fallback — never returns empty.
     v2.0: Dynamic IOC extraction — no hardcoded IPs/ports.
     """
-    hypotheses = []
+    hypotheses = _extract_memory_triage_hypotheses(raw_evidence)
     combined = "\n".join(v for v in raw_evidence.values() if v)
 
     # ═══════════════════════════════════════════════════════════════
@@ -503,14 +632,24 @@ def _static_fallback(raw_evidence: dict, os_type: str) -> list:
         # ── Dynamic: Suspicious services NOT in System32 ──────────
         for svc in _extract_suspicious_services(raw_evidence):
             exe = svc["exe"]
-            hypotheses.append({
-                "id":    f"S-SVC",
-                "claim": f"{exe} running as a Windows service from non-System32 path — suspicious",
-                "ioc":   exe,
-                "attack_phase": "Persistence",
-                "raw_evidence_quote": svc["line"][:100],
-                "requires_verification": ["vol3:svcscan", "vol3:pslist", f"vol3:malfind {exe} pid"],
-            })
+            if svc.get("known_legitimate"):
+                hypotheses.append({
+                    "id":    f"S-SVC",
+                    "claim": f"{exe} running from a known legitimate Windows service path — likely benign",
+                    "ioc":   exe,
+                    "attack_phase": "Persistence",
+                    "raw_evidence_quote": svc["line"][:100],
+                    "requires_verification": ["vol3:svcscan", "vol3:pslist", f"vol3:malfind {exe} pid"],
+                })
+            else:
+                hypotheses.append({
+                    "id":    f"S-SVC",
+                    "claim": f"{exe} running as a Windows service from non-System32 path — suspicious",
+                    "ioc":   exe,
+                    "attack_phase": "Persistence",
+                    "raw_evidence_quote": svc["line"][:100],
+                    "requires_verification": ["vol3:svcscan", "vol3:pslist", f"vol3:malfind {exe} pid"],
+                })
 
         # ── Metasploit indicators ─────────────────────────────────
         if "ruby.exe" in combined or "rubyw.exe" in combined:

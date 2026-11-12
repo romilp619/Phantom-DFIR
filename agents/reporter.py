@@ -1,17 +1,17 @@
-"""
-PHANTOM DFIR — Reporter Agent v4.0
+﻿"""
+PHANTOM DFIR â€” Reporter Agent v4.0
 Generates final JSON + Markdown report with:
   - Coherent attack narrative (not just a list of findings)
   - Verified findings (CRITICAL / MEDIUM / LOW)
-  - Cleared processes (investigated, determined benign — shows thoroughness)
+  - Cleared processes (investigated, determined benign â€” shows thoroughness)
   - MITRE ATT&CK kill chain (false-positive-free)
   - Attacker-focused timeline (no system noise)
   - Dynamic remediation playbook (from MITRE, not hardcoded)
   - Hallucinations caught (REFUTED list)
 
-v2.0 — Dynamic remediation from ATT&CK techniques
-v2.1 — Attack narrative, cleared/benign section, filtered timeline
-v4.0 — Evidence coverage audit, SHA-256 chain of custody, version bump
+v2.0 â€” Dynamic remediation from ATT&CK techniques
+v2.1 â€” Attack narrative, cleared/benign section, filtered timeline
+v4.0 â€” Evidence coverage audit, SHA-256 chain of custody, version bump
 """
 import json
 import os
@@ -20,23 +20,24 @@ import time
 from datetime import datetime
 
 from state import InvestigationState
-from correlation.mitre import map_evidence_to_mitre, build_kill_chain
+from correlation.mitre import build_kill_chain
+from correlation.mitre_rules import evaluate_attack_rules
 from correlation.timeline import extract_timestamps, filter_interesting, format_timeline_md
 from config import REPORT_DIR
 
-SEPARATOR = "═" * 60
+SEPARATOR = "â•" * 60
 
 
 def _emoji(confidence: str) -> str:
-    return {"CRITICAL": "🔴", "MEDIUM": "🟡", "LOW": "🟢",
-            "CLEARED": "✅", "REFUTED": "⚫", "UNVERIFIED": "⬜"}.get(confidence, "❓")
+    return {"CRITICAL": "ðŸ”´", "MEDIUM": "ðŸŸ¡", "LOW": "ðŸŸ¢",
+            "CLEARED": "âœ…", "REFUTED": "âš«", "UNVERIFIED": "â¬œ"}.get(confidence, "â“")
 
 
 def _finding_md(h: dict) -> str:
     """Format a single hypothesis as a Markdown finding block."""
     emoji = _emoji(h.get("confidence", ""))
     lines = [
-        f"### {emoji} {h.get('confidence','?')} — {h.get('claim', '')}",
+        f"### {emoji} {h.get('confidence','?')} â€” {h.get('claim', '')}",
         f"- **IOC**: `{h.get('ioc','')}`",
         f"- **Phase**: {h.get('attack_phase','')}",
         f"- **Sources ({len(h.get('verified_sources',[]))})**:",
@@ -56,7 +57,7 @@ def _build_attack_narrative(critical: list, medium: list, cleared: list,
                              techniques: list, kill_chain: list) -> str:
     """
     Generate a coherent attack story from the confirmed findings.
-    This is what wins hackathons — not just a list of IOCs, but a narrative
+    This is what wins hackathons â€” not just a list of IOCs, but a narrative
     that shows the analyst understands what happened.
     """
     sections = []
@@ -92,15 +93,31 @@ def _build_attack_narrative(critical: list, medium: list, cleared: list,
     for h in cleared:
         cleared_names.append(h.get("ioc", ""))
 
-    # Build the narrative
-    sections.append("The investigation of this memory image reveals a **multi-stage compromise** "
-                     "consistent with a targeted intrusion.")
+    # Build the narrative. Do not overstate the case: a report with only
+    # medium or cleared findings is not a confirmed compromise.
+    if critical:
+        sections.append(
+            "The investigation of this memory image reveals a **multi-stage compromise** "
+            "consistent with a targeted intrusion."
+        )
+    elif medium:
+        sections.append(
+            "The investigation identified **suspicious but unconfirmed artifacts** that "
+            "warrant analyst review. PHANTOM did not confirm a critical compromise because "
+            "the evidence did not meet the 3-source corroboration threshold."
+        )
+    else:
+        sections.append(
+            "The investigation did **not confirm malicious compromise** in this memory "
+            "image. Any investigated benign or refuted artifacts are documented below for "
+            "auditability."
+        )
 
     # Stage 1: Initial Access / Persistence
     if malware_services:
         svc_names = ", ".join(f"`{s['exe']}`" for s in malware_services)
         sections.append(
-            f"\n**Stage 1 — Persistence**: The attacker established persistence by installing "
+            f"\n**Stage 1 â€” Persistence**: The attacker established persistence by installing "
             f"malicious Windows service(s): {svc_names}. These services are configured to "
             f"auto-start and run from non-standard paths outside System32, indicating "
             f"deliberate evasion of default security monitoring."
@@ -110,7 +127,7 @@ def _build_attack_narrative(critical: list, medium: list, cleared: list,
     if c2_ips:
         ip_list = ", ".join(f"`{c['ioc']}`" for c in c2_ips)
         sections.append(
-            f"\n**Stage 2 — Command & Control**: Active C2 communication was detected to "
+            f"\n**Stage 2 â€” Command & Control**: Active C2 communication was detected to "
             f"{ip_list}. The connection state (CLOSE_WAIT/ESTABLISHED) indicates the C2 channel "
             f"was actively used. This traffic was observed on non-standard ports commonly "
             f"used by exploitation frameworks."
@@ -125,7 +142,7 @@ def _build_attack_narrative(critical: list, medium: list, cleared: list,
             if clean_targets:
                 target_str = f" Target hosts: {', '.join(f'`{t}`' for t in clean_targets)}."
         sections.append(
-            f"\n**Stage 3 — Lateral Movement**: The attacker used {tool_list} for SSH-based "
+            f"\n**Stage 3 â€” Lateral Movement**: The attacker used {tool_list} for SSH-based "
             f"lateral movement across the network.{target_str} Multiple instances of these tools "
             f"suggest systematic pivot operations from this compromised host."
         )
@@ -141,9 +158,9 @@ def _build_attack_narrative(critical: list, medium: list, cleared: list,
 
     # Kill chain summary
     if kill_chain:
-        chain_str = " → ".join(kill_chain)
+        chain_str = " â†’ ".join(kill_chain)
         sections.append(
-            f"\n**MITRE ATT&CK Kill Chain**: `{chain_str}` — this pattern indicates a "
+            f"\n**MITRE ATT&CK Kill Chain**: `{chain_str}` â€” this pattern indicates a "
             f"post-exploitation scenario with established persistence, active C2, and "
             f"ongoing lateral movement."
         )
@@ -200,7 +217,7 @@ def _filter_attacker_timeline(events: list, critical: list, medium: list) -> lis
             filtered.append(e)
             continue
 
-        # Include userinit.exe (user logon — forensically relevant)
+        # Include userinit.exe (user logon â€” forensically relevant)
         if "userinit" in event_lower:
             filtered.append(e)
             continue
@@ -211,7 +228,7 @@ def _filter_attacker_timeline(events: list, critical: list, medium: list) -> lis
 def _remediation(findings: list, techniques: list) -> str:
     """
     Generate dynamic remediation steps from confirmed findings + MITRE techniques.
-    v2.0: Not hardcoded to specific IOCs — works for any case.
+    v2.0: Not hardcoded to specific IOCs â€” works for any case.
     """
     steps = []
     step_num = 1
@@ -226,10 +243,10 @@ def _remediation(findings: list, techniques: list) -> str:
             phases[phase] = []
         phases[phase].append(h)
 
-    # Containment — always first
+    # Containment â€” always first
     if "C2" in phases:
         c2_iocs = [h["ioc"] for h in phases.get("C2", [])]
-        steps.append(f"{step_num}. **IMMEDIATE: Isolate host from network** — active C2 indicators: {', '.join(c2_iocs) if c2_iocs else 'detected'}")
+        steps.append(f"{step_num}. **IMMEDIATE: Isolate host from network** â€” active C2 indicators: {', '.join(c2_iocs) if c2_iocs else 'detected'}")
         step_num += 1
 
     # Kill malicious processes
@@ -257,22 +274,22 @@ def _remediation(findings: list, techniques: list) -> str:
     # Lateral movement audit
     if "LateralMovement" in phases:
         targets = [h["ioc"] for h in phases["LateralMovement"]]
-        steps.append(f"{step_num}. **Audit lateral movement targets**: {', '.join(targets)} — check all connected hosts")
+        steps.append(f"{step_num}. **Audit lateral movement targets**: {', '.join(targets)} â€” check all connected hosts")
         step_num += 1
 
     # Credential reset
     if "CredentialAccess" in phases:
-        steps.append(f"{step_num}. **Reset ALL domain credentials** — assume full credential compromise")
+        steps.append(f"{step_num}. **Reset ALL domain credentials** â€” assume full credential compromise")
         step_num += 1
 
     # MITRE-based additional steps
     technique_ids = {t["technique_id"] for t in techniques}
     if any(t.startswith("T1003") for t in technique_ids):
         if "CredentialAccess" not in phases:
-            steps.append(f"{step_num}. **Reset credentials** — credential dumping indicators detected")
+            steps.append(f"{step_num}. **Reset credentials** â€” credential dumping indicators detected")
             step_num += 1
     if any(t.startswith("T1055") for t in technique_ids):
-        steps.append(f"{step_num}. **Scan for injected processes** — process injection detected")
+        steps.append(f"{step_num}. **Scan for injected processes** â€” process injection detected")
         step_num += 1
 
     # Generic fallback
@@ -281,14 +298,14 @@ def _remediation(findings: list, techniques: list) -> str:
         steps.append("2. Review network logs for external connections from the host")
         step_num = 3
 
-    steps.append(f"{step_num}. **Preserve evidence** — SHA256 hash memory + disk images as chain of custody markers")
+    steps.append(f"{step_num}. **Preserve evidence** â€” SHA256 hash memory + disk images as chain of custody markers")
     return "\n".join(steps)
 
 
 def run_reporter(state: InvestigationState) -> InvestigationState:
     """LangGraph node: generate final JSON + Markdown report."""
     print(f"\n{SEPARATOR}", flush=True)
-    print("  PHASE 5 — REPORT GENERATION", flush=True)
+    print("  PHASE 5 â€” REPORT GENERATION", flush=True)
     print(SEPARATOR, flush=True)
 
     filepath  = state["filepath"]
@@ -301,9 +318,10 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
     low      = state.get("low_findings",      [])
     cleared  = state.get("cleared_findings",  [])
     refuted  = state.get("refuted",           [])
-    all_conf = critical + medium + low  # cleared excluded from "confirmed malicious"
+    confirmed_for_action = critical + medium  # LOW remains review-only
+    all_conf = confirmed_for_action  # cleared excluded from "confirmed malicious"
 
-    # ── Evidence Coverage Audit (v4.0) ───────────────────────────────────
+    # â”€â”€ Evidence Coverage Audit (v4.0) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     # Quality gate: check which plugin data was collected but never cited
     raw_evidence = state.get("raw_evidence", {})
     all_hypotheses = state.get("hypotheses", []) + cleared + refuted
@@ -334,22 +352,26 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
                   f"Uncited: {', '.join(sorted(uncited_plugins)[:5]) if uncited_plugins else 'none'}",
     })
     state["reasoning_log"] = reasoning_log
-    techniques   = map_evidence_to_mitre(state.get("raw_evidence", {}))
-    kill_chain   = build_kill_chain(techniques)
+    attack_review = evaluate_attack_rules(raw_evidence, critical + medium + low)
+    techniques = attack_review["confirmed"]
+    supported_techniques = attack_review["supported"]
+    lead_techniques = attack_review["leads"]
+    kill_chain = attack_review["kill_chain"]
 
-    # Timeline — filtered to attacker activity only
+    # Timeline â€” filtered to attacker activity only
     all_events       = extract_timestamps(state.get("raw_evidence", {}))
     key_events       = filter_interesting(all_events)
     attacker_events  = _filter_attacker_timeline(key_events, critical, medium)
 
     # Attack Narrative
     narrative = _build_attack_narrative(critical, medium, cleared, techniques, kill_chain)
+    self_correction_history = state.get("self_correction_history", [])
 
     import time as _time
     start_time = state.get("start_time")
     duration = round(_time.time() - start_time, 1) if start_time else state.get("duration_seconds", 0)
 
-    # ── JSON Report ────────────────────────────────────────────────────────────
+    # â”€â”€ JSON Report â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     report = {
         "metadata": {
             "tool":       "PHANTOM DFIR",
@@ -373,6 +395,7 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
             "hallucinations_caught": len(refuted),
         },
         "attack_narrative": narrative,
+        "self_correction_history": self_correction_history,
         "critical_findings": critical,
         "medium_findings":   medium,
         "low_findings":      low,
@@ -380,6 +403,8 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
         "refuted_hypotheses": refuted,
         "mitre_attack": {
             "techniques":  techniques,
+            "supported_techniques": supported_techniques,
+            "lead_techniques": lead_techniques,
             "kill_chain":  kill_chain,
         },
         "attack_timeline": attacker_events[:30],
@@ -389,11 +414,11 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
     json_path = os.path.join(REPORT_DIR, f"{basename}.json")
     with open(json_path, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    print(f"  ✓ JSON: {json_path}", flush=True)
+    print(f"  âœ“ JSON: {json_path}", flush=True)
 
-    # ── Markdown Report ────────────────────────────────────────────────────────
+    # â”€â”€ Markdown Report â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     md_lines = [
-        f"# PHANTOM DFIR — Investigation Report",
+        f"# PHANTOM DFIR â€” Investigation Report",
         f"**Target**: `{filepath}`  ",
         f"**OS**: {state.get('os_type','?')} | "
         f"**Duration**: {duration:.1f}s | "
@@ -406,11 +431,11 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
         "",
         f"| Confidence | Count |",
         f"|-----------|-------|",
-        f"| 🔴 CRITICAL | {len(critical)} |",
-        f"| 🟡 MEDIUM   | {len(medium)}   |",
-        f"| 🟢 LOW      | {len(low)}      |",
-        f"| ✅ CLEARED  | {len(cleared)} (investigated, benign) |",
-        f"| ⚫ REFUTED  | {len(refuted)} (hallucinations caught) |",
+        f"| ðŸ”´ CRITICAL | {len(critical)} |",
+        f"| ðŸŸ¡ MEDIUM   | {len(medium)}   |",
+        f"| ðŸŸ¢ LOW      | {len(low)}      |",
+        f"| âœ… CLEARED  | {len(cleared)} (investigated, benign) |",
+        f"| âš« REFUTED  | {len(refuted)} (hallucinations caught) |",
         "",
         "---",
         "",
@@ -420,7 +445,7 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
         "",
         "---",
         "",
-        "## 🔴 Critical Findings",
+        "## ðŸ”´ Critical Findings",
         "",
     ]
 
@@ -432,32 +457,32 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
         md_lines.append("_No CRITICAL findings confirmed._")
         md_lines.append("")
 
-    md_lines += ["---", "", "## 🟡 Medium Findings", ""]
+    md_lines += ["---", "", "## ðŸŸ¡ Medium Findings", ""]
     for h in medium:
         md_lines.append(_finding_md(h))
         md_lines.append("")
     if not medium:
         md_lines.append("_None._")
 
-    md_lines += ["---", "", "## 🟢 Low Findings", ""]
+    md_lines += ["---", "", "## ðŸŸ¢ Low Findings", ""]
     for h in low:
         md_lines.append(_finding_md(h))
         md_lines.append("")
     if not low:
         md_lines.append("_None._")
 
-    md_lines += ["---", "", "## ✅ Cleared (Investigated, Determined Benign)", ""]
+    md_lines += ["---", "", "## âœ… Cleared (Investigated, Determined Benign)", ""]
     if cleared:
         for h in cleared:
-            md_lines.append(f"- ✅ **{h.get('ioc','')}** — {h.get('claim','')}")
+            md_lines.append(f"- âœ… **{h.get('ioc','')}** â€” {h.get('claim','')}")
             md_lines.append(f"  - Path verified: `{h.get('raw_evidence_quote','')[:120]}`")
             md_lines.append(f"  - Sources checked: {len(h.get('verified_sources',[]))}")
     else:
         md_lines.append("_No processes cleared._")
 
-    md_lines += ["---", "", "## ⚫ Refuted (Hallucinations Caught)", ""]
+    md_lines += ["---", "", "## âš« Refuted (Hallucinations Caught)", ""]
     for h in refuted:
-        md_lines.append(f"- ~~{h.get('claim','')}~~ — {h.get('skeptic_challenges',[''])[0]}")
+        md_lines.append(f"- ~~{h.get('claim','')}~~ â€” {h.get('skeptic_challenges',[''])[0]}")
     if not refuted:
         md_lines.append("_No hallucinations detected._")
 
@@ -465,9 +490,11 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
         "",
         "---",
         "",
-        "## MITRE ATT&CK Kill Chain",
+        "## MITRE ATT&CK Review",
         "",
-        " → ".join(kill_chain) if kill_chain else "_No techniques mapped._",
+        "### Confirmed Kill Chain",
+        "",
+        " -> ".join(kill_chain) if kill_chain else "_No MEDIUM/CRITICAL ATT&CK techniques confirmed._",
         "",
         "| Technique ID | Name | Evidence |",
         "|-------------|------|---------|",
@@ -475,8 +502,45 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
     for t in techniques:
         md_lines.append(
             f"| `{t['technique_id']}` | {t['technique_name']} | "
-            f"`{', '.join(t['source_plugins'][:3])}` |"
+            f"`{', '.join(t.get('source_plugins', [])[:3])}` |"
         )
+    if not techniques:
+        md_lines.append("| _None_ | _No confirmed technique_ | _N/A_ |")
+
+    md_lines += [
+        "",
+        "### Supported Techniques",
+        "",
+        "_Two or more evidence families matched technique-specific conditions, but no MEDIUM/CRITICAL finding currently drives the verdict._",
+        "",
+        "| Technique ID | Name | Sources | Rationale |",
+        "|-------------|------|---------|-----------|",
+    ]
+    for t in supported_techniques:
+        md_lines.append(
+            f"| `{t['technique_id']}` | {t['technique_name']} | "
+            f"`{', '.join(t.get('source_plugins', [])[:4])}` | {t.get('rationale','')} |"
+        )
+    if not supported_techniques:
+        md_lines.append("| _None_ | _No supported technique_ | _N/A_ | _N/A_ |")
+
+    md_lines += [
+        "",
+        "### Review-Only ATT&CK Leads",
+        "",
+        "_Single-family or weak signals. These guide analyst review but do not affect the verdict or kill chain._",
+        "",
+        "| Technique ID | Name | Matched Terms | Sources |",
+        "|-------------|------|---------------|---------|",
+    ]
+    for t in lead_techniques:
+        terms = ", ".join(t.get("matched_required", [])[:4])
+        md_lines.append(
+            f"| `{t['technique_id']}` | {t['technique_name']} | "
+            f"`{terms}` | `{', '.join(t.get('source_plugins', [])[:4])}` |"
+        )
+    if not lead_techniques:
+        md_lines.append("| _None_ | _No lead-only technique_ | _N/A_ | _N/A_ |")
 
     md_lines += [
         "",
@@ -496,13 +560,13 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
         "",
     ]
 
-    # ── Analyst Reasoning Trace ────────────────────────────────────────────
+    # â”€â”€ Analyst Reasoning Trace â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     reasoning_log = state.get("reasoning_log", [])
     if reasoning_log:
         md_lines += [
             "## Investigation Reasoning Trace",
             "",
-            "How PHANTOM thought through this case — which tools were chosen, why, "
+            "How PHANTOM thought through this case â€” which tools were chosen, why, "
             "what was expected, and what was actually found.",
             "",
             "| Step | Agent | Action | Rationale | Result |",
@@ -516,14 +580,37 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
             md_lines.append(f"| {i} | **{agent}** | {action} | {rational} | {result} |")
         md_lines += ["", "---", ""]
 
+    if self_correction_history:
+        md_lines += [
+            "## Self-Correction Trace",
+            "",
+            "| Iteration | Threshold | Gaps | Action | Result |",
+            "|-----------|-----------|------|--------|--------|",
+        ]
+        for entry in self_correction_history:
+            decision = entry.get("decision", {})
+            gaps = ", ".join(decision.get("gaps", [])) or "none"
+            result = (
+                f"critical={entry.get('critical_count', 0)}, "
+                f"medium={entry.get('medium_count', 0)}, "
+                f"low={entry.get('low_count', 0)}, "
+                f"cleared={entry.get('cleared_count', 0)}, "
+                f"refuted={entry.get('refuted_count', 0)}"
+            )
+            md_lines.append(
+                f"| {entry.get('iteration', 0) + 1} | {entry.get('threshold', '?')} | "
+                f"{gaps} | {decision.get('action', 'unknown')} | {result} |"
+            )
+        md_lines += ["", "---", ""]
+
     md_lines.append(f"*PHANTOM DFIR v4.0 | World's first adversarial self-verifying DFIR agent*")
 
     md_path = os.path.join(REPORT_DIR, f"{basename}.md")
     with open(md_path, "w") as f:
         f.write("\n".join(md_lines))
-    print(f"  ✓ MD:   {md_path}", flush=True)
+    print(f"  âœ“ MD:   {md_path}", flush=True)
 
-    # ── Execution Log (structured JSON) ────────────────────────────────────
+    # â”€â”€ Execution Log (structured JSON) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     # v4.0: SHA-256 output hashes for chain of custody
     import hashlib
 
@@ -561,43 +648,44 @@ def run_reporter(state: InvestigationState) -> InvestigationState:
         "cleared_count": len(cleared),
         "refuted_count": len(refuted),
         "hallucinations_caught": len(refuted),
+        "self_correction_history": self_correction_history,
         "evidence_integrity": evidence_integrity,
         "reasoning_trace": reasoning_log,
     }
     exec_log_path = os.path.join(REPORT_DIR, f"{basename}_execution_log.json")
     with open(exec_log_path, "w") as f:
         json.dump(exec_log, f, indent=2, default=str)
-    print(f"  ✓ Exec: {exec_log_path}", flush=True)
+    print(f"  âœ“ Exec: {exec_log_path}", flush=True)
 
-    # ── Console Summary ───────────────────────────────────────────────────────
+    # â”€â”€ Console Summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     print(f"\n{SEPARATOR}", flush=True)
-    print("  PHANTOM DFIR — Investigation Complete", flush=True)
+    print("  PHANTOM DFIR â€” Investigation Complete", flush=True)
     print(f"  Duration: {duration:.1f}s | Skeptic rounds: {state.get('skeptic_round',0)}", flush=True)
     print(SEPARATOR, flush=True)
 
     for h in critical:
-        print(f"\n  🔴 CRITICAL: {h['claim'][:70]}", flush=True)
+        print(f"\n  ðŸ”´ CRITICAL: {h['claim'][:70]}", flush=True)
         for s in h.get("verified_sources", [])[:3]:
-            print(f"     ├── {s}", flush=True)
+            print(f"     â”œâ”€â”€ {s}", flush=True)
         if h.get("mitre_ids"):
-            print(f"     └── ATT&CK: {', '.join(h['mitre_ids'])}", flush=True)
+            print(f"     â””â”€â”€ ATT&CK: {', '.join(h['mitre_ids'])}", flush=True)
 
     for h in medium:
-        print(f"\n  🟡 MEDIUM: {h['claim'][:70]}", flush=True)
+        print(f"\n  ðŸŸ¡ MEDIUM: {h['claim'][:70]}", flush=True)
 
     for h in cleared:
-        print(f"\n  ✅ CLEARED: {h['claim'][:70]}", flush=True)
+        print(f"\n  âœ… CLEARED: {h['claim'][:70]}", flush=True)
 
     if kill_chain:
-        print(f"\n  ATT&CK Chain: {' → '.join(kill_chain)}", flush=True)
+        print(f"\n  ATT&CK Chain: {' â†’ '.join(kill_chain)}", flush=True)
 
     if refuted:
-        print(f"\n  ⚫ {len(refuted)} hallucination(s) caught by Skeptic:", flush=True)
+        print(f"\n  âš« {len(refuted)} hallucination(s) caught by Skeptic:", flush=True)
         for h in refuted:
-            print(f"     • {h['claim'][:60]}", flush=True)
+            print(f"     â€¢ {h['claim'][:60]}", flush=True)
 
-    print(f"\n  📋 Reasoning trace: {len(reasoning_log)} steps logged", flush=True)
-    print(f"  📄 Execution log: {exec_log_path}", flush=True)
+    print(f"\n  ðŸ“‹ Reasoning trace: {len(reasoning_log)} steps logged", flush=True)
+    print(f"  ðŸ“„ Execution log: {exec_log_path}", flush=True)
 
     print(f"\n{SEPARATOR}\n", flush=True)
 
