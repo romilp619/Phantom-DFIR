@@ -64,20 +64,23 @@ direction, not the numbers. Full detail: `docs/RESULTS-COMPARISON.md`.
 
 `phantom_ai_safety/evidence_scanner/scanner.py` scans untrusted recovered content before it reaches a model. Validated against 15 labelled payloads across 7 categories (**recall 15/15**) and 12 negative controls of ordinary hostile-looking forensic text (**0 false positives**) — because a scanner that flags malware paths would suppress real analysis. Known limitation: base64-encoded injections are not flagged, and keyword scanning over encoded data is not a sound detection strategy anyway.
 
+A **compiled Rust guard** (`phantom-guard/`) mirrors every rule at memory-safe process distance. The hard process boundary means evidence text cannot reach the caller's interpreter, and the test suite asserts the two agree exactly (89 tests, 89 passing). Two implementations agreeing on every artifact, category, offset, hash, and severity across the full attack corpus is a stronger claim than a single scanner can make about itself. `scripts/run_rust_guard.py` runs the guard over the generated attacks and writes a JSON report that states whether the two diverge.
+
 Recovered content is treated as data only. Nothing evaluates or executes it, every artifact is SHA-256 hashed, findings are stored separately from artifacts, and untrusted text is fenced so evidence cannot escape the data boundary.
 
 ## Layout
 
 ```
+phantom-guard/      compiled scanner binary (Rust), tested equivalence
 phantom_ai_safety/
-  harness/           run upstream code with tool stubs and an injectable LLM
-  red_team/          row schema and 7 evaluation families
-  evaluation/        metrics, baseline runner, before/after comparison
-  grounding/         the repaired verifier
-  evidence_scanner/  prompt-injection detection and quarantine
-scripts/             entry points (see below)
-tests/               pytest suite
-results/             generated JSON, including every per-row record
+  harness/          run upstream code with tool stubs and an injectable LLM
+  red_team/         row schema and 7 evaluation families
+  evaluation/       metrics, baseline runner, before/after comparison
+  grounding/        the repaired verifier
+  evidence_scanner/ prompt-injection detection (Python) and guard bridge
+scripts/            entry points (see below)
+tests/              pytest suite (89 passing)
+results/            generated JSON, including every per-row record
 ```
 
 ## Running it
@@ -90,6 +93,8 @@ export PHANTOM_ROOT=/path/to/Phantom-DFIR
 
 python scripts/smoke_harness.py                                     # reproduce the findings
 python scripts/validate_scanner.py                                  # scanner recall and false positives
+(cd phantom-guard && cargo build --release)                          # build the Rust guard
+python scripts/run_rust_guard.py --write                             # guard over the attack corpus
 python -m phantom_ai_safety.evaluation.baseline  --per-family 50 --quiet --out results/baseline.json
 python -m phantom_ai_safety.evaluation.comparison --per-family 50 --quiet --out results/comparison.json
 python scripts/summarize_results.py results/comparison.json
@@ -113,8 +118,9 @@ matters: it pins the exact bytes the findings were measured against.
 
 ## Status
 
-- Working and verified: harness, red-team set, baseline measurement, repair, before/after comparison, injection scanner, tests.
-- **Not implemented: the fine-tuned model.** The Cohere Labs checkpoints (`tiny-aya-global` and the Aya Expanse family) are gated and return HTTP 401 without an authenticated token. No fine-tuned artifact exists and no training run has been performed. Every number above comes from the deterministic verifier.
+- Working and verified: harness, red-team set, baseline measurement, repair, before/after comparison, injection scanner, Rust guard, tests (89 passing).
+- **Fine-tune in progress.** The Cohere Labs checkpoints are gated and required accepting the terms before download; that gate is now open and `CohereLabs/tiny-aya-global` downloads successfully. A QLoRA adapter has been trained and saved in a verification run (40 steps, loss 1.465, peak 7,763 MiB). The full one-epoch run (401 steps) is executing. No fine-tuned model is claimed anywhere until that run completes and the adapter is evaluated.
+- Every number in this README comes from the deterministic verifier. None depends on a trained model.
 - Not run: any real memory image, Volatility, Sleuth Kit, or the upstream CFReDS / SysInternals cases.
 
 ## Licensing and disclosure

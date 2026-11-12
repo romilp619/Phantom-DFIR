@@ -185,11 +185,43 @@ def scan_artifact(artifact_id: str, text: str, snippet: int = 120) -> ScanResult
     if not text:
         return result
 
+    _scan_into(result, artifact_id, text, text, snippet)
+
+    # Second pass over extracted obfuscated candidates. This can only ADD findings:
+    # the original text was scanned first and its findings are already recorded.
+    # A normalisation failure therefore degrades to the pre-normalisation detection
+    # rate rather than weakening detection.
+    for candidate in _extract_candidates(text):
+        _scan_into(result, artifact_id, candidate, text, snippet, derived=True)
+
+    # Deterministic ordering so two runs over the same evidence agree.
+    result.findings.sort(key=lambda f: (f.char_offset, f.category))
+    return result
+
+
+def _scan_into(
+    result: ScanResult,
+    artifact_id: str,
+    haystack: str,
+    original: str,
+    snippet: int,
+    *,
+    derived: bool = False,
+) -> None:
+    """Run the rule set over `haystack`, appending findings to `result`.
+
+    When `derived` is set, the match came from a normalised or decoded form rather
+    than the literal artifact. Offsets then refer to the derived string, not the
+    original bytes, so the finding is marked so a report cannot mislead a reader
+    into looking at the wrong place in the artifact.
+    """
     for name, severity, explanation, patterns in _COMPILED:
         for pattern in patterns:
-            for match in pattern.finditer(text):
+            for match in pattern.finditer(haystack):
                 start = match.start()
-                matched = text[start:start + snippet].replace("\n", " ").strip()
+                matched = haystack[start:start + snippet].replace("\n", " ").strip()
+                if derived:
+                    matched = f"[decoded] {matched}"[:snippet]
                 result.findings.append(
                     InjectionFinding(
                         artifact_id=artifact_id,
@@ -198,13 +230,29 @@ def scan_artifact(artifact_id: str, text: str, snippet: int = 120) -> ScanResult
                         severity=severity,
                         explanation=explanation,
                         matched_text=matched,
-                        char_offset=start,
+                        # Offset within the haystack that matched. For a derived
+                        # candidate this is not an offset into the artifact, which is
+                        # why the matched_text carries the [decoded] marker.
+                        char_offset=start if not derived else -1,
                         rule_pattern=pattern.pattern,
                     )
                 )
-    # Deterministic ordering so two runs over the same evidence agree.
-    result.findings.sort(key=lambda f: (f.char_offset, f.category))
-    return result
+
+
+def _extract_candidates(text: str) -> list[str]:
+    """Obfuscated candidate substrings to scan in addition to the literal text.
+
+    Imported lazily so a failure to import the optional normaliser cannot break
+    scanning of literal text.
+    """
+    try:
+        from phantom_ai_safety.evidence_scanner.normalize import extract_candidates
+    except Exception:
+        return []
+    try:
+        return extract_candidates(text)
+    except Exception:
+        return []
 
 
 def scan_evidence(items: list[tuple[str, str]]) -> list[ScanResult]:
