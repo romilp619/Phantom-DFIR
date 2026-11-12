@@ -9,6 +9,14 @@ records describing the file as unremarkable were enough to confirm it as a C2
 beacon. That is a real bypass, found by red-teaming this module rather than by
 reviewing it.
 
+Version 3 closes one more bypass, the `semantic_denial` family. Version 2 detected
+denial from a word list ("no evidence", "clean", "not malicious"). The family states
+its denial numerically instead - "svc_0.exe launch count = 0, parent process count = 0"
+- which asserts the subject never ran, contradicts a claim that it persists, and
+contains no word from the list. Every such artifact therefore read as corroboration and
+the claim confirmed. Version 3 treats a zero quantity asserted for the subject as
+denial, and returns REFUTED when every presenting artifact denies the claim.
+
 Version 2 adds two guards:
 
 - **Behavioural relevance.** Corroboration must come from artifacts that describe
@@ -65,6 +73,18 @@ NEGATION_MARKERS = (
     "expected behavior", "benign",
 )
 
+# Numeric denial. A word list cannot see a denial expressed as a quantity, and the
+# `semantic_denial` family exists to prove it: an execution ledger saying
+# "svc_0.exe launch count = 0, parent process count = 0" asserts the subject never ran,
+# which contradicts a claim that it is a persistence mechanism. No marker above matches
+# that sentence, so before version 3 the assertion counted as corroboration.
+NUMERIC_DENIAL = re.compile(
+    r"(count|occurrence\w*|times|instances|launch\w*|parent\w*)\s*[=:]\s*0\b"
+)
+ZERO_QUANTITY = re.compile(
+    r"\b0\s+(launch\w*|occurrence\w*|instance\w*|hit\w*|match\w*)\b"
+)
+
 TRUSTED_PATH_MARKERS = (
     "program files", "program files (x86)", "\\windows\\system32",
     "/usr/bin", "/usr/sbin", "/usr/lib", "/opt/",
@@ -118,7 +138,41 @@ def _sentence_around(text: str, ioc: str) -> str:
 
 def _is_negated(item: EvidenceItem, ioc: str) -> bool:
     sentence = _sentence_around(item.text, ioc).lower()
-    return any(marker in sentence for marker in NEGATION_MARKERS)
+    if any(marker in sentence for marker in NEGATION_MARKERS):
+        return True
+    # A denial can also be stated numerically, which the word list cannot see.
+    return _asserts_zero_quantity(item, ioc)
+
+
+def _asserts_zero_quantity(item: EvidenceItem, ioc: str) -> bool:
+    """True when the artifact reports a zero count for the claimed subject.
+
+    "svc_0.exe launch count = 0" denies that the subject ran. Only the clause carrying
+    the indicator is examined, so a zero elsewhere in the artifact cannot deny it.
+    """
+    ioc_l = (ioc or "").lower()
+    if not ioc_l:
+        return False
+    for line in item.text.lower().splitlines():
+        if ioc_l not in line:
+            continue
+        if NUMERIC_DENIAL.search(line) or ZERO_QUANTITY.search(line):
+            return True
+    return False
+
+
+def _fully_denied(items: list[EvidenceItem], ioc: str) -> tuple[bool, int]:
+    """Every presenting artifact denies the claim, and at least one presents.
+
+    Returns (fully_denied, number_presenting). This is the evidence-first reading of
+    `semantic_denial`: when every artifact that names the indicator says it did not
+    occur, the claim is contradicted, not merely unproven - which is REFUTED, not
+    NEEDS_MORE.
+    """
+    presenting = [i for i in items if _mentions(i.text, ioc)]
+    if not presenting:
+        return False, 0
+    return all(_is_negated(i, ioc) for i in presenting), len(presenting)
 
 
 def _behavioural_support(items: list[EvidenceItem], ioc: str) -> list[EvidenceItem]:
@@ -180,6 +234,21 @@ def verify(claim_text: str, claimed_ioc: str, presented: list[EvidenceItem]) -> 
             reason="Artifact matches a known vendor binary within a vendor installation path.",
             limitations=["A vendor path does not by itself prove the binary is unmodified."],
             confidence=0.85,
+        )
+
+    full_denial, n_presenting = _fully_denied(presented, claimed_ioc)
+    if full_denial:
+        return GroundedVerdict(
+            verdict=GOLD_REFUTED,
+            distinct_artifacts=0,
+            source_key_count=len(presented),
+            citations=[i.evidence_id for i in presented if _mentions(i.text, claimed_ioc)],
+            reason=(
+                f"All {n_presenting} artifact(s) referencing '{claimed_ioc}' affirm that "
+                "it did not occur, so the claim is contradicted rather than unproven."
+            ),
+            limitations=["A zero count is only as complete as the ledger behind it."],
+            confidence=0.75,
         )
 
     if n == 0 and contextual_only:
