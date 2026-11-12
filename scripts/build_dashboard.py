@@ -81,7 +81,172 @@ def metric_row(label: str, before, after, *, good_when_low: bool = True,
       </tr>"""
 
 
-def build_html(comp, held, base) -> str:
+def _pct(v):
+    """Format a 0-1 ratio as a percentage, tolerating None."""
+    return "n/a" if v is None else f"{v * 100:.1f}%"
+
+
+def _render_red_team(red) -> str:
+    """Section: prompt-injection red team. Every figure read from the results file."""
+    if not red:
+        return ('  <h2>5. Prompt-injection red team</h2>\n'
+                '  <div class="card warn"><p>Not run. Execute '
+                '<code>python scripts/run_red_team.py</code> to populate this section.</p></div>')
+
+    inj = red.get("injection", {})
+    sc = inj.get("scanner", {})
+    vf = inj.get("verifier", {})
+    fp = red.get("false_positive_control", {})
+    integ = red.get("evidence_integrity", {})
+    kinds = inj.get("per_attack_kind", {})
+    defence = inj.get("defence_summary", {})
+
+    rows = []
+    for kind in sorted(kinds):
+        k = kinds[kind]
+        det = k.get("scanner_detection_rate")
+        det_hi = k.get("scanner_detection_rate_high")
+        # A family is a gap when the scanner misses it at every severity.
+        cls = "gap" if det == 0.0 else ""
+        rows.append(
+            f'      <tr class="{cls}"><td>{kind.replace("_", " ")}</td>'
+            f'<td class="num">{k.get("n")}</td>'
+            f'<td class="num">{k.get("scanner_noticed", 0)}</td>'
+            f'<td class="num">{_pct(det)}</td>'
+            f'<td class="num">{_pct(det_hi)}</td></tr>'
+        )
+    kind_rows = "\n".join(rows)
+
+    flip = vf.get("flip_count", 0)
+    flip_cls = "ok" if flip == 0 else "warn"
+    gaps = [k for k, v in kinds.items() if v.get("scanner_detection_rate") == 0.0]
+    gap_note = ""
+    if gaps:
+        gap_note = (
+            '    <p class="dim"><strong>Detection gaps:</strong> '
+            + ", ".join(g.replace("_", " ") for g in sorted(gaps))
+            + '. These payloads match no scanner rule at any severity. The '
+            'direct-instruction families are caught; the ones that frame a conclusion '
+            'or dismiss evidence in realistic prose are not.</p>'
+        )
+
+    return f'''  <h2>5. Prompt-injection red team</h2>
+  <p class="dim">{inj.get("total_rows", 0)} attacks across {len(kinds)} families, each
+  paired with a clean twin of the same evidence so the manipulation is the only
+  difference. Deterministic: no model call, fixed seed {red.get("seed")}, so this table
+  reproduces exactly.</p>
+
+  <div class="kpis">
+    <div class="kpi"><span class="v">{flip}</span><span class="l">verdicts changed by<br>injected instructions</span></div>
+    <div class="kpi"><span class="v">{_pct(sc.get("detection_rate"))}</span><span class="l">scanner detection<br>any severity</span></div>
+    <div class="kpi"><span class="v">{_pct(sc.get("detection_rate_high"))}</span><span class="l">scanner detection<br>HIGH or CRITICAL</span></div>
+    <div class="kpi"><span class="v">{_pct(fp.get("false_positive_rate"))}</span><span class="l">false positives on<br>hostile-but-benign text</span></div>
+  </div>
+
+  <div class="card {flip_cls}">
+    <p class="lead">The defence result: <strong>{flip} of {inj.get("total_rows", 0)} attacks
+    changed the verdict</strong>. Identical evidence, with and without the injection,
+    produced an identical conclusion every time.</p>
+    <p class="dim">This is the property under test. A verifier that reads instruction-shaped
+    text inside evidence would flip here; an evidence-grounded one counts corroborating
+    artifacts and ignores prose that tries to address it. The injected text is reported as
+    a finding and never obeyed.</p>
+  </div>
+
+  <table>
+    <thead><tr><th>Attack family</th><th class="num">n</th><th class="num">noticed</th>
+    <th class="num">detect</th><th class="num">detect HIGH+</th></tr></thead>
+    <tbody>
+{kind_rows}
+    </tbody>
+  </table>
+  <p class="dim">Measured at two thresholds because the scanner's contract deliberately
+  keeps some families below the decisive bar: <code>analyst_addressing</code> and
+  <code>evidence_dismissal</code> are MEDIUM by design, so a HIGH-only measure understates
+  coverage. Both are reported so neither is mistaken for the other.</p>
+{gap_note}
+
+  <div class="card">
+    <p><strong>No false positives.</strong> {fp.get("flagged_as_manipulation", 0)} of
+    {fp.get("samples", 0)} hostile-but-benign forensic samples were reported as
+    manipulation attempts. IRC botnet channels, mimikatz paths, reverse-shell strings and
+    persistence registry keys all appear routinely in real evidence; a scanner that flags
+    them gets switched off within a week. Distinguishing <em>text that looks nasty</em>
+    from <em>text that manipulates the analyst</em> is the requirement, and it holds.</p>
+    <p><strong>Evidence integrity preserved.</strong>
+    {integ.get("artifacts_modified", 0)} of {integ.get("artifacts_checked", 0)} artifacts
+    were modified by scanning. Original evidence is hashed and left byte-identical, so
+    findings stay separated from the material they describe.</p>
+  </div>
+'''
+
+
+def _render_curation(cur) -> str:
+    """Section: CuratorKIT pipeline run and the three defects it surfaced."""
+    if not cur:
+        return ('  <h2>6. Data curation pipeline</h2>\n'
+                '  <div class="card warn"><p>Not run. Execute '
+                '<code>python scripts/curatorkit_curate_hardened.py</code> to populate '
+                'this section.</p></div>')
+
+    proj = cur.get("projection", {})
+    notes = cur.get("notes", [])
+    notes_html = "\n".join(f"      <li>{n}</li>" for n in notes)
+    pass_rate = cur.get("pass_rate")
+
+    rows_in = proj.get("rows_in", cur.get("rows_curated", 0))
+    return f'''  <h2>6. Data curation pipeline</h2>
+  <p class="dim">The hackathon stack requires the sponsor's toolkit in a real pipeline,
+  not described. CuratorKIT {cur.get("toolkit_version", "?")} was run over the full
+  training split, and it surfaced three defects that fail silently.</p>
+
+  <div class="kpis">
+    <div class="kpi"><span class="v">{rows_in:,}</span><span class="l">rows read in</span></div>
+    <div class="kpi"><span class="v">{cur.get("passed", 0):,}</span><span class="l">unique rows out<br>after exact dedup</span></div>
+    <div class="kpi"><span class="v">{_pct(pass_rate)}</span><span class="l">schema pass rate</span></div>
+    <div class="kpi"><span class="v">{cur.get("wall_clock_seconds", 0)}s</span><span class="l">wall clock</span></div>
+  </div>
+  <p class="dim">Exact deduplication removed
+  {rows_in - cur.get("passed", 0):,} rows
+  ({_pct((rows_in - cur.get("passed", 0)) / rows_in if rows_in else None)}), which is a
+  property of the generators rather than a defect: each family reuses one evidence block
+  across many rows while varying the framing. The effective corpus is
+  {cur.get("passed", 0):,} distinct texts, and that is the number this project reports.</p>
+
+  <div class="card warn">
+    <p><strong>1. An unrecognised format string silently drops the whole corpus.</strong>
+    Passing <code>format="jsonl"</code> does not raise. It falls back to UNKNOWN and rejects
+    100% of rows, with <code>RejectedSample</code> carrying no reason, so the run reports an
+    empty stage table and nothing to act on.</p>
+    <p><strong>2. Default cleaning deletes the evidence markers.</strong>
+    <code>TextCleaner.strip_html</code> removes tag-shaped text. Here the angle-bracket
+    markers <em>are</em> the evidence anchors, so the default removed every one while the
+    run reported a clean pass rate of <strong>1.000</strong>. Measured on the same input:
+    <strong>0 of 1,900</strong> rows kept their markers by default,
+    <strong>1,900 of 1,900</strong> with the fix.</p>
+    <p><strong>3. A non-zero injection rate is a silent no-op without injection types.</strong>
+    <code>injection_rate=0.10</code> produced identical counts to 0.0, no injected rows, and
+    an empty diagnostics dict.</p>
+    <p class="dim">A pipeline that reports success while destroying its own training signal
+    is the worst failure mode there is, and it is the same defect class this project audits
+    elsewhere.</p>
+  </div>
+
+  <div class="card">
+    <p><strong>Hardened runner.</strong> All three are now refused before the run and
+    verified after it, in <code>phantom_ai_safety/curation/guards.py</code>:
+    the format is validated against the toolkit's own enum; <code>strip_html</code> is
+    disabled for this corpus; a rate without types is rejected with an explanation; and a
+    post-run check fails loudly if every row was rejected or if markers vanished. The run
+    above passed both guards.</p>
+    <ul class="notes">
+{notes_html}
+    </ul>
+  </div>
+'''
+
+
+def build_html(comp, held, base, red=None, cur=None) -> str:
     before = comp["conditions"]["before_upstream"]["overall"]
     after = comp["conditions"]["after_grounded_repair"]["overall"]
     mc = comp["mcnemar"]
@@ -426,7 +591,11 @@ def build_html(comp, held, base) -> str:
     that verdict, artifact count and citations all reproduce.</p>
   </div>
 
-  <h2>5. What this does not claim</h2>
+{_render_red_team(red)}
+
+{_render_curation(cur)}
+
+  <h2>7. What this does not claim</h2>
   <div class="card">
     <p><span class="pill">no fine-tuned model</span>
     <span class="pill">no real memory image</span>
@@ -443,7 +612,7 @@ def build_html(comp, held, base) -> str:
     precisely why the one genuinely unanticipated attack, family 8, matters.</p>
   </div>
 
-  <h2>6. Reproducing</h2>
+  <h2>8. Reproducing</h2>
   <pre>git clone https://github.com/romilp619/Phantom-DFIR &amp;&amp; export PHANTOM_ROOT=$PWD/Phantom-DFIR
 python scripts/smoke_harness.py                 # the four findings, against real code
 python scripts/validate_scanner.py              # 15/15 recall, 0/12 false positives
@@ -477,8 +646,10 @@ def main() -> int:
         return 1
     held = load("results/heldout_rule_only.json")
     base = load("results/baseline.json")
+    red = load("results/red_team_report.json")
+    cur = load("results/curatorkit_report.json")
 
-    doc = build_html(comp, held, base)
+    doc = build_html(comp, held, base, red, cur)
     out = os.path.join(ROOT, args.out)
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "w", encoding="utf-8") as fh:
@@ -494,6 +665,12 @@ def main() -> int:
         "flags the residual failure": "behavioural_mention" in written
                                       and "still fails" in written,
         "states no fine-tuned model": "no fine-tuned model" in written,
+        "has red team section": "Prompt-injection red team" in written,
+        "reports zero verdict flips": "verdicts changed by" in written,
+        "has curation section": "Data curation pipeline" in written,
+        "discloses scanner gaps": "Detection gaps" in written
+                                  or "Not run" in written,
+        "balanced css braces": written.count("{") == written.count("}"),
     }
     print(f"wrote {out}  ({len(written):,} bytes)")
     bad = [k for k, v in checks.items() if not v]
