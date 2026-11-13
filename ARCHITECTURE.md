@@ -54,7 +54,7 @@ flowchart TB
 
 ## Trust boundaries and limitations
 
-- The MCP server exposes an allowlist of named tools rather than a general-purpose shell tool. Tool access is limited to the functions it defines.
+- The MCP server exposes an allowlist of named tools rather than a general-purpose shell tool. Tool access is limited to the functions it defines. Tool arguments are passed to the underlying forensic tools as argument lists, never through a shell, and PIDs must be integers, so text in an argument cannot run as a command (`tests/test_mcp_server_hardening.py`). The HTTP transport has no authentication and binds to localhost by default.
 - Evidence registration and integrity verification use SHA-256 hashes. Hash checks can detect content changes between checks; they do not by themselves make evidence storage immutable or guarantee that every analysis path verifies the hash at every step.
 - Analysis tools are intended to read evidence. They may write reports, temporary data, or extracted artifacts to output locations. Keep original evidence in a protected location and analyze a verified working copy when preserving chain of custody is required.
 - LLM output is optional and should be treated as analysis assistance. Findings need to be judged from the underlying artifacts and corroborating sources.

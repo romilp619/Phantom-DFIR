@@ -22,8 +22,10 @@ import hashlib
 import json
 import os
 import re
+import shlex
 import subprocess
 import sys
+import threading
 import time
 from typing import Any
 
@@ -37,6 +39,27 @@ except ImportError:
     MCP_AVAILABLE = False
     print("[WARN] mcp package not installed. Run: pip install mcp --break-system-packages",
           file=sys.stderr)
+    # The tool catalogue below is built at module level and references Tool(...)
+    # unconditionally (20 call sites). Without these placeholders the module
+    # raises "NameError: name 'Tool' is not defined" on import, which hides the
+    # warning above and breaks any caller that merely imports this module.
+    # MCP_AVAILABLE stays False, so the server still refuses to serve.
+    class _MCPUnavailable:
+        """Inert stand-in used only when the mcp package is missing."""
+
+        def __init__(self, *args, **kwargs):
+            self.args = args
+            self.kwargs = kwargs
+
+        def __call__(self, *args, **kwargs):
+            raise RuntimeError(
+                "mcp package not installed; install it with: pip install mcp")
+
+    Tool = _MCPUnavailable
+    TextContent = _MCPUnavailable
+    Server = _MCPUnavailable
+    stdio_server = _MCPUnavailable
+
 
 # ── Config ────────────────────────────────────────────────────────────────────
 # Insert project root (parent of mcpserver/) into path for config import
@@ -52,14 +75,90 @@ except ImportError:
 _EVIDENCE_REGISTRY: dict[str, dict] = {}   # filepath -> {sha256, size, registered_at}
 
 
-def _run_vol3(filepath: str, plugin: str, extra: str = "",
-              timeout: int = TIMEOUT_PLUGIN_FAST) -> str:
-    """Internal: run a Volatility 3 plugin with output sanitisation."""
-    cmd = f"{VOL3_CMD} -q -f '{filepath}' {plugin} {extra} 2>&1"
+# ── Safe command construction ─────────────────────────────────────────────────
+# Tool arguments arrive from an MCP client, i.e. from a model. They are never
+# placed into a shell string: every external tool is started from an argument
+# list with no shell, so quotes, semicolons, $(...) and backticks in a path are
+# just characters in a file name.
+
+def _safe_path(path) -> str:
+    """Return a path argument that cannot be read as a command-line option."""
+    if not isinstance(path, str) or not path:
+        raise ValueError("path must be a non-empty string")
+    if "\x00" in path:
+        raise ValueError("path must not contain NUL bytes")
+    return "./" + path if path.startswith("-") else path
+
+
+def _pid_args(pid) -> list:
+    """['--pid', '<n>'] for a valid PID, [] when no PID was given.
+
+    Accepts an int or a purely numeric string. Anything else is rejected, so
+    text supplied as a "pid" can never become extra command-line content.
+    """
+    if pid is None or pid == "" or pid == 0:
+        return []
+    if isinstance(pid, bool):
+        raise ValueError("pid must be an integer")
+    if isinstance(pid, int):
+        value = pid
+    elif isinstance(pid, str) and pid.strip().isdigit():
+        value = int(pid.strip())
+    else:
+        raise ValueError("pid must be an integer")
+    if value < 0:
+        raise ValueError("pid must be a non-negative integer")
+    return ["--pid", str(value)] if value else []
+
+
+def _head_lines(argv: list, limit: int, timeout: int, match=None) -> list:
+    """Run argv without a shell and return its first `limit` output lines.
+
+    Replaces `cmd | head -N` (and `cmd | grep PATTERN | head -N` when `match`
+    is given). The process is stopped as soon as enough lines were read, so a
+    multi-gigabyte image is not read to the end. stderr is discarded.
+    """
+    proc = subprocess.Popen(argv, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                            text=True, errors="replace")
+    timed_out = threading.Event()
+
+    def _expire():
+        timed_out.set()
+        proc.kill()
+
+    timer = threading.Timer(timeout, _expire)
+    timer.start()
+    lines = []
     try:
-        r = subprocess.run(cmd, shell=True, capture_output=True,
+        for line in proc.stdout:
+            line = line.rstrip("\n")
+            if match is not None and not match.search(line):
+                continue
+            lines.append(line)
+            if len(lines) >= limit:
+                break
+    finally:
+        timer.cancel()
+        if proc.poll() is None:
+            proc.kill()
+        proc.stdout.close()
+        proc.wait()
+    if timed_out.is_set():
+        raise subprocess.TimeoutExpired(argv, timeout)
+    return lines
+
+
+def _run_vol3(filepath: str, plugin: str, extra=None,
+              timeout: int = TIMEOUT_PLUGIN_FAST) -> str:
+    """Internal: run a Volatility 3 plugin with output sanitisation.
+
+    `extra` is a list of additional arguments (never a shell fragment).
+    """
+    cmd = shlex.split(VOL3_CMD) + ["-q", "-f", _safe_path(filepath), plugin] + list(extra or [])
+    try:
+        r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                            text=True, timeout=timeout, errors="replace")
-        out = (r.stdout + r.stderr).strip()
+        out = (r.stdout or "").strip()
     except subprocess.TimeoutExpired:
         return f"[TIMEOUT after {timeout}s]"
     except Exception as e:
@@ -298,7 +397,7 @@ def get_malfind(filepath: str, pid: int = None) -> dict:
     Find memory regions with suspicious characteristics (RWX + MZ headers).
     Primary indicator of process hollowing and code injection.
     """
-    extra = f"--pid {pid}" if pid else ""
+    extra = _pid_args(pid)
     raw   = _run_vol3(filepath, "windows.malware.malfind", extra,
                       timeout=TIMEOUT_PLUGIN_SLOW)
     mz_count = raw.count("MZ")
@@ -314,7 +413,7 @@ def get_malfind(filepath: str, pid: int = None) -> dict:
 
 def get_cmdline(filepath: str, pid: int = None) -> dict:
     """Get command line arguments for all processes (or specific PID)."""
-    extra = f"--pid {pid}" if pid else ""
+    extra = _pid_args(pid)
     raw   = _run_vol3(filepath, "windows.cmdline", extra)
     suspicious = []
     for line in raw.splitlines():
@@ -345,7 +444,7 @@ def get_hollowed_processes(filepath: str) -> dict:
 
 def get_dll_list(filepath: str, pid: int = None) -> dict:
     """Get loaded DLLs — detect injected DLLs from wrong locations."""
-    extra = f"--pid {pid}" if pid else ""
+    extra = _pid_args(pid)
     raw   = _run_vol3(filepath, "windows.dlllist", extra,
                       timeout=TIMEOUT_PLUGIN_SLOW)
     suspicious = []
@@ -364,7 +463,7 @@ def get_dll_list(filepath: str, pid: int = None) -> dict:
 def get_registry_run_keys(filepath: str) -> dict:
     """Get autorun registry keys — detect persistence mechanisms."""
     raw = _run_vol3(filepath, "windows.registry.printkey",
-                    "--key \"Software\\Microsoft\\Windows\\CurrentVersion\\Run\"")
+                    ["--key", "Software\\Microsoft\\Windows\\CurrentVersion\\Run"])
     return {"raw": raw[:2000], "source": "HKCU/HKLM Run keys"}
 
 
@@ -446,17 +545,24 @@ def get_disk_timeline(disk_path: str, output_dir: str = "/tmp") -> dict:
     timeline_file = os.path.join(output_dir, "phantom_timeline.csv")
 
     # Run log2timeline
-    log2tl = subprocess.run(
-        f"log2timeline.py --storage-file {plaso_file} {disk_path} 2>&1",
-        shell=True, capture_output=True, text=True, timeout=600
-    )
+    try:
+        log2tl = subprocess.run(
+            ["log2timeline.py", "--storage-file", plaso_file, _safe_path(disk_path)],
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+            errors="replace", timeout=600
+        )
+    except FileNotFoundError:
+        return {"timeline_built": False, "error": "log2timeline.py not found"}
 
     # Extract with psort
     if os.path.exists(plaso_file):
-        subprocess.run(
-            f"psort.py -o dynamic -w {timeline_file} {plaso_file} 2>/dev/null",
-            shell=True, timeout=120
-        )
+        try:
+            subprocess.run(
+                ["psort.py", "-o", "dynamic", "-w", timeline_file, plaso_file],
+                stderr=subprocess.DEVNULL, timeout=120
+            )
+        except FileNotFoundError:
+            pass
 
     if os.path.exists(timeline_file):
         # Read and filter interesting events
@@ -493,11 +599,8 @@ def get_disk_strings(disk_path: str, keywords: list = None) -> dict:
     results = {}
     all_text = ""
     try:
-        r = subprocess.run(
-            f"strings '{disk_path}' 2>/dev/null | head -10000",
-            shell=True, capture_output=True, text=True, timeout=120
-        )
-        all_text = r.stdout
+        all_text = "\n".join(
+            _head_lines(["strings", _safe_path(disk_path)], 10000, 120))
     except Exception as e:
         return {"error": str(e)}
 
@@ -521,11 +624,7 @@ def get_mft_deleted_files(disk_path: str) -> dict:
     SIFT tool: fls (The Sleuth Kit)
     """
     try:
-        r = subprocess.run(
-            f"fls -r -d '{disk_path}' 2>/dev/null | head -50",
-            shell=True, capture_output=True, text=True, timeout=120
-        )
-        deleted = r.stdout.splitlines()
+        deleted = _head_lines(["fls", "-r", "-d", _safe_path(disk_path)], 50, 120)
         suspicious_deleted = [l for l in deleted
                               if any(x in l.lower() for x in
                                      [".exe", ".dll", ".ps1", ".bat", ".vbs"])]
@@ -612,6 +711,11 @@ def correlate_memory_disk(memory_findings: dict, disk_findings: dict) -> dict:
     }
 
 
+# Same pattern the previous `grep -i` used. In grep's basic syntax the unescaped
+# {8} is literal, so in practice this selects lines ending in ".pf".
+_PREFETCH_LINE = re.compile(r"\.pf$|-[0-9A-F]\{8\}\.pf", re.IGNORECASE)
+
+
 def get_prefetch(disk_path: str) -> dict:
     """
     Extract Windows Prefetch execution evidence from disk image.
@@ -619,11 +723,8 @@ def get_prefetch(disk_path: str) -> dict:
     SIFT tool: strings + icat
     """
     try:
-        r = subprocess.run(
-            f"strings '{disk_path}' 2>/dev/null | grep -i '\\.pf$\\|-[0-9A-F]{{8}}\\.pf' | head -30",
-            shell=True, capture_output=True, text=True, timeout=60
-        )
-        prefetch = r.stdout.splitlines()
+        prefetch = _head_lines(["strings", _safe_path(disk_path)], 30, 60,
+                               match=_PREFETCH_LINE)
         suspicious = [p for p in prefetch
                      if any(x in p.lower() for x in
                             ["nc.exe", "ncat", "meterpreter",
@@ -796,7 +897,7 @@ async def main_mcp():
         await server.run(r, w, server.create_initialization_options())
 
 
-def run_http_server(host: str = "0.0.0.0", port: int = 8765):
+def run_http_server(host: str = "127.0.0.1", port: int = 8765):
     """
     Run as simple HTTP API server (no MCP SDK required).
     Useful for testing and integration with non-MCP clients.
@@ -844,7 +945,9 @@ if __name__ == "__main__":
 
     p = argparse.ArgumentParser(description="PHANTOM DFIR MCP Server")
     p.add_argument("--transport", choices=["stdio", "http"], default="stdio")
-    p.add_argument("--host", default="0.0.0.0")
+    p.add_argument("--host", default="127.0.0.1",
+                   help="HTTP bind address. Defaults to localhost: the HTTP API has no "
+                        "authentication, so only bind other addresses on a trusted network.")
     p.add_argument("--port", type=int, default=8765)
     args = p.parse_args()
 

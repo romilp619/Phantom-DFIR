@@ -35,8 +35,8 @@ published what broke, and measured a fix.
   (`benchmark_results/`).
 - Red-team: attack success rate against the verification step cut from **0.800 to 0.300**,
   accuracy up from **0.273 to 0.727** (`results/comparison.json`).
-- **119 tests** in the safety layer's suite, and a script that fails if this README's numbers
-  stop matching the stored results.
+- **139 tests**, and a script that fails if this README's numbers stop matching the stored
+  results.
 
 ---
 
@@ -163,7 +163,7 @@ python scripts/smoke_harness.py          # reproduces the three findings on the 
 python scripts/validate_scanner.py       # scanner: 15/15 recall, 0/12 false positives
 python -m phantom_ai_safety.evaluation.comparison --per-family 50 --quiet --out /tmp/comparison.json
 python scripts/verify_report_claims.py   # this README's numbers vs stored results
-pytest tests/ -q                         # 119 tests: 96 pass, 23 skip until the Rust guard is built
+pytest tests/ -q                         # 139 tests: 116 pass, 23 skip until the Rust guard is built
 ```
 
 Optional, with a Rust toolchain:
@@ -171,7 +171,7 @@ Optional, with a Rust toolchain:
 ```bash
 (cd phantom-guard && cargo build --release)
 python scripts/run_rust_guard.py         # Rust guard vs Python scanner, must agree exactly
-pytest tests/ -q                         # now 111 pass (the rest need CuratorKIT or are self-skips)
+pytest tests/ -q                         # now 131 pass (the rest need CuratorKIT or are self-skips)
 ```
 
 There is also a static results page: open `dashboard/index.html` in a browser.
@@ -242,11 +242,11 @@ Full installation steps, every command and the benchmark workflow are in
 | `phantom_router.py` | Evidence-type detection, dispatch, evidence-gap controller, unified report |
 | `disk_correlator.py` | Disk, E01 and PCAP analysis |
 | `tools/`, `correlation/`, `skills/` | Volatility wrappers, confidence scoring, MITRE ATT&CK mapping, DFIR skill notes |
-| `mcpserver/` | Optional MCP server exposing 20 forensic tools |
+| `mcpserver/` | Optional MCP server exposing 20 forensic tools, with no shell access from tool arguments |
 | `benchmark_reports.py`, `benchmarks/`, `benchmark_results/` | Multi-case benchmark, ground truth, stored scorecards |
 | `phantom_ai_safety/` | Red-team rows and injections, harness, evaluation, grounded verifier, injection scanner |
 | `phantom-guard/` | Rust build of the injection scanner |
-| `tests/`, `scripts/`, `data/`, `results/` | Safety-layer tests, entry points, evaluation sets, stored results |
+| `tests/`, `scripts/`, `data/`, `results/` | Test suite (safety layer and MCP hardening), entry points, evaluation sets, stored results |
 | `docs/` | Detailed write-ups, usage guide, version history |
 
 <details>
@@ -330,8 +330,9 @@ verifier). That run is a pipeline check. No fine-tuned model is claimed as a res
 - **Benchmark scores are stored runs on five public cases** that were also used while
   developing the engine. They show the engine reproduces known answers on those cases, not
   performance on unseen ones.
-- **The MCP server is for local, trusted use.** It builds tool command lines from the
-  arguments it receives, so do not expose its HTTP mode to an untrusted network or client.
+- **The MCP server's HTTP mode has no authentication.** It binds to localhost by default;
+  only bind another address on a trusted network. Tool arguments are passed to the forensic
+  tools as argument lists, never through a shell (`tests/test_mcp_server_hardening.py`).
 - **LLM output is assistance, not evidence.** Findings should be judged from the underlying
   artifacts.
 
