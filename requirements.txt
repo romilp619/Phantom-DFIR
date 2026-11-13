@@ -3,6 +3,12 @@
 # Install:
 #   python3 -m pip install -r requirements.txt
 #
+# If the python-evtx install below fails on a bare virtualenv, install the build
+# backend first (a venv created with `python -m venv` has no setuptools, and
+# hexdump ships only as an sdist, so it cannot build without one):
+#   python3 -m pip install setuptools wheel
+#   python3 -m pip install -r requirements.txt
+#
 # External DFIR tools such as Sleuth Kit, tshark, ClamAV/clamdscan, libbde,
 # dislocker, gpg, and Volatility symbols are installed with the OS package
 # manager, not pip. See README.md for apt commands.
@@ -28,7 +34,12 @@ mcp>=1.0.0
 # Artifact parsing and triage helpers
 pefile>=2023.2.7
 pyAesCrypt>=6.1.1
-# disk_correlator.py parses Windows Event Logs with `from Evtx.Evtx import Evtx`
-# (three call sites: 15199, 15597, 15972). The import name is Evtx; the PyPI
-# distribution is python-evtx.
-python-evtx>=0.7.4
+
+# Windows Event Log parsing.
+# disk_correlator.py does `from Evtx.Evtx import Evtx` at lines 15199, 15597 and
+# 15972. The import name is Evtx; the distribution is python-evtx.
+# python-evtx depends on hexdump, which is published as an sdist only (no wheel),
+# so the build backend must be present. setuptools is pinned here rather than left
+# to the environment because `python -m venv` does not seed it.
+setuptools>=68
+python-evtx>=0.8.1
