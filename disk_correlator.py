@@ -7694,7 +7694,7 @@ def generate_report(memory_path, disk_path, mem_artifacts,
         for n in mem_artifacts["network"][:10]:
             md += f"- `{n['line'][:150]}`\n"
 
-    md += f"\n---\n*PHANTOM DFIR v3.0 | Find Evil! Hackathon 2026*\n"
+    md += f"\n---\n*PHANTOM DFIR v3.0*\n"
 
     md_path = os.path.join(output_dir, f"{prefix}.md")
     with open(md_path, "w") as f:
@@ -22897,7 +22897,6 @@ Examples:
 ╔══════════════════════════════════════════════════════════════╗
 ║   PHANTOM DFIR — Intelligent Disk Correlator v3.0            ║
 ║   Path-based | Process Tree | Obfuscation Detection          ║
-║   Find Evil! Hackathon 2026                                   ║
 ╚══════════════════════════════════════════════════════════════╝""")
 
     if disk_only:

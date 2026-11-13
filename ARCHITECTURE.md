@@ -35,7 +35,7 @@ evidence is thin, and gather the results into a unified report
 
 **Multi-Agent Framework (LangGraph)** + **Custom MCP Server**
 
-PHANTOM combines the two most valued approaches from the hackathon guidelines:
+PHANTOM combines two widely recommended approaches:
 
 1. **LangGraph StateGraph**: 5 specialized agents communicate through a shared TypedDict state. No single model holds all raw data — evidence is distributed across plugin outputs and summarized before LLM context.
 

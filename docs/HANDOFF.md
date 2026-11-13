@@ -1,4 +1,4 @@
-# Handoff — Find Evil! submission (phantom-safety)
+# Handoff — submission (phantom-safety)
 
 State as of 2026-11-10 09:20 America/Chicago. Cold-start brief.
 Repo `phantom-safety`, 9 commits, HEAD `ce410d4`, 48 tracked files, working tree clean.
@@ -6,8 +6,7 @@ Long-form docs in `lexsi-work/`, mirrored into `phantom-safety/docs/`.
 
 ## Objective
 
-Winning submission for the Find Evil! Hackathon (AI Red
-Teaming, Safety and Alignment). Deadline 2026-11-15 11:59 PM AoE. Moo registers and
+Submission on AI red teaming, safety and alignment. Deadline 2026-11-15 11:59 PM AoE. Moo registers and
 submits manually.
 
 ## Headline finding
@@ -139,7 +138,7 @@ which the smoke test already proves works.
   to Moo. The `/health` `decision_canary` field should show it.
 - **Fulcrum is ON HOLD for public release.** `Projects/Buildtober 2026.md:25` and pending
   decision 2: "fulcrum public or not". Its repo is private Gitea `moo-private/fulcrum`.
-  **Do not put Fulcrum into a public hackathon repo** — that is Moo's publication decision,
+  **Do not put Fulcrum into a public repo** — that is Moo's publication decision,
   not ours. Same reasoning rules out HOUND internals (live bounty box, unverified shielded
   research, security/OSINT). Neither addresses Track 2 model alignment anyway.
 - **Model router:** `astra` (codex backend) works and was used for the independent red

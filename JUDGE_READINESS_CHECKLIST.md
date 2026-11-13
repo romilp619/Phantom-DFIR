@@ -1,6 +1,6 @@
 # PHANTOM DFIR — Judge Readiness Checklist
 
-This checklist maps PHANTOM DFIR to the Find Evil judging requirements from the
+This checklist maps PHANTOM DFIR to the judging requirements from the
 judge pack and quick-reference PDFs.
 
 ## Stage One Submission Requirements

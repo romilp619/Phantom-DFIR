@@ -196,7 +196,7 @@ def _render_curation(cur) -> str:
 
     rows_in = proj.get("rows_in", cur.get("rows_curated", 0))
     return f'''  <h2>6. Data curation pipeline</h2>
-  <p class="dim">The hackathon stack requires the sponsor's toolkit in a real pipeline,
+  <p class="dim">The brief requires the sponsor's toolkit chained into a real pipeline,
   not described. CuratorKIT {cur.get("toolkit_version", "?")} was run over the full
   training split, and it surfaced three defects that fail silently.</p>
 
@@ -458,7 +458,7 @@ def build_html(comp, held, base, red=None, cur=None) -> str:
 <div class="wrap">
 
   <header class="hero">
-    <div class="eyebrow">Find Evil! Hackathon &middot; SANS Institute</div>
+    <div class="eyebrow">AI Safety Evaluation</div>
     <h1>AI Safety &amp; Red Teaming</h1>
     <p class="sub">Audit of the adversarial &ldquo;Skeptic&rdquo; verification layer in
     PHANTOM DFIR, and an evidence-grounded replacement.</p>

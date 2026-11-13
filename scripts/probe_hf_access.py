@@ -19,7 +19,7 @@ import urllib.error
 import urllib.request
 
 CANDIDATES = [
-    # The hackathon's recommended family.
+    # The recommended model family.
     "CohereLabs/tiny-aya-global",
     "CohereLabs/tiny-aya-base",
     "CohereLabs/tiny-aya-fire",

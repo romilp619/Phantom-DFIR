@@ -101,7 +101,7 @@ Run PHANTOM:
 Recommended for:
 - Professional DFIR workflows
 - Forensic lab environments
-- Hackathon demo environments
+- Demo and lab environments
 
 IMPORTANT:
 SIFT ships with a system-installed Volatility that may cause symbol permission issues.
@@ -712,7 +712,7 @@ phantom-dfir/
 
 
 
-*PHANTOM DFIR v2.1 - Find Evil! Hackathon 2026*
+*PHANTOM DFIR v2.1*
 
 ---
 
@@ -1013,7 +1013,7 @@ a metric, change the result file and the claim together, or the check will catch
 `phantom_ai_safety.evidence_scanner.scanner`. That is the reference implementation the guard is
 tested against, and the equivalence tests fail if the two diverge. Swapping the pipeline to the
 guard is a one-line import with an identical signature, and is a reasonable thing to do once
-you trust the equivalence tests. It is not the default because a hackathon judge should be able
+you trust the equivalence tests. It is not the default because a reviewer should be able
 to read the detection rules in the same file as the numbers they produce.
 
 **The false-positive rate is the metric that matters most.** A scanner that flags ordinary

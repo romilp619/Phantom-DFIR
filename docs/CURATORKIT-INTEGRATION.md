@@ -1,6 +1,6 @@
 # CuratorKIT integration: a real pipeline run on the project's own data
 
-The hackathon brief asks for the stack to be "chained into a real pipeline". This document
+The brief asks for the stack to be "chained into a real pipeline". This document
 records an actual execution of the sponsor's CuratorKIT toolkit over the project's training
 split, with the numbers it produced, plus four things a builder should know before doing
 the same.

@@ -147,7 +147,7 @@ retains the original sections (verified present: `Parallel Hypothesis`, `Try-It-
 It appends the AI safety sections and ends:
 
 ```
-*PHANTOM DFIR v2.1 - Find Evil! Hackathon 2026*
+*PHANTOM DFIR v2.1*
 ```
 
 Metrics present in the integrated version and absent from the original: `0.273`, `0.636`,

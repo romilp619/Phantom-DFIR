@@ -10,7 +10,7 @@ import subprocess
 
 PROBES = [
     "0.273", "0.636", "0.800", "0.400", "0.839", "0.631",
-    "Find Evil", "SANS Institute", "attack success", "phantom-safety",
+    "attack success", "phantom-safety",
     "Evidence-grounded", "PHANTOM DFIR", "LangGraph",
 ]
 

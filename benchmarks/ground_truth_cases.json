@@ -10,7 +10,7 @@
   "cases": [
     {
       "id": "base_admin_memory",
-      "name": "SANS Find Evil base-admin memory",
+      "name": "Base-admin memory image",
       "evidence_type": "memory",
       "expected_verdict_any": [
         "COMPROMISE",
