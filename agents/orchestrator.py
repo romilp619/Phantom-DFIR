@@ -129,7 +129,7 @@ def run_investigation(filepath: str, self_correct: bool = False,
 ║  Hunting Overlay Network                                     ║
 ║                                                              ║
 ║  World's first adversarial self-verifying DFIR agent         ║
-║  Find Evil! Hackathon 2026  |  LangGraph + Ollama            ║
+║  LangGraph + Ollama                                          ║
 ╚══════════════════════════════════════════════════════════════╝
 """, flush=True)
 

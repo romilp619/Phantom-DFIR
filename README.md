@@ -101,7 +101,7 @@ Run PHANTOM:
 Recommended for:
 - Professional DFIR workflows
 - Forensic lab environments
-- Hackathon demo environments
+- Demo and lab environments
 
 IMPORTANT:
 SIFT ships with a system-installed Volatility that may cause symbol permission issues.
@@ -718,4 +718,4 @@ Phantom-DFIR/
 
 
 
-*PHANTOM DFIR v2.1 — Find Evil! Hackathon 2026*
+*PHANTOM DFIR v2.1*

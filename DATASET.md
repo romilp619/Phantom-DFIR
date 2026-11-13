@@ -3,7 +3,7 @@
 ## Test Data
 
 ### Primary: base-admin-memory.img
-- **Source**: SANS "Find Evil!" Hackathon 2026 provided dataset
+- **Source**: Provided challenge dataset
 - **Type**: Full memory capture (Windows 10 x64)
 - **Size**: 5,120 MB (5 GB)
 - **SHA256**: `d58343cb4e4a06ecc56012c8e25760b297594bf4695303527a5cbb2331726891`

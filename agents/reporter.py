@@ -156,8 +156,8 @@ def _build_attack_narrative(critical: list, medium: list, cleared: list,
                              techniques: list, kill_chain: list) -> str:
     """
     Generate a coherent attack story from the confirmed findings.
-    This is what wins hackathons - not just a list of IOCs, but a narrative
-    that shows the analyst understands what happened.
+    Produces a narrative rather than just a list of IOCs, showing what
+    happened and in what order.
     """
     sections = []
 
