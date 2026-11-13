@@ -1,0 +1,67 @@
+{
+  "toolkit": "curatorkit",
+  "toolkit_version": "0.1.26",
+  "hardened_by": "phantom_ai_safety.curation.guards",
+  "input": "data/train.jsonl",
+  "format": "alpaca",
+  "projection": {
+    "rows_in": 3300,
+    "projected": 3300,
+    "missing_system": 0,
+    "missing_user": 0,
+    "missing_assistant": 0,
+    "ids_preserved": 3300
+  },
+  "config_guard": {
+    "ok": true,
+    "checked": [
+      "format=alpaca",
+      "strip_html=False",
+      "injection_rate=0 (no injection requested)"
+    ],
+    "warnings": [],
+    "errors": []
+  },
+  "post_run_guard": {
+    "ok": true,
+    "checked": [
+      "passed=1900 rejected=0",
+      "marker_retention=200/200"
+    ],
+    "warnings": [],
+    "errors": []
+  },
+  "rows_curated": 1900,
+  "passed": 1900,
+  "rejected": 0,
+  "pass_rate": 1.0,
+  "stage_counts": {
+    "JSONLReader": {
+      "output_count": 3300,
+      "rejected_count": 0
+    },
+    "SchemaGate": {
+      "input_count": 3300,
+      "output_count": 3300,
+      "probe_recovered": 0,
+      "rejected_count": 0
+    },
+    "ExactDeduplicator": {
+      "input_count": 3300,
+      "output_count": 1900
+    },
+    "TextCleaner": {
+      "input_count": 1900,
+      "output_count": 1900
+    }
+  },
+  "rejection_reasons": {},
+  "wall_clock_seconds": 0.32,
+  "injection_rate": 0.0,
+  "evidence_markers_preserved": true,
+  "notes": [
+    "strip_html disabled so angle-bracket evidence markers survive cleaning",
+    "format validated against DataFormat; 'jsonl' would reject 100% of rows silently",
+    "a non-zero injection_rate without injection_types is refused"
+  ]
+}

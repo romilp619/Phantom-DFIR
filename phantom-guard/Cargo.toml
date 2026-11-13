@@ -1,0 +1,19 @@
+[package]
+name = "phantom-guard"
+version = "1.0.0"
+edition = "2024"
+description = "Memory-safe forensic evidence scanner - hardens Phantom-DFIR against prompt injection"
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/romilp619/Phantom-DFIR"
+
+[[bin]]
+name = "phantom-guard"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+regex = { version = "1", default-features = false, features = ["std", "unicode-perl", "unicode-case"] }
+sha2 = "0.10"
+clap = { version = "4", features = ["derive"] }

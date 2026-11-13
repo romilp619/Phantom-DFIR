@@ -1,0 +1,53 @@
+{
+  "guard": {
+    "boundary": "process",
+    "categories": [
+      "instruction_override",
+      "system_prompt_extraction",
+      "conclusion_fabrication",
+      "tool_manipulation",
+      "jailbreak_persona",
+      "analyst_addressing",
+      "evidence_dismissal"
+    ],
+    "implementation": "rust",
+    "memory_safe": true,
+    "name": "phantom-guard",
+    "patterns": 27,
+    "rule_fingerprint": "742132fc36fa70bb2e3f90d6207b8ede55f8ad26b6c293860deffcf163f488ac",
+    "rules": 7,
+    "version": "1.0.0"
+  },
+  "self_test": "passed",
+  "attack_rows": 160,
+  "artifacts_scanned": 460,
+  "summary": {
+    "artifacts_scanned": 460,
+    "artifacts_manipulated": 40,
+    "total_findings": 120,
+    "by_category": {
+      "instruction_override": 20,
+      "jailbreak_persona": 20,
+      "evidence_dismissal": 40,
+      "analyst_addressing": 40
+    },
+    "by_severity": {
+      "CRITICAL": 20,
+      "HIGH": 20,
+      "MEDIUM": 80
+    },
+    "implementation": "rust",
+    "boundary": "process"
+  },
+  "equivalence": {
+    "artifacts": 460,
+    "disagreements": 0,
+    "disagreement_ids": [],
+    "agrees": true
+  },
+  "severity_counts": {
+    "CRITICAL": 20,
+    "HIGH": 20,
+    "MEDIUM": 80
+  }
+}

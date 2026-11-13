@@ -571,39 +571,76 @@ In short:
 
 ## AI Safety and Red-Team Layer
 
-Alongside the forensic engine, PHANTOM has a companion AI safety and red-team evaluation
-layer, **`phantom-safety`**, which attacks the forensic agent with adversarial evidence and
-measures whether it can be pushed into a wrong verdict.
+Alongside the forensic engine, this repository carries an AI safety and red-team evaluation
+layer. It attacks the forensic agent with adversarial evidence and measures whether the agent
+can be pushed into a wrong verdict.
 
-It lives on the branch **`ai-safety/phantom-safety`** (same commit as the original
-`backup/pre-redteam-2026-11-12`), deliberately **not** on `main`: it imports this application
-content-unmodified and measures it from the outside, so no safety result can be an artefact of
-editing the system under test.
+The layer sits on top of the engine as a separate module. It imports the engine's
+verification code (`agents/skeptic.py`, `correlation/confidence.py`) unmodified and measures
+it from the outside, so no safety result can be an artefact of editing the system under test.
+The forensic pipeline (`main.py`, `phantom_router.py`, `disk_correlator.py`) does not import
+or call the layer, so an investigation runs exactly as it did before the layer was added.
+
+| Path | Role |
+|---|---|
+| `phantom_ai_safety/red_team/` | Adversarial evidence rows (10 attack families + 1 control family) and injection attacks |
+| `phantom_ai_safety/harness/` | Runs the real Skeptic and confidence scorer with tool stubs and an injectable LLM |
+| `phantom_ai_safety/evaluation/` | Baseline runner, before/after comparison, metrics |
+| `phantom_ai_safety/grounding/` | Evidence-grounded claim verifier (the proposed repair) |
+| `phantom_ai_safety/evidence_scanner/` | Prompt-injection scanner for evidence text, with a normalisation pass (base64, hex, zero-width, homoglyphs) |
+| `phantom_ai_safety/curation/`, `phantom_ai_safety/repair/` | Training-data guards (CuratorKIT) and QLoRA training/evaluation (AlignTune); optional, not needed for the results below |
+| `phantom-guard/` | Rust build of the scanner, run as a separate process and tested for exact agreement with the Python scanner |
+| `tests/`, `scripts/`, `data/`, `results/`, `docs/` | Test suite, entry points, evaluation sets, stored per-row results, write-ups |
+
+### What it measured
+
+| | upstream verification | grounded verifier |
+|---|---|---|
+| Accuracy | 0.273 | **0.727** |
+| Attack success rate | 0.800 | **0.300** |
+| False-confirm rate | 0.839 | **0.562** |
+| Corroborated threat reported as cleared | 0.427 | **0.000** |
+
+These come from `results/comparison.json`, which stores every per-row record, and
+`scripts/verify_report_claims.py` fails if this table stops matching that file.
+
+How to read these numbers:
+
+- The set is 550 synthetic rows (500 attacks, 50 controls) in 11 families. Rows inside a
+  family share one template and every family scores all-or-nothing, so this is 11
+  family-level outcomes (3 of 11 handled correctly before, 8 of 11 after), not 550
+  independent trials.
+- Three attack families still defeat the grounded verifier: `behavioural_mention`,
+  `identity_alias` and `network_contact_inflation`. An attack success rate of 0.300 is a
+  research result, not a guarantee.
+- No real forensic image is involved. The evaluation needs no Volatility, no GPU and no model.
+- Five LLM stand-ins (including a model that refutes everything and no model at all) produce
+  identical Skeptic confidences on every row: on that path the verdict is decided by the
+  source count, not by the model.
+- The scanner is validated on 15 labelled payloads (15/15 flagged) and 12 hostile-looking
+  but benign forensic strings (0 flagged). On the larger injection set in
+  `results/red_team_report.json` it notices 0.667 of expected attacks, and no injection
+  changed a verifier verdict (0 of 160).
+
+### Run it
 
 ```bash
-# browse it
-git fetch origin
-git switch ai-safety/phantom-safety
-
-# or check it out beside this one, leaving your forensic worktree untouched
-git worktree add ../phantom-safety ai-safety/phantom-safety
+pip install pytest                                   # plus requirements.txt
+python scripts/smoke_harness.py                      # reproduce the findings
+python scripts/validate_scanner.py                   # scanner recall / false positives
+(cd phantom-guard && cargo build --release)          # build the Rust guard (optional)
+python scripts/run_rust_guard.py                     # guard vs Python scanner equivalence
+python -m phantom_ai_safety.evaluation.comparison --per-family 50 --quiet --out results/comparison.json
+python scripts/verify_report_claims.py               # README table vs stored results
+pytest tests/ -q                                     # 119 tests; guard tests skip if the binary is not built
 ```
-
-It contains adversarial evidence-injection attacks and evaluation
-(`phantom_ai_safety/red_team/`), a prompt-injection scanner with a detection-normalisation
-pass (`phantom_ai_safety/evidence_scanner/`), evidence-grounded claim verification
-(`grounding/`), training-data curation guards (`curation/`), a baseline/comparison metrics
-harness (`evaluation/`), QLoRA repair training (`repair/`), and a compiled Rust guard
-(`phantom-guard/`) that provides a process-isolated verdict path.
-
-**Do not delete that branch.** It is the only copy of that work and has no separate working
-directory on disk. Its original name reads like a disposable backup; it is not one.
 
 Note that *adversarial* means two different things in this project. The **Skeptic agent**
 (`agents/skeptic.py`) is a forensic adversary that challenges intrusion hypotheses and is part
 of every analysis run. The **red-team layer** is a security adversary that attacks the agent
 itself, and runs only as a separate evaluation. See
-[ARCHITECTURE.md](ARCHITECTURE.md#the-ai-safety-and-red-team-layer) for the full distinction.
+[ARCHITECTURE.md](ARCHITECTURE.md#the-ai-safety-and-red-team-layer) for the full distinction,
+and [`docs/`](docs/) for the detailed write-ups.
 
 ---
 
@@ -679,6 +716,11 @@ Phantom-DFIR/
 ├── forensic_reasoning_patch.py  # Standalone reasoning patch, kept for reference
 │                            #   (not imported by any module; disk_correlator.py
 │                            #    carries the active forensic_reasoning chain)
+├── phantom_ai_safety/       # AI safety and red-team layer (separate module, see above)
+├── phantom-guard/           # Rust build of the evidence injection scanner
+├── tests/                   # pytest suite for the safety layer
+├── scripts/                 # Safety-layer entry points and probes
+├── data/, results/, docs/   # Evaluation sets, stored results, safety-layer write-ups
 ├── ARCHITECTURE.md          # Execution paths, trust boundaries, AI safety layer
 ├── ACCURACY_REPORT.md       # Measured accuracy and guardrail behaviour
 ├── BENCHMARK_MATRIX.md      # Per-case benchmark matrix

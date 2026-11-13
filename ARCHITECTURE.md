@@ -66,16 +66,12 @@ PHANTOM ships a second, complementary body of work: **`phantom-safety`**, an AI 
 red-team evaluation layer that measures and hardens the forensic agent's reasoning against
 adversarial evidence.
 
-It lives on the branch **`ai-safety/phantom-safety`** (also reachable under its original name
-`backup/pre-redteam-2026-11-12`), not on `main`. That separation is deliberate and is the
-layer's core methodological claim: it imports the forensic application **content-unmodified**
-and measures it from the outside, so no safety result can be an artefact of editing the system
-under test. Nothing in that branch edits the forensic engine, and nothing on `main` depends on
-it. The two trees share no module, function, or dependency.
-
-> **Do not delete the `ai-safety/phantom-safety` branch.** It is the only copy of that work —
-> there is no separate working directory for it on disk. Its former name
-> (`backup/pre-redteam-2026-11-12`) reads like a disposable backup; it is not one.
+It lives in this repository beside the forensic engine (`phantom_ai_safety/`, `phantom-guard/`,
+`tests/`, `scripts/`, `data/`, `results/`, `docs/`). The dependency runs one way only, and that
+is the layer's core methodological claim: it imports the forensic application's verification
+code **content-unmodified** and measures it from the outside, so no safety result can be an
+artefact of editing the system under test. Nothing in the layer edits the forensic engine, and
+no engine module imports the layer.
 
 ### What the layer contains
 
