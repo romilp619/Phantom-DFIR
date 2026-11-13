@@ -101,4 +101,4 @@ uses of the word *adversarial* in this project:
 
 Neither replaces the other, and consolidating them would be a category error.
 
-For command examples and setup, see the [README](README.md). For implementation details, see `phantom_router.py`, `main.py`, `disk_correlator.py`, and `mcpserver/mcp_server.py`.
+For a short overview see the [README](README.md); for setup and every command see [docs/USAGE.md](docs/USAGE.md). For implementation details, see `phantom_router.py`, `main.py`, `disk_correlator.py`, and `mcpserver/mcp_server.py`.
