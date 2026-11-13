@@ -1,0 +1,49 @@
+{
+  "cases_scored": 5,
+  "fully_reproduced": 5,
+  "partially_reproduced": 0,
+  "not_reproduced": 0,
+  "average_adjusted_score_percent": 97.0,
+  "cases": [
+    {
+      "case_id": "cfreds_data_leakage",
+      "case_name": "CFReDS data leakage / insider exfiltration",
+      "status": "FULLY_REPRODUCED",
+      "adjusted_score_percent": 100.0,
+      "verdict_matched": true,
+      "source": "/home/romil/phantom_final_logs/cfreds/cfreds_benchmark_result.json"
+    },
+    {
+      "case_id": "ali_hadi_encrypt_them_all",
+      "case_name": "Ali Hadi Encrypt Them All",
+      "status": "FULLY_REPRODUCED",
+      "adjusted_score_percent": 100.0,
+      "verdict_matched": true,
+      "source": "/home/romil/phantom_final_logs/encrypt_them_all/encrypt_them_all_benchmark_result.json"
+    },
+    {
+      "case_id": "m57_jean_phishing",
+      "case_name": "M57 Jean phishing-induced data leakage",
+      "status": "FULLY_REPRODUCED",
+      "adjusted_score_percent": 90.0,
+      "verdict_matched": true,
+      "source": "/home/romil/phantom_final_logs/jean/jean_benchmark_result.json"
+    },
+    {
+      "case_id": "nitroba_harassment_pcap",
+      "case_name": "Nitroba harassment attribution PCAP",
+      "status": "FULLY_REPRODUCED",
+      "adjusted_score_percent": 95.0,
+      "verdict_matched": true,
+      "source": "/home/romil/phantom_final_logs/nitroba/nitroba_benchmark_result.json"
+    },
+    {
+      "case_id": "sysinternals_case",
+      "case_name": "SysInternals challenge",
+      "status": "FULLY_REPRODUCED",
+      "adjusted_score_percent": 100.0,
+      "verdict_matched": true,
+      "source": "/home/romil/phantom_final_logs/sysinternals/sysinternals_benchmark_result.json"
+    }
+  ]
+}

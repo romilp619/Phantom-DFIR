@@ -1,9 +1,9 @@
 """
-PHANTOM DFIR — Parallel Evidence Collector
+PHANTOM DFIR - Parallel Evidence Collector
 Runs ALL Vol3 + Vol2 plugins in parallel threads.
 Race OS detection: first engine to answer wins.
 
-v1.1 — Full Linux plugin suite added
+v1.1 - Full Linux plugin suite added
 """
 import threading
 import time
@@ -12,6 +12,7 @@ from typing import Optional
 
 import tools.vol3_tools as v3
 import tools.vol2_tools as v2
+import tools.memory_triage as mt
 from state import InvestigationState
 from config import VOL3_CMD, VOL2_CMD, MAX_PARALLEL_WORKERS
 import shutil
@@ -95,12 +96,15 @@ def detect_os_parallel(filepath: str, engines: dict) -> tuple:
     os_type = result.get("os") or "unknown"
     profile = result.get("profile")
     winner  = result.get("winner") or "timeout"
-    print(f"  ✓ OS: {os_type} | profile: {profile or 'auto'} | via: {winner}", flush=True)
+    print(f"  [OK] OS: {os_type} | profile: {profile or 'auto'} | via: {winner}", flush=True)
     return os_type, profile
 
 
 def collect_windows_evidence(filepath: str, engines: dict) -> tuple:
-    tasks = {}
+    tasks = {
+        "memory:strings_ioc": lambda: mt.run_strings_ioc(filepath),
+        "memory:yara_scan":   lambda: mt.run_yara_memory_scan(filepath),
+    }
 
     if engines.get("vol3"):
         tasks.update({
@@ -164,15 +168,18 @@ def collect_windows_evidence(filepath: str, engines: dict) -> tuple:
 
 def collect_linux_evidence(filepath: str, engines: dict) -> tuple:
     """
-    Full Linux evidence collection — equivalent depth to Windows.
+    Full Linux evidence collection - equivalent depth to Windows.
     Covers: processes, network, bash history, rootkit detection,
     eBPF malware, kernel module tampering, fileless indicators.
     """
-    tasks = {}
+    tasks = {
+        "memory:strings_ioc": lambda: mt.run_strings_ioc(filepath),
+        "memory:yara_scan":   lambda: mt.run_yara_memory_scan(filepath),
+    }
 
     if engines.get("vol3"):
         tasks.update({
-            # ── Process enumeration ──────────────────────────────────────────
+            # -- Process enumeration ------------------------------------------
             "vol3:linux_pslist":         lambda: v3.linux_pslist(filepath),
             "vol3:linux_psscan":         lambda: v3.linux_psscan(filepath),
             "vol3:linux_pstree":         lambda: v3.linux_pstree(filepath),
@@ -182,25 +189,25 @@ def collect_linux_evidence(filepath: str, engines: dict) -> tuple:
             "vol3:linux_pidhashtable":   lambda: v3.linux_pidhashtable(filepath),
             "vol3:linux_ptrace":         lambda: v3.linux_ptrace(filepath),
 
-            # ── Network connections ──────────────────────────────────────────
+            # -- Network connections ------------------------------------------
             "vol3:linux_sockstat":       lambda: v3.linux_sockstat(filepath),
             "vol3:linux_sockscan":       lambda: v3.linux_sockscan(filepath),
             "vol3:linux_netfilter":      lambda: v3.linux_netfilter(filepath),
             "vol3:linux_ip_addr":        lambda: v3.linux_ip_addr(filepath),
 
-            # ── Execution history ────────────────────────────────────────────
+            # -- Execution history --------------------------------------------
             "vol3:linux_bash":           lambda: v3.linux_bash(filepath),
             "vol3:linux_lsof":           lambda: v3.linux_lsof(filepath),
             "vol3:linux_mountinfo":      lambda: v3.linux_mountinfo(filepath),
             "vol3:linux_boottime":       lambda: v3.linux_boottime(filepath),
             "vol3:linux_kmsg":           lambda: v3.linux_kmsg(filepath),
 
-            # ── Malware / fileless / injection detection ─────────────────────
+            # -- Malware / fileless / injection detection ---------------------
             "vol3:linux_malfind":        lambda: v3.linux_malfind(filepath),
             "vol3:linux_process_spoof":  lambda: v3.linux_process_spoofing(filepath),
             "vol3:linux_ebpf":           lambda: v3.linux_ebpf(filepath),
 
-            # ── Rootkit detection ────────────────────────────────────────────
+            # -- Rootkit detection --------------------------------------------
             "vol3:linux_check_syscall":  lambda: v3.linux_check_syscall(filepath),
             "vol3:linux_check_idt":      lambda: v3.linux_check_idt(filepath),
             "vol3:linux_check_afinfo":   lambda: v3.linux_check_afinfo(filepath),
@@ -212,12 +219,12 @@ def collect_linux_evidence(filepath: str, engines: dict) -> tuple:
             "vol3:linux_check_ftrace":   lambda: v3.linux_check_ftrace(filepath),
             "vol3:linux_check_tracepoints": lambda: v3.linux_check_tracepoints(filepath),
 
-            # ── Library / module analysis ────────────────────────────────────
+            # -- Library / module analysis ------------------------------------
             "vol3:linux_lsmod":          lambda: v3.linux_lsmod(filepath),
             "vol3:linux_library_list":   lambda: v3.linux_library_list(filepath),
             "vol3:linux_elfs":           lambda: v3.linux_elfs(filepath),
 
-            # ── Banners / OS info ────────────────────────────────────────────
+            # -- Banners / OS info --------------------------------------------
             "vol3:banners":              lambda: v3.linux_banner(filepath),
         })
 
@@ -251,17 +258,17 @@ def _run_parallel(tasks: dict) -> tuple:
             try:
                 result = future.result()
                 raw_evidence[name] = result or ""
-                status = "✓" if result and "[TIMEOUT]" not in result and "[ERROR]" not in result else "✗"
+                status = "[OK]" if result and "[TIMEOUT]" not in result and "[ERROR]" not in result else "[FAIL]"
                 print(f"    [{completed:>2}/{total}] {status} {name:<30} ({elapsed_plugin:.1f}s)", flush=True)
             except Exception as e:
                 errors.append(f"{name}: {e}")
                 raw_evidence[name] = f"[ERROR] {e}"
-                print(f"    [{completed:>2}/{total}] ✗ {name:<30} (FAILED: {e})", flush=True)
+                print(f"    [{completed:>2}/{total}] [FAIL] {name:<30} (FAILED: {e})", flush=True)
 
     wall_time = time.time() - t_start
     succeeded = total - len(errors)
-    print(f"\n  ── {succeeded}/{total} plugins succeeded in {wall_time:.1f}s "
-          f"({len(errors)} failed) ──", flush=True)
+    print(f"\n  -- {succeeded}/{total} plugins succeeded in {wall_time:.1f}s "
+          f"({len(errors)} failed) --", flush=True)
 
     return raw_evidence, errors
 
@@ -270,9 +277,9 @@ def run_collector(state: InvestigationState) -> InvestigationState:
     filepath = state["filepath"]
     engines  = state.get("engines") or detect_engines()
 
-    print("\n══════════════════════════════════════════════════", flush=True)
-    print("  PHASE 1 — PARALLEL EVIDENCE COLLECTION", flush=True)
-    print("══════════════════════════════════════════════════", flush=True)
+    print("\n==================================================", flush=True)
+    print("  PHASE 1 - PARALLEL EVIDENCE COLLECTION", flush=True)
+    print("==================================================", flush=True)
     print(f"  Target : {filepath}", flush=True)
     print(f"  Engines: {list(engines.keys())}", flush=True)
 
@@ -286,20 +293,22 @@ def run_collector(state: InvestigationState) -> InvestigationState:
         print(f"  [Linux] Running full Linux plugin suite...", flush=True)
         raw_evidence, errors = collect_linux_evidence(filepath, engines)
     else:
-        print(f"  [!] OS unknown — running banners + strings fallback", flush=True)
+        print(f"  [!] OS unknown - running banners + strings fallback", flush=True)
         raw_evidence = {"vol3:banners": v3.linux_banner(filepath)}
         errors = []
 
     elapsed = time.time() - t0
+    raw_evidence["memory:timeline_hints"] = mt.build_memory_timeline_hints(raw_evidence, os_type)
+    raw_evidence["memory:triage_summary"] = mt.build_triage_summary(raw_evidence)
     print(f"\n  Collection complete: {len(raw_evidence)} plugins in {elapsed:.1f}s", flush=True)
 
-    # ── Reasoning Trace ───────────────────────────────────────────────────
+    # -- Reasoning Trace ---------------------------------------------------
     import time as _time
     reasoning = state.get("reasoning_log", [])
     reasoning.append({
         "agent": "Collector",
         "action": "OS Detection",
-        "rationale": f"Raced Vol3 windows.info vs Vol2 kdbgscan vs strings in parallel — "
+        "rationale": f"Raced Vol3 windows.info vs Vol2 kdbgscan vs strings in parallel - "
                      f"first responder wins to minimize detection time",
         "result": f"OS={os_type}, profile={vol2_profile or 'auto'}, detected via parallel race",
         "timestamp": _time.time(),
@@ -312,6 +321,14 @@ def run_collector(state: InvestigationState) -> InvestigationState:
                      f"Ran all in parallel with {MAX_PARALLEL_WORKERS} workers to minimize wall time.",
         "result": f"{len(raw_evidence)} plugins completed in {elapsed:.1f}s, "
                   f"{len(errors)} errors",
+        "timestamp": _time.time(),
+    })
+    reasoning.append({
+        "agent": "Collector",
+        "action": "Memory triage enrichment",
+        "rationale": "Ran bounded strings/YARA triage and condensed timeline hints after Volatility collection. "
+                     "These are lead-generation artifacts used by Investigator and self-correction, not standalone proof.",
+        "result": raw_evidence.get("memory:triage_summary", "")[:500],
         "timestamp": _time.time(),
     })
 

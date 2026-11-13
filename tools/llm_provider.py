@@ -48,6 +48,7 @@ def _create_ollama(model, timeout, temperature):
         model=model,
         timeout=timeout,
         temperature=temperature,
+        num_ctx=getattr(config, "OLLAMA_NUM_CTX", 8192),
     )
 
 
@@ -144,5 +145,6 @@ def get_provider_info() -> dict:
         "provider": provider,
         "model": config.OLLAMA_MODEL,
         "has_api_key": bool(getattr(config, "LLM_API_KEY", None)),
+        "num_ctx": getattr(config, "OLLAMA_NUM_CTX", None) if provider == "ollama" else None,
         "ollama_url": config.OLLAMA_BASE_URL if provider == "ollama" else None,
     }

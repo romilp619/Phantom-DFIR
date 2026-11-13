@@ -11,6 +11,11 @@
 langgraph>=0.2.0
 langchain-core>=0.2.0
 langchain-ollama>=0.1.0
+# tools/llm_provider.py imports these provider packages directly. Without them the
+# Anthropic, Groq and OpenAI routes cannot be constructed.
+langchain-anthropic>=0.1.0
+langchain-groq>=0.1.0
+langchain-openai>=0.1.0
 
 # Memory forensics
 volatility3>=2.7.0
@@ -21,18 +26,24 @@ uvicorn>=0.20.0
 mcp>=1.0.0
 
 # Artifact parsing and triage helpers
-# pefile is kept for PE inspection used by triage/extension workflows.
 pefile>=2023.2.7
 pyAesCrypt>=6.1.1
-
-# Windows event log parsing (EVTX)
-# Imported lazily by disk_correlator.py; without it EVTX timestamp recovery
-# and Event7045 service-install parsing silently degrade.
+# disk_correlator.py parses Windows Event Logs with `from Evtx.Evtx import Evtx`
+# (three call sites: 15199, 15597, 15972). The import name is Evtx; the PyPI
+# distribution is python-evtx.
 python-evtx>=0.7.4
 
-# Optional additional LLM providers (tools/llm_provider.py imports these
-# lazily; Ollama remains the default and no provider below is required).
-# Install only the ones you intend to use:
-#   langchain-anthropic>=0.1.0
-#   langchain-openai>=0.1.0
-#   langchain-groq>=0.1.0
+# Test suite (tests/ - 6 suites: injection, curation guards, scanner
+# normalisation, the Rust guard, bounded-guard and core).
+pytest>=7.4.0
+
+# Optional, AI-safety repair track only. These are large GPU packages and are
+# NOT needed to run the forensic engine, the evidence scanner or the test
+# suite. Install them only to retrain or evaluate the QLoRA repair adapter
+# (phantom_ai_safety/repair/, scripts/check_model_compat.py):
+#   torch
+#   transformers
+#   trl
+#   peft
+#   datasets
+

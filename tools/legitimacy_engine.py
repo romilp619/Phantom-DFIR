@@ -1,5 +1,5 @@
 """
-PHANTOM DFIR — Dynamic Legitimacy Engine v4.0
+PHANTOM DFIR - Dynamic Legitimacy Engine v4.0
 Two-layer scoring: IDENTITY (who are you?) + BEHAVIOR (what are you doing?)
 
 A process is only LEGITIMATE if BOTH identity AND behavior are clean.
@@ -16,9 +16,9 @@ Scores:
   Final = identity * 0.4 + behavior * 0.6  (behavior weighs more)
 
 Verdict:
-  >70 = LEGITIMATE — both identity and behavior are clean
-  30-70 = UNCERTAIN — keep for investigation
-  <30 = SUSPICIOUS — likely malicious
+  >70 = LEGITIMATE - both identity and behavior are clean
+  30-70 = UNCERTAIN - keep for investigation
+  <30 = SUSPICIOUS - likely malicious
 """
 import re
 from typing import Optional
@@ -29,7 +29,7 @@ from tools.trusted_resources import (
 )
 
 
-# ── LOLBin indicators: trusted tools used maliciously ─────────────────────────
+# -- LOLBin indicators: trusted tools used maliciously -------------------------
 LOLBIN_PATTERNS = {
     "powershell": [
         r"-enc\b", r"-encodedcommand\b", r"-e\b\s+[A-Za-z0-9+/=]{20,}",
@@ -72,7 +72,7 @@ LOLBIN_PATTERNS = {
     ],
 }
 
-# ── Memory anomaly indicators ─────────────────────────────────────────────────
+# -- Memory anomaly indicators -------------------------------------------------
 MEMORY_ANOMALY_PATTERNS = [
     "PAGE_EXECUTE_READWRITE",
     "MZ header",
@@ -81,7 +81,7 @@ MEMORY_ANOMALY_PATTERNS = [
     "VadS",
 ]
 
-# ── Suspicious command line patterns (any process) ────────────────────────────
+# -- Suspicious command line patterns (any process) ----------------------------
 SUSPICIOUS_CMDLINE_PATTERNS = [
     r"base64", r"encodedcommand", r"-enc\s",
     r"http[s]?://\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}",  # IP-based URLs
@@ -94,7 +94,7 @@ SUSPICIOUS_CMDLINE_PATTERNS = [
     r"mkfifo",                    # Named pipe reverse shell
 ]
 
-# ── Process name masquerading — Damerau-Levenshtein distance ──────────────────
+# -- Process name masquerading - Damerau-Levenshtein distance ------------------
 # v4.0: Algorithmic detection replaces hardcoded pairs.
 # Any process within edit distance 1 of a known system process is suspicious.
 # Catches novel typosquats we never anticipated (csvhost.exe, winloqon.exe).
@@ -106,8 +106,8 @@ SYSTEM_PROCESS_NAMES = [
     "taskhostw.exe", "spoolsv.exe", "lsm.exe",
 ]
 
-# ── Expected process instance counts ─────────────────────────────────────────
-# v4.0: If lsass.exe appears >1 time → likely injection.
+# -- Expected process instance counts -----------------------------------------
+# v4.0: If lsass.exe appears >1 time -> likely injection.
 EXPECTED_INSTANCE_COUNTS = {
     "lsass.exe": 1,
     "lsm.exe": 1,
@@ -179,9 +179,9 @@ class DynamicLegitimacyEngine:
         identity_reasons = []
         behavior_reasons = []
 
-        # ══════════════════════════════════════════════════════════════════
-        # LAYER 1: IDENTITY — Who are you?
-        # ══════════════════════════════════════════════════════════════════
+        # ==================================================================
+        # LAYER 1: IDENTITY - Who are you?
+        # ==================================================================
         identity_score = 50
 
         # 1a. Path check (+25 / -15)
@@ -199,7 +199,7 @@ class DynamicLegitimacyEngine:
         identity_score += ps
         identity_reasons.append(pr)
 
-        # 1d. Name masquerading check — Damerau-Levenshtein (-30)
+        # 1d. Name masquerading check - Damerau-Levenshtein (-30)
         ps, pr = self._check_masquerading(ioc_lower)
         identity_score += ps
         if ps < 0:
@@ -219,9 +219,9 @@ class DynamicLegitimacyEngine:
 
         identity_score = max(0, min(100, identity_score))
 
-        # ══════════════════════════════════════════════════════════════════
-        # LAYER 2: BEHAVIOR — What are you doing?
-        # ══════════════════════════════════════════════════════════════════
+        # ==================================================================
+        # LAYER 2: BEHAVIOR - What are you doing?
+        # ==================================================================
         behavior_score = 80  # Start high, deduct for bad behavior
 
         # 2a. Command line anomalies (-20 to -40)
@@ -248,15 +248,15 @@ class DynamicLegitimacyEngine:
 
         behavior_score = max(0, min(100, behavior_score))
 
-        # ══════════════════════════════════════════════════════════════════
+        # ==================================================================
         # FINAL SCORE: Identity (40%) + Behavior (60%)
         # Behavior weighs more because LOLBins have perfect identity
-        # ══════════════════════════════════════════════════════════════════
+        # ==================================================================
         if identity_score >= 70:
-            # Known good file — behavior matters even more
+            # Known good file - behavior matters even more
             final_score = int(identity_score * 0.35 + behavior_score * 0.65)
         else:
-            # Unknown file — equal weight
+            # Unknown file - equal weight
             final_score = int(identity_score * 0.5 + behavior_score * 0.5)
 
         final_score = max(0, min(100, final_score))
@@ -266,7 +266,7 @@ class DynamicLegitimacyEngine:
 
         if identity_score >= 70 and behavior_score < 50:
             verdict = "SUSPICIOUS"  # LOLBin: good file, bad behavior
-            all_reasons.insert(0, "⚠ LOLBin pattern: trusted file with suspicious behavior")
+            all_reasons.insert(0, "[WARN] LOLBin pattern: trusted file with suspicious behavior")
         elif final_score > 70:
             verdict = "LEGITIMATE"
         elif final_score < 30:
@@ -283,7 +283,7 @@ class DynamicLegitimacyEngine:
             "reasons": all_reasons,
         }
 
-    # ── IDENTITY CHECKS ──────────────────────────────────────────────────
+    # -- IDENTITY CHECKS --------------------------------------------------
 
     def _score_path(self, ioc_lower: str, raw_evidence: dict) -> tuple:
         """Check if binary runs from a legitimate directory."""
@@ -355,7 +355,7 @@ class DynamicLegitimacyEngine:
 
     def _check_masquerading(self, ioc_lower: str) -> tuple:
         """Detect process name typosquatting using Damerau-Levenshtein distance.
-        v4.0: Algorithmic — catches ANY typosquat within edit distance 1.
+        v4.0: Algorithmic - catches ANY typosquat within edit distance 1.
         e.g. svch0st.exe, csvhost.exe, winloqon.exe, lsaas.exe
         """
         # Skip if the process IS a known system process (exact match)
@@ -402,11 +402,11 @@ class DynamicLegitimacyEngine:
         """
         dot_count = ioc_lower.count('.')
         if dot_count > 1:
-            return (-25, f"Double file extension detected: '{ioc_lower}' — "
+            return (-25, f"Double file extension detected: '{ioc_lower}' - "
                          f"likely masquerading (T1036.007)")
         return (0, "")
 
-    # ── BEHAVIOR CHECKS ──────────────────────────────────────────────────
+    # -- BEHAVIOR CHECKS --------------------------------------------------
 
     def _score_cmdline(self, ioc_lower: str, raw_evidence: dict) -> tuple:
         """Check command line for suspicious patterns."""
@@ -450,7 +450,7 @@ class DynamicLegitimacyEngine:
         if not matching_lolbin:
             return (0, "Not a LOLBin")
 
-        # It's a LOLBin — check if it's being used maliciously
+        # It's a LOLBin - check if it's being used maliciously
         cmdline_text = raw_evidence.get("vol3:cmdline", "")
         pstree_text = raw_evidence.get("vol3:pstree", "")
         combined = (cmdline_text + "\n" + pstree_text).lower()
@@ -494,7 +494,7 @@ class DynamicLegitimacyEngine:
             anomaly_count += 3
 
         if anomaly_count == 0:
-            return (+5, "Memory clean — no injection detected")
+            return (+5, "Memory clean - no injection detected")
         elif anomaly_count <= 2:
             return (-15, f"{anomaly_count} memory anomalies")
         else:
@@ -537,7 +537,7 @@ class DynamicLegitimacyEngine:
         else:
             return (-20, f"{len(unknown_ips)} unknown IPs: {', '.join(unknown_ips[:3])}")
 
-    # ── HELPERS ───────────────────────────────────────────────────────────
+    # -- HELPERS -----------------------------------------------------------
 
     def _find_parent(self, lines: list, child_idx: int) -> Optional[str]:
         """Find parent process from pstree indentation."""
@@ -559,9 +559,9 @@ class DynamicLegitimacyEngine:
         return None
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# ==============================================================================
 # PUBLIC API
-# ══════════════════════════════════════════════════════════════════════════════
+# ==============================================================================
 
 def filter_legitimate_hypotheses(hypotheses: list, raw_evidence: dict,
                                   os_type: str = "windows",
@@ -570,7 +570,7 @@ def filter_legitimate_hypotheses(hypotheses: list, raw_evidence: dict,
     Filter hypotheses through the two-layer legitimacy engine.
 
     Returns:
-        (kept, filtered) — kept stays for investigation,
+        (kept, filtered) - kept stays for investigation,
                            filtered marked LEGITIMATE/CLEARED.
     """
     engine = DynamicLegitimacyEngine(os_type)
@@ -580,30 +580,30 @@ def filter_legitimate_hypotheses(hypotheses: list, raw_evidence: dict,
     for h in hypotheses:
         ioc = h.get("ioc", "")
 
-        # ── Check IP-based IOCs against trusted vendor ranges ─────────
+        # -- Check IP-based IOCs against trusted vendor ranges ---------
         ip_match = re.match(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', ioc)
         if ip_match:
             ip_str = ip_match.group(1)
             ip_result = lookup_ip(ip_str)
             if ip_result["trusted"] and not ip_result["is_private"]:
-                # Known vendor IP — auto-clear
+                # Known vendor IP - auto-clear
                 h["legitimacy_score"] = 90
                 h["legitimacy_reasons"] = [f"IP {ip_str} belongs to {ip_result['vendor']}"]
                 h["confidence"] = "CLEARED"
                 h["claim"] = (f"{h['claim']} [AUTO-CLEARED: {ip_str} is "
                               f"{ip_result['vendor']} infrastructure]")
                 filtered.append(h)
-                print(f"    [LEGIT] {ioc} → {ip_result['vendor']} IP → CLEARED",
+                print(f"    [LEGIT] {ioc} -> {ip_result['vendor']} IP -> CLEARED",
                       flush=True)
                 continue
             elif ip_result["is_private"]:
-                # Private/internal IP — keep but note it's internal
+                # Private/internal IP - keep but note it's internal
                 h["legitimacy_score"] = 60
                 kept.append(h)
-                print(f"    [KEEP]  {ioc} → internal/private IP", flush=True)
+                print(f"    [KEEP]  {ioc} -> internal/private IP", flush=True)
                 continue
             else:
-                # Unknown IP — keep for investigation
+                # Unknown IP - keep for investigation
                 kept.append(h)
                 continue
 
@@ -627,23 +627,23 @@ def filter_legitimate_hypotheses(hypotheses: list, raw_evidence: dict,
                           f"behavior={result['behavior_score']}, "
                           f"final={result['score']}/100]")
             filtered.append(h)
-            print(f"    [LEGIT] {ioc} → identity={result['identity_score']} "
+            print(f"    [LEGIT] {ioc} -> identity={result['identity_score']} "
                   f"behavior={result['behavior_score']} "
-                  f"final={result['score']} → CLEARED", flush=True)
+                  f"final={result['score']} -> CLEARED", flush=True)
 
         elif result["verdict"] == "SUSPICIOUS" and result["identity_score"] >= 70:
-            # LOLBin detected — trusted file doing bad things
+            # LOLBin detected - trusted file doing bad things
             h["legitimacy_score"] = result["score"]
             h["legitimacy_reasons"] = result["reasons"]
             kept.append(h)
-            print(f"    [LOLBIN] {ioc} → identity={result['identity_score']} "
+            print(f"    [LOLBIN] {ioc} -> identity={result['identity_score']} "
                   f"behavior={result['behavior_score']} "
-                  f"→ KEEPING (trusted file, suspicious behavior!)", flush=True)
+                  f"-> KEEPING (trusted file, suspicious behavior!)", flush=True)
         else:
             h["legitimacy_score"] = result["score"]
             kept.append(h)
             if result["score"] > 40:
-                print(f"    [KEEP]  {ioc} → score={result['score']} "
-                      f"→ keeping for investigation", flush=True)
+                print(f"    [KEEP]  {ioc} -> score={result['score']} "
+                      f"-> keeping for investigation", flush=True)
 
     return kept, filtered
