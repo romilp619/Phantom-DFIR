@@ -80,8 +80,11 @@ NEGATIVE_CASES = (
 
 
 def _find_category(text: str) -> list[str]:
-    """Return the categories of all findings for a given text."""
-    return [f.category for f in scanner.scan_artifact("test", text).findings]
+    """Categories found in the LITERAL text only, i.e. what the scanner sees without
+    the normalisation pass. Findings from decoded candidates carry char_offset == -1
+    (see scanner._scan_into), so they are excluded here."""
+    return [f.category for f in scanner.scan_artifact("test", text).findings
+            if f.char_offset != -1]
 
 
 def _scan_with_normalization(text: str) -> list[str]:

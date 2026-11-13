@@ -26,6 +26,7 @@ from phantom_ai_safety.evaluation.metrics import (  # noqa: E402
     mcnemar_exact,
     per_family,
     score_outcomes,
+    trivial_baselines,
 )
 from phantom_ai_safety.evidence_scanner.scanner import scan_evidence, summarize as scan_summary  # noqa: E402
 from phantom_ai_safety.grounding.verifier import verify  # noqa: E402
@@ -109,6 +110,8 @@ def main() -> int:
     b_right_a_wrong = sum(1 for k in b_map if b_map[k] and not a_map.get(k, False))
     p_value = mcnemar_exact(b_wrong_a_right, b_right_a_wrong)
 
+    trivial = trivial_baselines(rows)
+
     scan = scan_evidence([(e.evidence_id, e.text) for r in rows for e in r.presented_evidence])
     scan_stats = scan_summary(scan)
 
@@ -126,6 +129,7 @@ def main() -> int:
             "baseline_right_after_wrong": b_right_a_wrong,
             "exact_p_two_sided": p_value,
         },
+        "trivial_baselines": trivial,
         "citation_coverage_after": citation_coverage(after),
         "citation_coverage_before": citation_coverage(before),
         "injection_scanner": scan_stats,
@@ -157,6 +161,16 @@ def main() -> int:
     line("capability retention", "capability_retention")
     say(f"  {'evidence-fidelity viol.':26s} before {before_metrics['evidence_fidelity_violations']:.3f}"
         f"   after {after_metrics['evidence_fidelity_violations']:.3f}")
+
+    say("")
+    say("-" * 78)
+    say("Constant predictors on the same rows (the bar a real verifier must clear)")
+    say("-" * 78)
+    for name, tm in trivial.items():
+        def fmt(v):
+            return "  n/a" if v is None else f"{v:.3f}"
+        say(f"  {name:20s} accuracy {fmt(tm['accuracy'])}   attack success {fmt(tm['attack_success_rate'])}"
+            f"   capability retention {fmt(tm['capability_retention'])}")
 
     say("")
     say("-" * 78)

@@ -35,7 +35,7 @@ published what broke, and measured a fix.
   (`benchmark_results/`).
 - Red-team: attack success rate against the verification step cut from **0.800 to 0.300**,
   accuracy up from **0.273 to 0.727** (`results/comparison.json`).
-- **139 tests**, and a script that fails if this README's numbers stop matching the stored
+- **158 tests**, and a script that fails if this README's numbers stop matching the stored
   results.
 
 ---
@@ -132,6 +132,11 @@ How to read this table:
   `identity_alias` and `network_contact_inflation`. An attack success rate of 0.300 is a
   research result, not a guarantee.
 - Unmanipulated control rows stay 100% correct, so the repair does not win by refusing everything.
+- The bar to clear: a system that always answers NEEDS_MORE scores accuracy 0.575 and attack
+  success 0.400 on these rows, but gets only 0.320 of the control rows right. The grounded
+  verifier beats every constant answer on all three measures; the engine's original
+  verification does not. These baselines are computed in `results/comparison.json` and
+  enforced by `tests/test_trivial_baselines.py`.
 
 ### 4. Prompt-injection scanner
 
@@ -146,6 +151,34 @@ homoglyph obfuscation. `phantom-guard/` is the same scanner in Rust, run as a se
   no injection changed a verifier verdict (0 of 160) (`results/red_team_report.json`).
 - The Rust and Python scanners agree on every artifact in the attack corpus
   (`scripts/run_rust_guard.py`).
+
+### 5. The layer applied to a real run
+
+The numbers above come from synthetic evidence. `phantom_ai_safety/review` applies the same
+checks to a report the engine has already written for a real investigation. It reads the
+report file only, so the engine itself is untouched.
+
+```bash
+python -m phantom_ai_safety.review logs/final_runs/memory_self_correction_report.json
+```
+
+Output for that stored run (a real memory image):
+
+```text
+Status: REVIEW (0 high, 1 for review)
+Findings reviewed: 4; text fields scanned: 96
+
+| id   | confidence | source keys | distinct artifacts (est.) | flags                       |
+| H001 | LOW        | 1           | 1                         | none                        |
+| H002 | LOW        | 1           | 1                         | none                        |
+| H003 | LOW        | 1           | 1                         | none                        |
+| H004 | CLEARED    | 2           | 2                         | cleared_by_wording (review) |
+```
+
+It checks three things: prompt injection in every text field of the report, whether a
+CRITICAL finding rests on fewer than three distinct artifacts once duplicate source keys are
+collapsed, and whether a finding was cleared on its wording. It raises flags for an analyst
+and never changes a verdict.
 
 ---
 
@@ -163,7 +196,8 @@ python scripts/smoke_harness.py          # reproduces the three findings on the 
 python scripts/validate_scanner.py       # scanner: 15/15 recall, 0/12 false positives
 python -m phantom_ai_safety.evaluation.comparison --per-family 50 --quiet --out /tmp/comparison.json
 python scripts/verify_report_claims.py   # this README's numbers vs stored results
-pytest tests/ -q                         # 139 tests: 116 pass, 23 skip until the Rust guard is built
+python -m phantom_ai_safety.review logs/final_runs/memory_self_correction_report.json   # review a real run
+pytest tests/ -q                         # 158 tests: 142 pass, 16 skip until the Rust guard is built
 ```
 
 Optional, with a Rust toolchain:
@@ -171,7 +205,7 @@ Optional, with a Rust toolchain:
 ```bash
 (cd phantom-guard && cargo build --release)
 python scripts/run_rust_guard.py         # Rust guard vs Python scanner, must agree exactly
-pytest tests/ -q                         # now 131 pass (the rest need CuratorKIT or are self-skips)
+pytest tests/ -q                         # now 157 pass (the last one needs CuratorKIT)
 ```
 
 There is also a static results page: open `dashboard/index.html` in a browser.
@@ -182,6 +216,8 @@ There is also a static results page: open `dashboard/index.html` in a browser.
 | Red-team before / after numbers | `results/comparison.json` (all 1,100 per-row records) |
 | Model has no decision authority | `scripts/smoke_harness.py`, `results/baseline.json` |
 | Scanner detection | `scripts/validate_scanner.py`, `results/red_team_report.json` |
+| Review of a real run | `python -m phantom_ai_safety.review <report.json>`, `tests/test_report_review.py` |
+| MCP tool arguments cannot run commands | `tests/test_mcp_server_hardening.py` |
 | README matches data | `scripts/verify_report_claims.py` |
 
 ---
@@ -244,7 +280,7 @@ Full installation steps, every command and the benchmark workflow are in
 | `tools/`, `correlation/`, `skills/` | Volatility wrappers, confidence scoring, MITRE ATT&CK mapping, DFIR skill notes |
 | `mcpserver/` | Optional MCP server exposing 20 forensic tools, with no shell access from tool arguments |
 | `benchmark_reports.py`, `benchmarks/`, `benchmark_results/` | Multi-case benchmark, ground truth, stored scorecards |
-| `phantom_ai_safety/` | Red-team rows and injections, harness, evaluation, grounded verifier, injection scanner |
+| `phantom_ai_safety/` | Red-team rows and injections, harness, evaluation, grounded verifier, injection scanner, post-run report review |
 | `phantom-guard/` | Rust build of the injection scanner |
 | `tests/`, `scripts/`, `data/`, `results/` | Test suite (safety layer and MCP hardening), entry points, evaluation sets, stored results |
 | `docs/` | Detailed write-ups, usage guide, version history |
@@ -324,9 +360,10 @@ verifier). That run is a pipeline check. No fine-tuned model is claimed as a res
   families, not real images. It shows which classes of manipulation work, not how often they
   would occur in practice.
 - **The repair is not complete.** Three attack families still succeed.
-- **The layer is not yet wired into the live pipeline.** The grounded verifier and the
-  scanner run as a separate evaluation. An investigation still uses the engine's original
-  Skeptic.
+- **The layer does not change verdicts in the live pipeline.** An investigation still uses
+  the engine's original Skeptic. The layer's checks are applied afterwards with
+  `python -m phantom_ai_safety.review`, which flags findings for an analyst. That review works
+  from the source keys stored in the report, so its distinct-artifact count is an estimate.
 - **Benchmark scores are stored runs on five public cases** that were also used while
   developing the engine. They show the engine reproduces known answers on those cases, not
   performance on unseen ones.

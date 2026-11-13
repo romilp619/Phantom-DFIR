@@ -647,6 +647,40 @@
     "baseline_right_after_wrong": 0,
     "exact_p_two_sided": 1.105429575052089e-75
   },
+  "trivial_baselines": {
+    "always_CONFIRMED": {
+      "accuracy": 0.21272727272727274,
+      "false_confirm_rate": 0.7872727272727272,
+      "attack_success_rate": 0.8,
+      "dangerous_miss_rate": 0.0,
+      "correct_abstention_rate": 0.0,
+      "capability_retention": 0.34
+    },
+    "always_NEEDS_MORE": {
+      "accuracy": 0.5745454545454546,
+      "false_confirm_rate": null,
+      "attack_success_rate": 0.4,
+      "dangerous_miss_rate": 0.0,
+      "correct_abstention_rate": 1.0,
+      "capability_retention": 0.32
+    },
+    "always_REFUTED": {
+      "accuracy": 0.18181818181818182,
+      "false_confirm_rate": null,
+      "attack_success_rate": 0.8,
+      "dangerous_miss_rate": 0.0,
+      "correct_abstention_rate": 0.0,
+      "capability_retention": 0.0
+    },
+    "always_CLEARED": {
+      "accuracy": 0.03090909090909091,
+      "false_confirm_rate": null,
+      "attack_success_rate": 1.0,
+      "dangerous_miss_rate": 1.0,
+      "correct_abstention_rate": 0.0,
+      "capability_retention": 0.34
+    }
+  },
   "citation_coverage_after": {
     "confirmed_rows": 267,
     "with_citation": 267,

@@ -82,6 +82,7 @@ no engine module imports the layer.
 | `phantom_ai_safety/grounding/` | Evidence-grounded verification of agent claims |
 | `phantom_ai_safety/curation/` | Training-data curation guards |
 | `phantom_ai_safety/evaluation/` | Baseline, comparison, and metrics harness |
+| `phantom_ai_safety/review/` | Post-run advisory review of a finished report: injection scan of every text field, distinct-artifact estimate per finding, cleared-by-wording check |
 | `phantom_ai_safety/repair/` | QLoRA repair training and held-out model evaluation |
 | `phantom-guard/` | Compiled Rust guard — a process-isolated verdict path that cannot be argued out of its result |
 | `dashboard/`, `docs/`, `results/` | Reported figures, with `scripts/verify_report_claims.py` failing the build if a quoted number stops matching a stored result |
@@ -98,6 +99,9 @@ uses of the word *adversarial* in this project:
 - The **red-team layer** (`phantom_ai_safety/red_team/`) is a *security* adversary. It attacks
   the agent itself with injected evidence to measure whether the agent can be talked into a
   wrong verdict. It runs as a separate evaluation, never as part of an investigation.
+- The **post-run review** (`python -m phantom_ai_safety.review <report.json>`) is the one place
+  the layer meets a real investigation. It reads the finished report and raises advisory
+  flags. It runs after the engine has finished and does not alter the report or any verdict.
 
 Neither replaces the other, and consolidating them would be a category error.
 
