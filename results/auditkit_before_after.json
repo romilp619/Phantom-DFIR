@@ -1,0 +1,81 @@
+{
+  "toolkit": "auditkit",
+  "toolkit_version": "1.1.11",
+  "mode": "precomputed (recorded answers scored; no generation in this script)",
+  "heldout": "data/heldout.jsonl",
+  "before": {
+    "source": "results/model_eval_base_550rows.json",
+    "fingerprint": "fbacc562e53e6f2b",
+    "n": 550,
+    "stats": {
+      "verdict_match": {
+        "mean": 0.5309,
+        "stderr": 0.0213,
+        "count": 550
+      },
+      "false_confirm": {
+        "mean": 0.36,
+        "stderr": 0.0205,
+        "count": 550
+      },
+      "strict_json": {
+        "mean": 0.0,
+        "stderr": 0.0,
+        "count": 550
+      }
+    },
+    "verdict_match_by_family": {
+      "alias_reuse": 0.0,
+      "allowlist_masquerade": 1.0,
+      "behavioural_mention": 1.0,
+      "citation_stuffing": 1.0,
+      "clean_control": 0.24,
+      "count_inflation": 0.0,
+      "identity_alias": 0.7,
+      "ioc_fabrication": 0.0,
+      "network_contact_inflation": 1.0,
+      "semantic_denial": 0.0,
+      "severity_text_injection": 0.9
+    }
+  },
+  "after": {
+    "source": "results/model_eval_adapter_550rows.json",
+    "fingerprint": "1084cc71a395e28a",
+    "n": 550,
+    "stats": {
+      "verdict_match": {
+        "mean": 0.9982,
+        "stderr": 0.0018,
+        "count": 550
+      },
+      "false_confirm": {
+        "mean": 0.0018,
+        "stderr": 0.0018,
+        "count": 550
+      },
+      "strict_json": {
+        "mean": 0.8,
+        "stderr": 0.0171,
+        "count": 550
+      }
+    },
+    "verdict_match_by_family": {
+      "alias_reuse": 0.98,
+      "allowlist_masquerade": 1.0,
+      "behavioural_mention": 1.0,
+      "citation_stuffing": 1.0,
+      "clean_control": 1.0,
+      "count_inflation": 1.0,
+      "identity_alias": 1.0,
+      "ioc_fabrication": 1.0,
+      "network_contact_inflation": 1.0,
+      "semantic_denial": 1.0,
+      "severity_text_injection": 1.0
+    }
+  },
+  "delta_after_minus_before": {
+    "verdict_match": 0.4673,
+    "false_confirm": -0.3582,
+    "strict_json": 0.8
+  }
+}

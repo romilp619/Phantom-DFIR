@@ -1,0 +1,146 @@
+{
+  "toolkit": "curatorkit",
+  "toolkit_version": "0.1.27",
+  "input": "data/train.jsonl",
+  "input_sha256": "8576755308bc76c4f6cfaad5f01e616953061bc8901d859ba6ca083c196bdf2b",
+  "input_rows": 3300,
+  "gold_correction": {
+    "targets_replaced": 1200,
+    "by_family": {
+      "behavioural_mention": 300,
+      "identity_alias": 300,
+      "network_contact_inflation": 300,
+      "semantic_denial": 300
+    },
+    "why": "stored targets are rule-verifier output; on these rows it is CONFIRMED where gold is NEEDS_MORE or REFUTED"
+  },
+  "heldout_overlap": {
+    "training_rows_dropped": 50,
+    "by_family": {
+      "semantic_denial": 50
+    },
+    "remaining_overlap_in_output": 0
+  },
+  "curatorkit_instruction_input_projection": {
+    "kept": 2750,
+    "of": 3250,
+    "kept_by_family": {
+      "alias_reuse": 200,
+      "behavioural_mention": 300,
+      "citation_stuffing": 300,
+      "clean_control": 200,
+      "count_inflation": 300,
+      "identity_alias": 300,
+      "ioc_fabrication": 300,
+      "network_contact_inflation": 300,
+      "semantic_denial": 250,
+      "severity_text_injection": 300
+    },
+    "families_removed_entirely": [
+      "allowlist_masquerade"
+    ],
+    "stage_counts": {
+      "JSONLReader": {
+        "output_count": 3250,
+        "rejected_count": 0
+      },
+      "SchemaGate": {
+        "input_count": 3250,
+        "output_count": 3250,
+        "probe_recovered": 0,
+        "rejected_count": 0
+      },
+      "ExactDeduplicator": {
+        "input_count": 3250,
+        "output_count": 2750
+      },
+      "TextCleaner": {
+        "input_count": 2750,
+        "output_count": 2750
+      }
+    },
+    "cause": "ExactDeduplicator hashes instruction + output and ignores input; rows with different evidence and the same templated answer are removed as duplicates"
+  },
+  "curatorkit_full_prompt_projection": {
+    "kept": 3250,
+    "of": 3250,
+    "rejected": 0,
+    "kept_by_family": {
+      "alias_reuse": 300,
+      "allowlist_masquerade": 300,
+      "behavioural_mention": 300,
+      "citation_stuffing": 300,
+      "clean_control": 300,
+      "count_inflation": 300,
+      "identity_alias": 300,
+      "ioc_fabrication": 300,
+      "network_contact_inflation": 300,
+      "semantic_denial": 250,
+      "severity_text_injection": 300
+    },
+    "stage_counts": {
+      "JSONLReader": {
+        "output_count": 3250,
+        "rejected_count": 0
+      },
+      "SchemaGate": {
+        "input_count": 3250,
+        "output_count": 3250,
+        "probe_recovered": 0,
+        "rejected_count": 0
+      },
+      "ExactDeduplicator": {
+        "input_count": 3250,
+        "output_count": 3250
+      },
+      "TextCleaner": {
+        "input_count": 3250,
+        "output_count": 3250
+      }
+    },
+    "config_guard": {
+      "ok": true,
+      "checked": [
+        "format=alpaca",
+        "strip_html=False",
+        "injection_rate=0 (no injection requested)"
+      ],
+      "warnings": [],
+      "errors": []
+    },
+    "post_run_guard": {
+      "ok": true,
+      "checked": [
+        "passed=3250 rejected=0",
+        "marker_retention=200/200"
+      ],
+      "warnings": [],
+      "errors": []
+    },
+    "wall_clock_seconds": 0.64
+  },
+  "per_family_cap": 100,
+  "output": "data/train_curated.jsonl",
+  "output_rows": 1100,
+  "output_by_family": {
+    "alias_reuse": 100,
+    "allowlist_masquerade": 100,
+    "behavioural_mention": 100,
+    "citation_stuffing": 100,
+    "clean_control": 100,
+    "count_inflation": 100,
+    "identity_alias": 100,
+    "ioc_fabrication": 100,
+    "network_contact_inflation": 100,
+    "semantic_denial": 100,
+    "severity_text_injection": 100
+  },
+  "output_gold_distribution": {
+    "CLEARED": 33,
+    "CONFIRMED": 234,
+    "NEEDS_MORE": 633,
+    "REFUTED": 200
+  },
+  "output_sha256": "5971bc21bbc773cd05eabebe65d89546ef8502686174483421ab19b20f2d2d95",
+  "note": "Output rows carry the original, uncleaned text of the rows that passed curation, so training and held-out prompts are rendered identically."
+}

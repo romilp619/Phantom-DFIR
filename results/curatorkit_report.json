@@ -1,6 +1,6 @@
 {
   "toolkit": "curatorkit",
-  "toolkit_version": "0.1.26",
+  "toolkit_version": "0.1.27",
   "hardened_by": "phantom_ai_safety.curation.guards",
   "input": "data/train.jsonl",
   "format": "alpaca",
@@ -56,7 +56,7 @@
     }
   },
   "rejection_reasons": {},
-  "wall_clock_seconds": 0.32,
+  "wall_clock_seconds": 0.41,
   "injection_rate": 0.0,
   "evidence_markers_preserved": true,
   "notes": [

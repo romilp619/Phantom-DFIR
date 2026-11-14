@@ -9,9 +9,7 @@ inspection rather than assumed:
   SFTTrainerFactory        .create_trainer(config) -> trainer with .train(),
                            .evaluate(), .save_model(), .push_to_hub()
 
-Target hardware is an RTX 4060 Laptop with **8188 MiB**, so the configuration is
-built for that ceiling and not for the 16 GB box this script happens to be written
-on. 4-bit NF4, LoRA r=16, microbatch 1, gradient accumulation, gradient
+Target hardware is an 8 GB laptop GPU, so the configuration is built for that ceiling. 4-bit NF4, LoRA r=16, microbatch 1, gradient accumulation, gradient
 checkpointing.
 
 `--dry-run` validates the whole pipeline except the parts that need the weights: it
@@ -19,9 +17,9 @@ loads the JSONL, renders a sample prompt, builds every config object, and checks
 tokenizer/model config over the network. It downloads no weights and runs no
 training step. That is the strongest check possible while the checkpoints are gated.
 
-Why this is blocked: every Cohere Labs checkpoint returns HTTP 401 anonymously, so
-this script cannot run until a Hugging Face account has accepted the licence terms
-and a read token is available. See scripts/probe_hf_access.py.
+This ran end to end on 2026-11-14 on an RTX 5050 Laptop (8 GB); see
+docs/MODEL-RESULT.md. The Cohere checkpoints are gated, so a Hugging Face account that
+has accepted the licence terms, and a token, are required.
 """
 from __future__ import annotations
 
@@ -97,7 +95,10 @@ def build_configs(args) -> tuple:
         use_gradient_checkpointing=True,
         use_unsloth=False,
         trust_remote_code=False,
-        device_map="auto",
+        # Everything on GPU 0. With "auto", accelerate offloaded part of the 4-bit
+        # model to the CPU on an 8 GB card and the first backward pass failed with
+        # "expected device meta but got cuda:0".
+        device_map={"": 0},
     )
     train_ds = DatasetConfig(
         name=args.train,
@@ -155,6 +156,130 @@ def build_configs(args) -> tuple:
     )
 
 
+def restore_dropped_settings(trainer, config) -> None:
+    """Put back the settings `SFTTrainerFactory.create_trainer` discards.
+
+    Measured on aligntune 0.1.35: the factory rebuilds the config and the trainer's
+    copy has `model.quantization == {}`, `model.device_map == "auto"`,
+    `model.peft.variant == "standard"` and `train.warmup_ratio == 0.1`, whatever was
+    passed in. Without quantisation the 3.35B model loads in bfloat16 (about 6.7 GB),
+    accelerate offloads part of it to the CPU on an 8 GB card, and the first backward
+    pass fails with "expected device meta but got cuda:0". A run that fits in memory
+    would train unquantised LoRA while reporting QLoRA.
+
+    The model is loaded lazily inside `trainer.train()`, so restoring the values here
+    is early enough. Each restored value is printed and then asserted.
+    """
+    mine, theirs = config.model, trainer.config.model
+    restored = []
+    for name in ("quantization", "device_map"):
+        if getattr(theirs, name, None) != getattr(mine, name):
+            setattr(theirs, name, getattr(mine, name))
+            restored.append(f"model.{name}")
+    if getattr(theirs.peft, "variant", None) != mine.peft.variant:
+        theirs.peft.variant = mine.peft.variant
+        restored.append("model.peft.variant")
+    if trainer.config.train.warmup_ratio != config.train.warmup_ratio:
+        trainer.config.train.warmup_ratio = config.train.warmup_ratio
+        restored.append("train.warmup_ratio")
+    if trainer.config.logging.run_name != config.logging.run_name:
+        trainer.config.logging.run_name = config.logging.run_name
+        restored.append("logging.run_name")
+    print(f"  settings restored after trainer creation: {restored or 'none needed'}")
+    assert trainer.config.model.quantization.get("load_in_4bit") is True, \
+        "4-bit quantisation is not set on the trainer config"
+    assert trainer.config.model.device_map == config.model.device_map
+
+
+def frozen_params_to_bf16(trainer) -> None:
+    """Load the model now and store its frozen float32 parameters as bfloat16.
+
+    `prepare_model_for_kbit_training` casts every non-quantised parameter to float32.
+    On this model that includes the 262,144-row embedding and output matrix, and it
+    makes the per-token logits float32 as well. Measured on an 8 GB card with ~1,200
+    token rows: peak GPU memory 9,055 MiB, which either spills into system memory or
+    fails with CUDA out of memory in the loss. The frozen weights were bfloat16 on
+    disk, so storing them as bfloat16 again loses nothing. LoRA weights stay float32.
+    """
+    import torch
+
+    if trainer.model is None:
+        trainer.setup_model()
+    changed = 0
+    for param in trainer.model.parameters():
+        if not param.requires_grad and param.dtype == torch.float32:
+            param.data = param.data.to(torch.bfloat16)
+            changed += 1
+    torch.cuda.empty_cache()
+    print(f"  frozen float32 parameter tensors stored as bfloat16: {changed}")
+    print(f"  GPU memory after load: {torch.cuda.memory_allocated() / 2**20:.0f} MiB")
+
+
+def install_answer_only_loss(trainer) -> None:
+    """Compute the loss on the assistant's answer only, and only for those positions.
+
+    Two reasons, both measured on an 8 GB card with ~1,200 token rows:
+
+    * Memory. The stock causal-LM loss turns the full `[tokens, 262144]` logits into
+      float32 and runs cross-entropy over every position. That put peak GPU memory at
+      6.8 GB, and whenever the desktop held some VRAM the run fell into system-memory
+      paging: 10 optimiser steps took between 2 and 85 minutes. Selecting the answer
+      positions before the float32 cast keeps the large tensors in bfloat16.
+    * Signal. About 90% of each row is the system prompt and the evidence block, which
+      are identical in structure across rows. Loss on those tokens teaches the model to
+      reproduce the prompt, not to choose a verdict.
+
+    The answer starts after the last `<|CHATBOT_TOKEN|>` in the row. If a row has no
+    such token the function falls back to every labelled position, so it can never
+    silently train on nothing.
+    """
+    import torch
+    import torch.nn.functional as F
+
+    if trainer.model is None:
+        trainer.setup_model()
+    chatbot_id = trainer.tokenizer.convert_tokens_to_ids("<|CHATBOT_TOKEN|>")
+    assert isinstance(chatbot_id, int) and chatbot_id >= 0, "no <|CHATBOT_TOKEN|> in vocab"
+    stats = {"calls": 0, "fallbacks": 0, "answer_tokens": 0}
+
+    def answer_only_loss(logits, labels, vocab_size=None, num_items_in_batch=None,
+                         ignore_index=-100, shift_labels=None, **_):
+        if shift_labels is None:
+            shift_labels = labels[..., 1:]
+        shift_logits = logits[..., :-1, :]
+        keep = shift_labels != ignore_index
+        labelled = keep.sum()
+        # Position of the last chatbot marker in each row of the unshifted labels.
+        is_marker = labels == chatbot_id
+        positions = torch.arange(labels.shape[-1], device=labels.device).expand_as(labels)
+        last_marker = torch.where(is_marker, positions, torch.full_like(positions, -1)).max(dim=-1).values
+        has_marker = last_marker >= 0
+        # shift_labels[t] is labels[t + 1]; keep targets strictly after the marker.
+        after = positions[..., 1:] > last_marker.unsqueeze(-1)
+        keep = keep & (after | ~has_marker.unsqueeze(-1))
+        stats["calls"] += 1
+        stats["fallbacks"] += int((~has_marker).sum())
+        stats["answer_tokens"] += int(keep.sum())
+        selected = shift_logits[keep].float()
+        loss = F.cross_entropy(selected, shift_labels[keep].to(selected.device))
+        if num_items_in_batch is not None:
+            # The Trainer passes the labelled-token count of the whole accumulated
+            # batch and then does NOT divide by the accumulation steps itself. Weight
+            # this micro-batch by its share so the accumulated loss is a mean.
+            if torch.is_tensor(num_items_in_batch):
+                num_items_in_batch = num_items_in_batch.to(loss.device)
+            loss = loss * (labelled.to(loss.device) / num_items_in_batch)
+        return loss
+
+    hf_model = trainer.model
+    for attr in ("base_model", "model"):
+        hf_model = getattr(hf_model, attr, hf_model)
+    hf_model.loss_function = answer_only_loss
+    trainer._answer_only_loss_stats = stats
+    print(f"  answer-only loss installed on {type(hf_model).__name__} "
+          f"(chatbot token id {chatbot_id})")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default=DEFAULT_MODEL)
@@ -172,6 +297,9 @@ def main() -> int:
     ap.add_argument("--max-seq-length", type=int, default=4096)
     ap.add_argument("--eval-interval", type=int, default=50)
     ap.add_argument("--save-interval", type=int, default=200)
+    ap.add_argument("--answer-only-loss", action=argparse.BooleanOptionalAction, default=True,
+                    help="loss on the assistant answer only (default on; see "
+                         "install_answer_only_loss)")
     ap.add_argument("--dry-run", action="store_true",
                     help="validate configs and data without loading weights")
     args = ap.parse_args()
@@ -241,8 +369,24 @@ def main() -> int:
     # --- real run ---
     from aligntune.sft import SFTTrainerFactory
     trainer = SFTTrainerFactory().create_trainer(config)
+    restore_dropped_settings(trainer, config)
+    frozen_params_to_bf16(trainer)
+    if args.answer_only_loss:
+        install_answer_only_loss(trainer)
     print("\n  trainer created; starting training")
     trainer.train()
+    try:
+        import torch
+        n_4bit = sum(1 for m in trainer.model.modules() if type(m).__name__ == "Linear4bit")
+        print(f"\n  4-bit linear layers in the trained model: {n_4bit}")
+        print(f"  peak GPU memory: {torch.cuda.max_memory_allocated() / 2**20:.0f} MiB")
+        stats = getattr(trainer, "_answer_only_loss_stats", None)
+        if stats:
+            print(f"  answer-only loss: {stats['calls']} calls, "
+                  f"{stats['answer_tokens']} answer tokens, "
+                  f"{stats['fallbacks']} rows without a chatbot marker")
+    except Exception as exc:  # noqa: BLE001
+        print(f"  could not read quantisation/memory facts: {exc}")
     trainer.save_model(args.output_dir)
     print(f"\n  saved to {args.output_dir}")
     print("  NOTE: adapters only. Report the run hash and steps in the write-up.")

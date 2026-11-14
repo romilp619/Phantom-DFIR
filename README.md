@@ -35,7 +35,12 @@ published what broke, and measured a fix.
   (`benchmark_results/`).
 - Red-team: attack success rate against the verification step cut from **0.800 to 0.300**,
   accuracy up from **0.273 to 0.727** (`results/comparison.json`).
-- **158 tests**, and a script that fails if this README's numbers stop matching the stored
+- Model level: `CohereLabs/tiny-aya-global` as the verifier, accuracy **0.524 to 0.998** and
+  attack success rate **0.462 to 0.002** after QLoRA fine-tuning, on 550 held-out rows in
+  11 templated families. The model learned the templates; read
+  [the caveats](#6-a-small-open-model-as-the-verifier-before-and-after-fine-tuning) before quoting this
+  (`results/model_eval_base_550rows.json`, `results/model_eval_adapter_550rows.json`).
+- **167 tests**, and a script that fails if this README's numbers stop matching the stored
   results.
 
 ---
@@ -182,6 +187,43 @@ and never changes a verdict.
 
 ---
 
+### 6. A small open model as the verifier, before and after fine-tuning
+
+Sections 2 and 3 compare two pieces of rule-based code. This one puts a small open-weights
+model, `CohereLabs/tiny-aya-global` (3.35B), in the verifier's seat and measures it on the
+same 550 held-out rows before and after fine-tuning. Three Lexsi toolkits are chained:
+CuratorKIT curates the training set, AlignTune runs the QLoRA fine-tune, and AuditKIT
+re-scores the recorded answers.
+
+| | Base model | Fine-tuned adapter | Rule verifier (section 3) |
+|---|---|---|---|
+| Accuracy | 0.524 | **0.998** | 0.727 |
+| Attack success rate | 0.462 | **0.002** | 0.300 |
+| False-confirm rate | 0.760 | **0.008** | 0.562 |
+| Answers that are not valid JSON | 155 of 550 | 0 of 550 | n/a |
+
+- Adapter, training and evaluation logs, every raw answer:
+  [RomilCyber/tiny-aya-global-phantom-verifier-qlora](https://huggingface.co/RomilCyber/tiny-aya-global-phantom-verifier-qlora)
+- Dataset: [RomilCyber/phantom-dfir-evidence-grounding](https://huggingface.co/datasets/RomilCyber/phantom-dfir-evidence-grounding)
+- Full write-up, commands and toolkit findings: [docs/MODEL-RESULT.md](docs/MODEL-RESULT.md)
+
+How to read this table:
+
+- **The model learned 11 templates.** Training and held-out rows come from the same 11
+  generators with different seeds, so a held-out row differs from a training row in names,
+  ids and counts, not in shape. The score shows the adapter gives the right verdict for
+  these 11 row shapes. Nothing outside them was tested.
+- The adapter was trained on gold labels, 100 rows per family. It passes the three families
+  the rule verifier fails because it saw labelled examples of them.
+- **The adapter does not always stop.** In 110 of 550 answers it writes the correct JSON
+  object and then keeps generating; in 46 of those a later object has a different verdict.
+  The score reads the first object, and anything using the adapter must do the same.
+- The base model scores below the always-`NEEDS_MORE` baseline (0.575). Its 155 unusable
+  answers are counted as `NEEDS_MORE`; reading the verdict it actually wrote gives accuracy
+  0.531 and attack success 0.440.
+- One run, one seed. AuditKIT's independent scoring of the same answers agrees: 0.531
+  before, 0.998 after (`results/auditkit_before_after.json`).
+
 ## Verify it yourself in five minutes
 
 No evidence image, GPU, LLM or Volatility is needed for the red-team layer.
@@ -197,7 +239,7 @@ python scripts/validate_scanner.py       # scanner: 15/15 recall, 0/12 false pos
 python -m phantom_ai_safety.evaluation.comparison --per-family 50 --quiet --out /tmp/comparison.json
 python scripts/verify_report_claims.py   # this README's numbers vs stored results
 python -m phantom_ai_safety.review logs/final_runs/memory_self_correction_report.json   # review a real run
-pytest tests/ -q                         # 158 tests: 142 pass, 16 skip until the Rust guard is built
+pytest tests/ -q                         # 167 tests: 151 pass, 16 skip until the Rust guard is built
 ```
 
 Optional, with a Rust toolchain:
@@ -205,7 +247,7 @@ Optional, with a Rust toolchain:
 ```bash
 (cd phantom-guard && cargo build --release)
 python scripts/run_rust_guard.py         # Rust guard vs Python scanner, must agree exactly
-pytest tests/ -q                         # now 157 pass (the last one needs CuratorKIT)
+pytest tests/ -q                         # now 166 pass (the last one needs CuratorKIT)
 ```
 
 There is also a static results page: open `dashboard/index.html` in a browser.
@@ -218,6 +260,7 @@ There is also a static results page: open `dashboard/index.html` in a browser.
 | Scanner detection | `scripts/validate_scanner.py`, `results/red_team_report.json` |
 | Review of a real run | `python -m phantom_ai_safety.review <report.json>`, `tests/test_report_review.py` |
 | MCP tool arguments cannot run commands | `tests/test_mcp_server_hardening.py` |
+| Model before / after numbers | `results/model_eval_base_550rows.json`, `results/model_eval_adapter_550rows.json` (per-row outcomes and raw answers), [docs/MODEL-RESULT.md](docs/MODEL-RESULT.md) |
 | README matches data | `scripts/verify_report_claims.py` |
 
 ---
@@ -346,11 +389,15 @@ Phantom-DFIR/
 </details>
 
 **Lexsi toolkits used.** CuratorKIT curates the training set
-(`scripts/curatorkit_curate_hardened.py`, `results/curatorkit_report.json`) and AlignTune
-drives QLoRA training (`phantom_ai_safety/repair/train_qlora.py`). A first adapter on
-`CohereLabs/tiny-aya-global` was checked on 40 held-out rows
-(`results/adapter_eval_40rows.json`: 38 of 40 correct, against 40 of 40 for the rule
-verifier). That run is a pipeline check. No fine-tuned model is claimed as a result.
+(`scripts/build_curated_train.py`, `results/curation_pipeline_report.json`), AlignTune
+drives QLoRA training (`phantom_ai_safety/repair/train_qlora.py`), and AuditKIT re-scores
+the recorded answers (`scripts/auditkit_score.py`, `results/auditkit_before_after.json`).
+Running them on real data turned up four defects that fail silently, including a
+CuratorKIT duplicate filter that deleted four attack families and an AlignTune trainer
+factory that drops the 4-bit setting. They are written up in
+[docs/MODEL-RESULT.md](docs/MODEL-RESULT.md). SafeTune, CircuitKIT and AgentTune were not
+used. `results/adapter_eval_40rows.json` is an older 40-row pipeline check of one family
+and is superseded by the 550-row result.
 
 ---
 
@@ -359,7 +406,12 @@ verifier). That run is a pipeline check. No fine-tuned model is claimed as a res
 - **The red-team evaluation is synthetic.** It uses generated evidence rows in 11 templated
   families, not real images. It shows which classes of manipulation work, not how often they
   would occur in practice.
-- **The repair is not complete.** Three attack families still succeed.
+- **The repair is not complete.** Three attack families still succeed against the rule
+  verifier.
+- **The fine-tuned model result is a template result.** The adapter scores 0.998 on held-out
+  rows from the same 11 generators it was trained on. It was not tested on any attack
+  outside them, it was trained and evaluated once, and in 110 of 550 answers it keeps
+  generating after its verdict. It is not wired into the forensic engine.
 - **The layer does not change verdicts in the live pipeline.** An investigation still uses
   the engine's original Skeptic. The layer's checks are applied afterwards with
   `python -m phantom_ai_safety.review`, which flags findings for an analyst. That review works
@@ -384,6 +436,7 @@ verifier). That run is a pipeline check. No fine-tuned model is claimed as a res
 | [docs/RED-TEAM-ARCHITECTURE.md](docs/RED-TEAM-ARCHITECTURE.md) | Red-team layer design |
 | [docs/SEMANTIC-DENIAL-FIX.md](docs/SEMANTIC-DENIAL-FIX.md) | How one attack family was closed, with before and after |
 | [docs/REMAINING-FAMILIES.md](docs/REMAINING-FAMILIES.md) | Why the three remaining families still succeed |
+| [docs/MODEL-RESULT.md](docs/MODEL-RESULT.md) | Fine-tuned model before and after, the pipeline that ran, toolkit defects found |
 | [BENCHMARK_MATRIX.md](BENCHMARK_MATRIX.md), [ACCURACY_REPORT.md](ACCURACY_REPORT.md) | Forensic benchmark detail |
 | [DATASET.md](DATASET.md) | Evidence provenance |
 | [docs/CHANGELOG.md](docs/CHANGELOG.md) | Engine version history |
@@ -392,5 +445,6 @@ verifier). That run is a pipeline check. No fine-tuned model is claimed as a res
 it challenges intrusion hypotheses during every run. The **red-team layer** is a security
 adversary: it attacks the agent itself and runs only as a separate evaluation.
 
-Licence: MIT (see [LICENSE](LICENSE)). The optional fine-tune uses a gated Cohere checkpoint; check
-its model card for licence terms before reusing it.
+Licence: MIT (see [LICENSE](LICENSE)). The fine-tuned adapter is derived from the gated
+`CohereLabs/tiny-aya-global` checkpoint and is published under CC-BY-NC-4.0 (non-commercial),
+following that model's licence.

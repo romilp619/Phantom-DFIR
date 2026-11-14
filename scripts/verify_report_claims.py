@@ -175,6 +175,34 @@ def main() -> int:
         except Exception as e:  # noqa: BLE001
             print(f"  test count check skipped: {e}")
 
+    # 9. Model-level before/after: the README figures against the stored evaluations.
+    base_eval = load("results/model_eval_base_550rows.json")
+    tuned_eval = load("results/model_eval_adapter_550rows.json")
+    if base_eval and tuned_eval and readme.is_file():
+        text = readme.read_text(encoding="utf-8")
+        print("\n9. README model-level table vs stored evaluations")
+        bm, tm = base_eval["model_metrics"], tuned_eval["model_metrics"]
+        model_rows = [
+            ("model accuracy before", 0.524, bm.get("accuracy")),
+            ("model accuracy after", 0.998, tm.get("accuracy")),
+            ("model ASR before", 0.462, bm.get("attack_success_rate")),
+            ("model ASR after", 0.002, tm.get("attack_success_rate")),
+            ("model false-conf before", 0.760, bm.get("false_confirm_rate")),
+            ("model false-conf after", 0.008, tm.get("false_confirm_rate")),
+        ]
+        for label, wrote, actual in model_rows:
+            ok = actual is not None and abs(float(actual) - wrote) <= 0.0005
+            present = f"{wrote:.3f}" in text
+            if not ok:
+                problems.append(f"README {label}: wrote {wrote}, data says {actual}")
+            elif not present:
+                problems.append(f"README {label}: value {wrote:.3f} not present in README")
+            print(f"  {label:26s}{wrote:>8.3f}  {'OK' if ok and present else 'BAD':>4s}")
+        if base_eval.get("rows") != 550 or tuned_eval.get("rows") != 550:
+            problems.append("model evaluations are not both on 550 rows")
+        if base_eval.get("adapter") is not None or not tuned_eval.get("adapter"):
+            problems.append("model evaluation files are not base-vs-adapter")
+
     print("\n" + "=" * 74)
     if problems:
         print(f"{len(problems)} PROBLEM(S) - the write-up does not match the data:")

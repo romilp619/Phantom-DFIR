@@ -35,6 +35,13 @@ Two things worth drawing out.
 a non-empty system, user, and assistant message, and all 3,300 preserve their original id
 (`S20000-F1-000` and so on) through to the curated `DataSample`.
 
+> **Correction, 2026-11-14.** The paragraph below is wrong about the cause. The 1,400 rows
+> are not byte-identical: all 3,300 prompts are distinct. CuratorKIT's exact deduplicator
+> hashes `instruction + output` and ignores `input`, so rows with different evidence and the
+> same templated answer are removed as duplicates. Four families are deleted entirely. The
+> measurement and the fix are in [MODEL-RESULT.md](MODEL-RESULT.md) and
+> `scripts/build_curated_train.py`. The original text is kept for the record.
+
 **Exact deduplication removed 42.4% of the corpus.** 1,400 of 3,300 rows are byte-identical
 after projection. That is a property of the generators, not a defect: each family reuses the
 same evidence block across many rows while varying the framing. It is a real number the
